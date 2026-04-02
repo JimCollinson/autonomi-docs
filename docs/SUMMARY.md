@@ -72,6 +72,10 @@
 
 - [System Overview](architecture/system-overview.md)
 
+## GitHub
+
+- [Source Repositories](github.md)
+
 ## Additional Resources
 
 - [Glossary](glossary.md)
