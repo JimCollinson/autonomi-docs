@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The Python SDK is the current merged Python client for the `antd` daemon.
+The Python SDK is the Python client for the `antd` daemon.
 
 ## Install
 
@@ -83,7 +83,7 @@ except AntdError as error:
     print(error)
 ```
 
-REST and gRPC share the same high-level API, but the current merged README notes that wallet operations and `payment_mode` are REST-only today.
+REST and gRPC share the same high-level API, but the upstream README notes that wallet operations and `payment_mode` are REST-only today.
 
 ## Full API reference
 

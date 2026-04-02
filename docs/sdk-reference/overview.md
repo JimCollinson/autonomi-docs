@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-`ant-sdk` is the current daemon-based developer interface for Autonomi. The repo centers on `antd`, a local gateway daemon that exposes REST and gRPC APIs, plus language SDKs and local developer tooling around that daemon.
+`ant-sdk` is the SDK path for building on Autonomi through a local daemon. The repo centers on `antd`, a local gateway daemon that exposes REST and gRPC APIs, plus language SDKs and local developer tooling around that daemon.
 
 ## Architecture
 
@@ -29,7 +29,7 @@ Your application
        Autonomi Network
 ```
 
-The current merged repo includes these developer-facing pieces:
+The repo includes these developer-facing pieces:
 
 | Component | What it does |
 |------|------|
@@ -40,7 +40,7 @@ The current merged repo includes these developer-facing pieces:
 
 ## Connection model
 
-The current daemon defaults are:
+The daemon defaults are:
 
 - REST: `http://localhost:8082`
 - gRPC: `localhost:50051`
@@ -57,7 +57,7 @@ Current SDKs can use that file to discover non-default ports instead of hardcodi
 
 ## Current shared surfaces
 
-The merged `antd` REST surface groups into these areas:
+The `antd` REST surface groups into these areas:
 
 | Group | Current routes |
 |------|------|
@@ -72,18 +72,18 @@ The current proto directory contains `health.proto`, `data.proto`, `chunks.proto
 
 ## Language SDKs
 
-The repo currently contains language SDK directories for Go, JavaScript/TypeScript, Python, C#, Kotlin, Swift, Ruby, PHP, Dart, Lua, Elixir, Zig, Rust, C++, and Java.
+The repo contains language SDK directories for Go, JavaScript/TypeScript, Python, C#, Kotlin, Swift, Ruby, PHP, Dart, Lua, Elixir, Zig, Rust, C++, and Java.
 
-Do not assume perfect parity from this page alone. Current merged SDKs expose the same daemon surface with language-specific constructors and, in some cases, transport differences. For example:
+Do not assume perfect parity from this page alone. The SDKs expose the same daemon surface with language-specific constructors and, in some cases, transport differences. For example:
 
-- current JavaScript examples use `createClient()` from `antd`
-- current Python examples use `AntdClient()` from `antd`
+- JavaScript examples use `createClient()` from `antd`
+- Python examples use `AntdClient()` from `antd`
 - some SDK READMEs document both REST and gRPC, while others are REST-only today
 
 Use the binding-specific page when you need package names, constructors, or transport details.
 
 ## Related pages
 
-- [Install antd](../getting-started/install.md)
-- [Your First Upload](../getting-started/hello-world.md)
+- [Build with the SDKs](../getting-started/install.md)
+- [Your First Upload with the SDKs](../getting-started/hello-world.md)
 - [REST API](rest-api.md)

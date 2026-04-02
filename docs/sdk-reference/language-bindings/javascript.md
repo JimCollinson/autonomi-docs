@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The JavaScript SDK is the current merged REST client package for `antd`.
+The JavaScript SDK is the REST client package for `antd`.
 
 ## Install
 

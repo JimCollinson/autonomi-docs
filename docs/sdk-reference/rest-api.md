@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-This page describes the current merged REST surface exposed by `antd`. By default, the daemon listens on `http://localhost:8082`.
+This page describes the REST surface exposed by `antd`. By default, the daemon listens on `http://localhost:8082`.
 
 All current REST payloads are JSON. When you send or receive binary data, the bytes are base64-encoded inside a `data` field.
 
@@ -543,6 +543,6 @@ curl -X POST http://localhost:8082/v1/upload/finalize \
 
 ## Related pages
 
-- [Install antd](../getting-started/install.md)
-- [Your First Upload](../getting-started/hello-world.md)
-- [Store and Retrieve Data](../how-to-guides/store-and-retrieve-data.md)
+- [Build with the SDKs](../getting-started/install.md)
+- [Your First Upload with the SDKs](../getting-started/hello-world.md)
+- [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)

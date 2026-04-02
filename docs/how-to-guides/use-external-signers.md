@@ -20,7 +20,7 @@ Use the current two-phase upload flow when your application signs EVM payment tr
 
 ### 1. Start `antd` without a wallet key
 
-The current merged daemon does not have an `--external-signer` flag. External-signer mode is the absence of `AUTONOMI_WALLET_KEY` plus the use of the prepare/finalize endpoints.
+The daemon does not have an `--external-signer` flag. External-signer mode is the absence of `AUTONOMI_WALLET_KEY` plus the use of the prepare/finalize endpoints.
 
 ```bash
 EVM_RPC_URL=https://your-rpc-endpoint \
@@ -60,7 +60,7 @@ Expected response shape:
 }
 ```
 
-For file uploads, the current merged equivalent is `POST /v1/upload/prepare` with a local `path` field instead of `data`.
+For file uploads, the equivalent is `POST /v1/upload/prepare` with a local `path` field instead of `data`.
 
 ### 3. Submit the payment externally
 
@@ -92,7 +92,7 @@ The `address` field is only present when `store_data_map` is `true`.
 
 ### 5. Know the current SDK limitation
 
-The current merged Python and JavaScript SDKs include helper methods for prepare/finalize, but their finalize wrappers do not currently expose the full raw REST response shape. If you need `store_data_map` or the returned `data_map`, use the REST API directly for now.
+The Python and JavaScript SDKs include helper methods for prepare/finalize, but their finalize wrappers do not currently expose the full raw REST response shape. If you need `store_data_map` or the returned `data_map`, use the REST API directly for now.
 
 ## Verify it worked
 
@@ -110,4 +110,4 @@ Finalize succeeds when the daemon accepts the `upload_id` and the external trans
 
 - [Handle Payments](handle-payments.md)
 - [REST API](../sdk-reference/rest-api.md)
-- [Run as a Daemon](run-as-daemon.md)
+- [Use antd as a Local Service](run-as-daemon.md)

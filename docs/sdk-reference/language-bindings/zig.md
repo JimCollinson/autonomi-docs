@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The Zig SDK is the current merged Zig client for the `antd` daemon.
+The Zig SDK is the Zig client for the `antd` daemon.
 
 ## Install
 

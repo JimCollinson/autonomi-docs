@@ -50,7 +50,7 @@
   verification_mode: current-merged-truth
 -->
 
-This page gives a current merged view of how the main developer-facing and network-facing repos fit together.
+This page gives a high-level view of how the main developer-facing and network-facing repos fit together.
 
 ## High-level architecture
 
@@ -78,7 +78,7 @@ Application
 
 ## Developer interfaces
 
-The current merged developer entry points are:
+The main developer entry points are:
 
 - `ant-sdk`, centered on the `antd` daemon plus language SDKs
 - `ant-client`, centered on `ant-core` and the `ant` CLI
@@ -89,7 +89,7 @@ These interfaces target the same network, but one uses a local daemon and the ot
 
 The current `ant-node` crate is a thin wrapper around `saorsa-core::P2PNode`. It adds configuration, chunk storage, payment verification, upgrade handling, and node runtime management on top of the core P2P layer.
 
-At the current merged refs in scope, `ant-node` documents chunk storage as its active network data type.
+In the repos used for this page, `ant-node` documents chunk storage as its active network data type.
 
 ## Routing and transport
 

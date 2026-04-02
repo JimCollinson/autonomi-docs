@@ -49,7 +49,7 @@ ant dev start --ant-node-dir ../ant-node
 
 If the two repos are already laid out as siblings and discovery works in your environment, `--ant-node-dir` can be omitted.
 
-The current merged start flow launches:
+The local start flow launches:
 
 - a local `ant-devnet`
 - `antd --network local`
@@ -107,10 +107,10 @@ The local network is working when `ant dev status` reports a healthy daemon and 
 
 **Cannot reach `http://localhost:8082/health`**: Use `ant dev status` and `ant dev logs` to inspect the daemon.
 
-**Wallet not configured**: Restart the environment; the current local start flow provisions wallet access from the generated devnet manifest.
+**Wallet not configured**: Restart the environment; the local start flow provisions wallet access from the generated devnet manifest.
 
 ## Next steps
 
-- [Your First Upload](../getting-started/hello-world.md)
-- [Store and Retrieve Data](store-and-retrieve-data.md)
+- [Your First Upload with the SDKs](../getting-started/hello-world.md)
+- [Store and Retrieve Data with the SDKs](store-and-retrieve-data.md)
 - [Handle Payments](handle-payments.md)

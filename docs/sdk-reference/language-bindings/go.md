@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The Go SDK is the current merged Go client for the `antd` daemon.
+The Go SDK is the Go client for the `antd` daemon.
 
 ## Install
 
@@ -44,7 +44,7 @@ func main() {
 }
 ```
 
-The current merged SDK also includes a `GrpcClient` for the daemon's gRPC endpoint.
+The SDK also includes a `GrpcClient` for the daemon's gRPC endpoint.
 
 ## Store and retrieve data
 

@@ -8,7 +8,9 @@
   verification_mode: current-merged-truth
 -->
 
-Use the current merged wallet and cost endpoints in `antd` to check balances, approve token spend, estimate uploads, and choose a payment mode.
+This guide uses the SDK path through `antd` to check balances, approve token spend, estimate uploads, and choose a payment mode.
+
+If you want to work from the command line instead, see [Use the ant CLI](../getting-started/using-ant-client.md). If you want direct Rust access, see [Build Directly in Rust](../getting-started/build-directly-in-rust.md).
 
 ## Prerequisites
 
@@ -105,7 +107,7 @@ main().catch((error) => {
 
 ### 3. Estimate storage cost
 
-Cost estimation uses the current merged daemon logic and returns a string amount in atto tokens.
+Cost estimation uses the daemon's current pricing logic and returns a string amount in atto tokens.
 
 {% tabs %}
 {% tab title="cURL" %}
@@ -147,7 +149,7 @@ main().catch((error) => {
 
 ### 4. Choose a payment mode when uploading
 
-The current merged daemon accepts three payment modes: `auto`, `merkle`, and `single`.
+The daemon accepts three payment modes: `auto`, `merkle`, and `single`.
 
 - `auto` is the default
 - `merkle` forces Merkle batch payments
@@ -207,6 +209,6 @@ Check the wallet balance before and after a paid upload, then fetch the stored d
 
 ## Next steps
 
-- [Store and Retrieve Data](store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](store-and-retrieve-data.md)
 - [Use External Signers](use-external-signers.md)
 - [REST API](../sdk-reference/rest-api.md)

@@ -92,6 +92,11 @@ Use:
 
 These pages must reflect what a developer can do now.
 
+They must also make the user path explicit:
+- say what tool or path the page covers
+- explain why a developer would choose that path
+- link to alternative supported paths when they exist
+
 #### Language binding pages
 
 Use:
@@ -121,6 +126,9 @@ Rules:
 - Preserve structure that is still accurate.
 - Use the page template that matches the page type.
 - Use only terminology allowed by `CLAUDE.md`.
+- Do not put source-audit or verification language into rendered body text.
+- Explain a tool or interface before telling the reader to install or run it.
+- When a task can be done through multiple supported paths, be explicit about which path the page covers and link the alternatives.
 
 If evidence is missing:
 - do not infer the missing details

@@ -8,9 +8,9 @@
   verification_mode: current-merged-truth
 -->
 
-`ant-client` is the direct Rust and CLI path to the Autonomi network. The repo currently contains `ant-core`, a headless Rust library, and `ant-cli`, the `ant` binary built on top of it.
+`ant-client` is the direct CLI and Rust path to the Autonomi network. The repo contains `ant-core`, a headless Rust library, and `ant-cli`, the `ant` binary built on top of it.
 
-## When to use ant-client
+## When to use this path
 
 Use `ant-client` when you want:
 
@@ -20,16 +20,16 @@ Use `ant-client` when you want:
 
 For most multi-language application work, `ant-sdk` remains the easier starting point.
 
-## Current components
+## Components
 
 | Component | What it does |
 |------|------|
 | `ant-core` | Direct network library for data operations, payments, local devnet helpers, and node management |
 | `ant-cli` | `ant` binary for file, chunk, wallet, and node commands |
 
-## Current CLI shape
+## CLI shape
 
-The current merged CLI has these top-level groups:
+The CLI has these top-level groups:
 
 - `ant file`
 - `ant chunk`
@@ -68,6 +68,6 @@ curl -fsSL https://raw.githubusercontent.com/WithAutonomi/ant-client/main/instal
 
 ## Related pages
 
-- [Using ant-client](../getting-started/using-ant-client.md)
+- [Use the ant CLI](../getting-started/using-ant-client.md)
 - [Command Reference](command-reference.md)
 - [ant-core Rust Library](ant-core-library.md)

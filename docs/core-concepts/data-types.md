@@ -15,11 +15,21 @@
   verification_mode: current-merged-truth
 -->
 
-The current merged developer-facing storage surfaces are public data, private data, chunks, files, directories, and DataMaps.
+Autonomi stores content as immutable, content-addressed data. The main developer-facing storage surfaces in this docs set are public data, private data, chunks, files, directories, and DataMaps.
 
 ## Why it matters
 
-These are the shapes the current SDK and CLI actually expose today. Choosing the right one determines whether you work with raw bytes already in memory, files on disk, low-level chunks, or a DataMap that you keep locally versus store on-network.
+These are the shapes the SDK and CLI expose for developers today. Choosing the right one determines whether you work with raw bytes already in memory, files on disk, low-level chunks, or a DataMap that you keep locally versus store on-network.
+
+## Content-addressed and immutable
+
+When you upload data to Autonomi, the stored result is content-addressed rather than mutable. In practice, that means:
+
+- changing the content produces a different address
+- public data and public file uploads can be retrieved from their content-derived addresses
+- private workflows still store content-addressed chunks, but you keep the retrieval metadata locally in a DataMap
+
+This is why the storage surfaces on Autonomi are immutable rather than update-in-place records.
 
 ## Current surfaces at a glance
 
@@ -34,17 +44,17 @@ These are the shapes the current SDK and CLI actually expose today. Choosing the
 
 ## Public data
 
-Public data is the simplest current storage surface for in-memory bytes. In the daemon APIs, you send a base64 payload and receive a public address back.
+Public data is the simplest storage surface for in-memory bytes. In the daemon APIs, you send a base64 payload and receive a public address back.
 
 Use public data when anyone who has the returned address should be able to retrieve the content.
 
 ## Private data
 
-Private data still stores encrypted chunks on the network, but the retrieval metadata is returned to you as a serialized DataMap instead of being stored publicly.
+Private data still stores encrypted, content-addressed chunks on the network, but the retrieval metadata is returned to you as a serialized DataMap instead of being stored publicly.
 
 Use private data when you want the network to store the encrypted chunks while you keep the retrieval capability client-side.
 
-In the current merged daemon and CLI surfaces, losing that DataMap means losing the practical ability to retrieve the uploaded content.
+In the daemon and CLI surfaces, losing that DataMap means losing the practical ability to retrieve the uploaded content.
 
 ## Chunks
 
@@ -56,7 +66,7 @@ Use chunk operations when you are building low-level tooling or want explicit co
 
 File and directory uploads wrap self-encryption, chunk storage, and DataMap handling for content that already lives on disk.
 
-Current merged behavior differs slightly by interface:
+Behavior differs slightly by interface:
 
 - `antd` exposes public file and directory upload/download endpoints
 - `ant` supports both public file uploads and private uploads that keep a local `.datamap` file
@@ -67,16 +77,12 @@ Use these surfaces when you want the tooling to handle file-system input and out
 
 A DataMap is the retrieval metadata that ties uploaded content back to its encrypted chunks.
 
-In the current merged surfaces, a DataMap shows up in two main ways:
+In the SDK and CLI surfaces, a DataMap shows up in two main ways:
 
 - private uploads return it directly to you
 - public uploads store it on-network and return an address that can be fetched later
 
 This makes DataMap handling one of the main differences between public and private workflows.
-
-## Current scope note
-
-At the current merged refs used for this page, the primary documented developer surfaces are data, chunks, files, directories, and DataMaps. Earlier draft concepts such as Pointers, Scratchpads, GraphEntries, Registers, and Vaults are not part of the current merged `ant-sdk` or `ant-client` developer interfaces documented here.
 
 ## Practical example
 
@@ -89,6 +95,6 @@ The current tooling maps cleanly onto these surfaces:
 
 ## Related pages
 
-- [Store and Retrieve Data](../how-to-guides/store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
 - [Payment Model](payment-model.md)
 - [Self-Encryption](self-encryption.md)

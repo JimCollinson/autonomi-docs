@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The current Java SDK talks to `antd` over REST by default and also exposes async and gRPC clients.
+The Java SDK talks to `antd` over REST by default and also exposes async and gRPC clients.
 
 ## Install
 

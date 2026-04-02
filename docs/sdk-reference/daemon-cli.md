@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-Reference for the current merged `antd` command-line interface.
+Reference for the `antd` command-line interface.
 
 ## Usage
 
@@ -70,7 +70,7 @@ antd --log-level debug
 
 ## Notes
 
-- The current merged CLI does not include an `--external-signer` flag.
+- The CLI does not include an `--external-signer` flag.
 - External-signer mode is handled through environment configuration and the prepare/finalize upload endpoints.
 - On startup, `antd` writes a `daemon.port` file so SDKs can discover the active ports.
 
@@ -84,6 +84,6 @@ antd --log-level debug
 
 ## Related pages
 
-- [Install antd](../getting-started/install.md)
-- [Run as a Daemon](../how-to-guides/run-as-daemon.md)
+- [Build with the SDKs](../getting-started/install.md)
+- [Use antd as a Local Service](../how-to-guides/run-as-daemon.md)
 - [REST API](rest-api.md)

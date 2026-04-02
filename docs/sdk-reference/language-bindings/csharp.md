@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The current C# SDK is an async .NET 8 client for `antd` with both REST and gRPC transports.
+The C# SDK is an async .NET 8 client for `antd` with both REST and gRPC transports.
 
 ## Install
 

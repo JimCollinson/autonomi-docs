@@ -88,6 +88,8 @@ All documentation work follows `source audit -> draft -> verify`. Follow the det
 - Write in **second person** ("you"), **present tense**, **active voice**
 - Be direct and precise. Respect the developer's time.
 - Explain the "why" before the "how" — one sentence of context, then the steps
+- Lead with the product, user task, or developer path, not with internal repo or implementation names, unless the tool name itself is the topic of the page
+- Do not surface provenance language such as `current-merged-truth`, "current merged", refs, audits, or verification modes in rendered prose. Keep that information in verification comments and workflow docs only.
 - See [Audience and objectives](#audience-and-objectives) for reader assumptions
 
 ### Prohibited words and phrases
@@ -119,6 +121,9 @@ All technical terms must match the terminology lockfile below exactly. Using the
 - Every page must be **self-contained**. No "as we discussed in the previous section" or "see above."
 - An agent reading any single page via llms.txt should understand the topic without needing other pages.
 - Link to related pages at the end, not inline as prerequisites.
+- Getting Started and How-to pages must explain what tool or path they cover, why you would choose it, and where the alternatives live when multiple supported paths exist.
+- Explain a tool or interface before telling the reader to install, run, or configure it.
+- Titles should describe user outcomes or choices, not internal mechanisms, unless the mechanism name itself is the thing the page teaches.
 
 ### Formatting
 
@@ -448,11 +453,13 @@ local trust scoring | Local Trust Scoring, EigenTrust | Node reputation system b
 2. Run the source audit described in `planning/verification-workflow.md`
 3. Identify the page type from its directory location
 4. Follow the template for that page type (see above)
-5. Start from **broad source repos** (ant-sdk, ant-client, ant-node)
-6. Add **targeted foundational repos** only when the page topic requires them (check component-registry.yml)
-7. Use only terms from the terminology lockfile
-8. Verify the page against the audited evidence, then add the verification metadata comment with the repo, ref, and commit you verified against
-9. Every code example must be complete and runnable
+5. Identify the user path when relevant (for example: SDKs and daemon, CLI, or direct Rust) and make sure the page is explicit about which path it covers
+6. Start from **broad source repos** (ant-sdk, ant-client, ant-node)
+7. Add **targeted foundational repos** only when the page topic requires them (check component-registry.yml)
+8. Use only terms from the terminology lockfile
+9. Keep provenance and verification language out of the rendered body text
+10. Verify the page against the audited evidence, then add the verification metadata comment with the repo, ref, and commit you verified against
+11. Every code example must be complete and runnable
 
 ### When updating an existing page
 

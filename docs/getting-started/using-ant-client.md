@@ -1,4 +1,4 @@
-# Using ant-client (Rust / CLI)
+# Use the ant CLI
 
 <!-- verification:
   source_repo: ant-client
@@ -8,13 +8,15 @@
   verification_mode: current-merged-truth
 -->
 
-Use `ant-client` when you want direct Rust or CLI access to the Autonomi network without running `antd`.
+Use the `ant` CLI when you want direct command-line access to the Autonomi network without running `antd`. This path is a good fit for shell workflows, scripts, operational tasks, and developers who want to upload, download, or inspect data directly from the terminal.
 
 ## Prerequisites
 
 - A local devnet manifest or bootstrap peer information for the network you want to use
 - `SECRET_KEY` set for uploads and wallet commands
 - A file to upload for the quickstart example below
+
+If you want to build an application in another language, start with [Build with the SDKs](install.md). If you want daemon-free programmatic Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
 
 ## Steps
 
@@ -79,10 +81,11 @@ echo "hello autonomi" | SECRET_KEY=0x... ant chunk put \
 
 ## What happened
 
-`ant` connected directly to the network instead of talking through a local daemon. File commands handled self-encryption, payment, and DataMap management, while the chunk command stored a single low-level payload without file splitting.
+`ant` connected directly to the network instead of talking through a local daemon. File commands handled self-encryption, payment, and DataMap management for you, while the chunk command stored a single low-level payload without file splitting.
 
 ## Next steps
 
 - [ant-client Overview](../cli-reference/overview.md)
 - [Command Reference](../cli-reference/command-reference.md)
 - [ant-core Rust Library](../cli-reference/ant-core-library.md)
+- [Build Directly in Rust](build-directly-in-rust.md)

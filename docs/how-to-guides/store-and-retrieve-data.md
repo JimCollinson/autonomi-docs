@@ -1,4 +1,4 @@
-# Store and Retrieve Data
+# Store and Retrieve Data with the SDKs
 
 <!-- verification:
   source_repo: ant-sdk
@@ -8,7 +8,9 @@
   verification_mode: current-merged-truth
 -->
 
-Store public data, private data, files, and directories through the current merged `antd` daemon surface.
+This guide uses the SDK path through `antd`. It shows how to store public data, private data, files, and directories through the local daemon and language SDKs.
+
+If you want direct shell access instead, see [Use the ant CLI](../getting-started/using-ant-client.md). If you want direct programmatic Rust access without the daemon, see [Build Directly in Rust](../getting-started/build-directly-in-rust.md).
 
 ## Prerequisites
 
@@ -149,7 +151,7 @@ main().catch((error) => {
 {% endtab %}
 {% endtabs %}
 
-At this commit, the current Python and JavaScript SDKs surface the returned private `data_map` through `PutResult.address`.
+In the Python and JavaScript SDKs, the returned private `data_map` is surfaced through `PutResult.address`.
 
 ### 4. Retrieve private data
 
@@ -291,6 +293,6 @@ For raw data, compare the retrieved bytes to the original payload. For files and
 
 ## Next steps
 
-- [Your First Upload](../getting-started/hello-world.md)
+- [Your First Upload with the SDKs](../getting-started/hello-world.md)
 - [REST API](../sdk-reference/rest-api.md)
 - [ant-sdk Overview](../sdk-reference/overview.md)

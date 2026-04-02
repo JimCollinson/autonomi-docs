@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-This page describes the current merged gRPC surface exposed by `antd` on `localhost:50051` by default.
+This page describes the gRPC surface exposed by `antd` on `localhost:50051` by default.
 
 Unlike the REST API, the gRPC API carries raw bytes in protobuf fields rather than base64 strings in JSON.
 

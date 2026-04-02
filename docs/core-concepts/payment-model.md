@@ -15,26 +15,30 @@
   verification_mode: current-merged-truth
 -->
 
-The current merged Autonomi developer interfaces charge on write operations and expose payment through wallet configuration, cost-estimation APIs, and selectable payment modes.
+Autonomi uses a pay-once storage model. You pay in ANT when you upload data, then retrieve it later without ongoing storage charges or a separate retrieval payment flow in the current developer tooling.
 
 ## Why it matters
 
-You cannot treat uploads as fire-and-forget writes. The current daemon and direct-network tooling both require wallet context for paid storage operations, and the interfaces differ in where they expose cost estimation, wallet approval, and payment-mode control.
+You cannot treat uploads as fire-and-forget writes. The daemon and direct-network tooling both require wallet context for paid storage operations, and the interfaces differ in where they expose cost estimation, wallet approval, and payment-mode control.
 
 ## How it works
 
+### Pay once on upload
+
+Autonomi is designed around immutable storage rather than renewable storage leases. In practice, that means the payment event happens when you upload data. The current developer tooling does not expose recurring storage fees or a separate retrieval payment step.
+
 ### Wallet-backed writes
 
-The current merged tools use different wallet inputs:
+The tools use different wallet inputs:
 
 - `antd` uses `AUTONOMI_WALLET_KEY` for direct-wallet uploads
 - `ant` and `ant-core` use `SECRET_KEY` or an attached `Wallet`
 
 Without wallet configuration, write endpoints either fail or switch into an external-signer preparation flow.
 
-### Current EVM network choices
+### EVM network choices
 
-The current `ant` CLI exposes these EVM network values:
+The `ant` CLI exposes these EVM network values:
 
 - `arbitrum-one`
 - `arbitrum-sepolia`
@@ -44,16 +48,16 @@ The daemon-side external-signer flow also exposes `EVM_RPC_URL`, `EVM_PAYMENT_TO
 
 ### Cost estimation
 
-The current merged `antd` surface exposes cost estimation explicitly:
+The `antd` surface exposes cost estimation explicitly:
 
 - `POST /v1/data/cost`
 - `POST /v1/cost/file`
 
-Those endpoints return string amounts in the smallest token units used by the current daemon surface.
+Those endpoints return string amounts in the smallest token units used by the daemon surface.
 
 ### Payment modes
 
-The current merged payment modes are:
+The supported payment modes are:
 
 | Mode | Current behavior |
 |------|------------------|
@@ -61,15 +65,15 @@ The current merged payment modes are:
 | `merkle` | Force Merkle batch payment |
 | `single` | Force per-chunk payment |
 
-In `ant-core`, the Merkle threshold is currently `64` chunks.
+In `ant-core`, the Merkle threshold is `64` chunks.
 
 ### What happens on retrieval
 
-The current merged download flows do not expose a separate payment step for retrieval. The payment surfaces in these repos are tied to storing data, chunks, files, directories, or node-management operations that require wallet context.
+The current download flows do not expose a separate payment step for retrieval. The payment surfaces in these repos are tied to storing data, chunks, files, directories, or node-management operations that require wallet context.
 
 ## Practical example
 
-Two current payment patterns show up across the merged interfaces:
+Two payment patterns show up across the daemon and direct-network interfaces:
 
 1. Estimate and upload through `antd`
 

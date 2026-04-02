@@ -28,12 +28,14 @@ The current implementation uses:
 - ChaCha20-Poly1305 for authenticated encryption
 - Brotli compression during chunk processing
 
+Chunk addresses are derived from the encrypted content. That is why the higher-level storage model is content-addressed: if the content changes, the resulting encrypted chunks and their addresses change too.
+
 Important current limits from the crate itself:
 
 - `MIN_ENCRYPTABLE_BYTES` is currently `3`
 - `MAX_CHUNK_SIZE` is currently `4_190_208` bytes
 
-The crate stores chunk metadata in a `DataMap`, and the `DataMap` can be shrunk recursively when it grows beyond the immediate chunk set.
+The crate stores chunk metadata in a `DataMap`, and the `DataMap` can be shrunk recursively when it grows beyond the immediate chunk set. In the higher-level SDK and CLI workflows, that `DataMap` is what turns a set of encrypted chunks back into retrievable content.
 
 ## Practical example
 
@@ -52,10 +54,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-The crate does not store anything on the network for you. Persisting the encrypted chunks and keeping the `DataMap` somewhere safe is the caller's responsibility.
+The crate does not store anything on the network for you. Persisting the encrypted chunks and keeping the `DataMap` somewhere safe is the caller's responsibility. That is why higher-level tools build on top of it: they handle payment, network storage, and the public/private retrieval choices around the `DataMap`.
 
 ## Related pages
 
 - [Data Types](data-types.md)
-- [Store and Retrieve Data](../how-to-guides/store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
 - [Core Concepts Overview](overview.md)

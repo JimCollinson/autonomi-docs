@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The PHP SDK is the current merged PHP client for the `antd` daemon.
+The PHP SDK is the PHP client for the `antd` daemon.
 
 ## Install
 

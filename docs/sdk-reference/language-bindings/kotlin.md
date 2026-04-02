@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The current Kotlin SDK targets the `antd` daemon over REST or gRPC.
+The Kotlin SDK targets the `antd` daemon over REST or gRPC.
 
 ## Install
 

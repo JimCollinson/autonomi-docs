@@ -7,9 +7,10 @@
 ## Getting Started
 
 - [What is Autonomi?](getting-started/introduction.md)
-- [Install antd](getting-started/install.md)
-- [Your First Upload](getting-started/hello-world.md)
-- [Using ant-client (Rust / CLI)](getting-started/using-ant-client.md)
+- [Build with the SDKs](getting-started/install.md)
+- [Your First Upload with the SDKs](getting-started/hello-world.md)
+- [Use the ant CLI](getting-started/using-ant-client.md)
+- [Build Directly in Rust](getting-started/build-directly-in-rust.md)
 
 ## Core Concepts
 
@@ -23,10 +24,10 @@
 ## How-To Guides
 
 - [Set Up a Local Network](how-to-guides/setup-local-network.md)
-- [Store and Retrieve Data](how-to-guides/store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](how-to-guides/store-and-retrieve-data.md)
 - [Manage Keys and Wallets](how-to-guides/manage-keys.md)
 - [Handle Payments](how-to-guides/handle-payments.md)
-- [Run as a Daemon](how-to-guides/run-as-daemon.md)
+- [Use antd as a Local Service](how-to-guides/run-as-daemon.md)
 - [Use External Signers](how-to-guides/use-external-signers.md)
 - [Test Your Application](how-to-guides/test-your-application.md)
 - [Deploy to Mainnet](how-to-guides/deploy-to-mainnet.md)

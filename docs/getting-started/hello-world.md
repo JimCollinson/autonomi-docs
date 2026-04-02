@@ -1,4 +1,4 @@
-# Your First Upload
+# Your First Upload with the SDKs
 
 <!-- verification:
   source_repo: ant-sdk
@@ -8,13 +8,15 @@
   verification_mode: current-merged-truth
 -->
 
-This page stores a small public payload with the current merged `antd` daemon and reads it back. By the end, you will have a working upload/download round-trip through the live daemon surface.
+This guide uses the SDK path. It stores a small public payload through `antd` and reads it back again so you can see how the local daemon, SDK, and network fit together.
 
 ## Prerequisites
 
-- `antd` installed and running on `http://localhost:8082` (see [Install antd](install.md))
+- `antd` installed and running on `http://localhost:8082` (see [Build with the SDKs](install.md))
 - For write operations: start `antd` with `AUTONOMI_WALLET_KEY` set, or use `ant dev start` for a local devnet
 - Optional: Python or JavaScript runtime if you want to use those SDK tabs
+
+If you would rather use shell commands or direct Rust instead, see [Use the ant CLI](using-ant-client.md) and [Build Directly in Rust](build-directly-in-rust.md).
 
 ## Steps
 
@@ -206,10 +208,10 @@ main().catch((error) => {
 
 ## What happened
 
-`antd` accepted your payload, encrypted and chunked it internally, stored the resulting data on the network, then returned the network address used to fetch it again. The REST API represents binary payloads as base64 inside JSON, while the current Python and JavaScript SDKs decode those values back into bytes for you.
+`antd` accepted your payload, self-encrypted it into chunks, stored those chunks on the network, and returned the public address used to fetch it again. That address is content-addressed: if you uploaded different bytes, you would get a different address. The REST API represents binary payloads as base64 inside JSON, while the Python and JavaScript SDKs decode those values back into bytes for you.
 
 ## Next steps
 
-- [Store and Retrieve Data](../how-to-guides/store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
 - [REST API](../sdk-reference/rest-api.md)
 - [ant-sdk Overview](../sdk-reference/overview.md)

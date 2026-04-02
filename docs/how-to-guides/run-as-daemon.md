@@ -1,4 +1,4 @@
-# Run as a Daemon
+# Use antd as a Local Service
 
 <!-- verification:
   source_repo: ant-sdk
@@ -8,7 +8,13 @@
   verification_mode: current-merged-truth
 -->
 
-Run `antd` as a long-lived local service so applications can talk to a stable REST and gRPC endpoint.
+Run `antd` as a long-lived local service when you want one stable Autonomi gateway that multiple applications, scripts, or background processes can share.
+
+Use this setup if you want:
+
+- a persistent local REST and gRPC endpoint
+- one daemon shared by more than one app or tool
+- service-manager supervision instead of manually starting `antd` in a terminal
 
 ## Prerequisites
 
@@ -98,6 +104,6 @@ The daemon is healthy when `/health` returns `status: ok` and your application c
 
 ## Next steps
 
-- [Install antd](../getting-started/install.md)
+- [Build with the SDKs](../getting-started/install.md)
 - [Daemon CLI: antd](../sdk-reference/daemon-cli.md)
 - [REST API](../sdk-reference/rest-api.md)

@@ -127,7 +127,7 @@ async fn main() {
 
 ## Local development
 
-The current merged library also exports `LocalDevnet` for local development flows:
+The library also exports `LocalDevnet` for local development flows:
 
 ```rust
 use ant_core::data::LocalDevnet;

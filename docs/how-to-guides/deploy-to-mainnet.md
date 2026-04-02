@@ -15,7 +15,7 @@
   verification_mode: current-merged-truth
 -->
 
-Move from local testing to the current merged mainnet-facing configuration for either `antd` or `ant`.
+Move from local testing to a mainnet-facing configuration for either `antd` or `ant`.
 
 ## Prerequisites
 
@@ -74,7 +74,7 @@ curl -X POST http://127.0.0.1:8082/v1/data/public \
 
 ### 5. Verify the direct-network CLI path separately if you use it
 
-The current merged `ant` CLI expects bootstrap peers and an EVM network setting for mainnet-style writes:
+The `ant` CLI expects bootstrap peers and an EVM network setting for mainnet-style writes:
 
 ```bash
 SECRET_KEY=0x... ant file upload photo.jpg \
@@ -107,6 +107,6 @@ Mainnet deployment is working when the daemon reports healthy status, wallet end
 
 ## Next steps
 
-- [Run as a Daemon](run-as-daemon.md)
+- [Use antd as a Local Service](run-as-daemon.md)
 - [Handle Payments](handle-payments.md)
 - [Use External Signers](use-external-signers.md)

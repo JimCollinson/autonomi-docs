@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-Reference for the current merged `ant` CLI.
+Reference for the `ant` CLI.
 
 ## Global flags
 
@@ -205,5 +205,5 @@ Clears node data, logs, and registry state.
 ## Related pages
 
 - [ant-client Overview](overview.md)
-- [Using ant-client](../getting-started/using-ant-client.md)
+- [Use the ant CLI](../getting-started/using-ant-client.md)
 - [ant-core Rust Library](ant-core-library.md)

@@ -15,7 +15,7 @@
   verification_mode: current-merged-truth
 -->
 
-Test against the current merged local tooling first, then move outward to more production-like environments.
+Test against the local tooling first, then move outward to more production-like environments.
 
 ## Prerequisites
 
@@ -62,7 +62,7 @@ describe("store data", () => {
 
 ### 2. Run integration tests against the local daemon environment
 
-Start the current merged local environment:
+Start the local environment:
 
 ```bash
 ant dev start --ant-node-dir ../ant-node
@@ -187,4 +187,4 @@ Your local integration environment is healthy when `ant dev status` reports a ru
 
 - [Set Up a Local Network](setup-local-network.md)
 - [Deploy to Mainnet](deploy-to-mainnet.md)
-- [Store and Retrieve Data](store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](store-and-retrieve-data.md)

@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The C++ SDK is the current merged C++ client for the `antd` daemon.
+The C++ SDK is the C++ client for the `antd` daemon.
 
 ## Install
 

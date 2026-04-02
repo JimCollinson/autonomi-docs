@@ -14,7 +14,7 @@ The language bindings in `ant-sdk` are clients for the `antd` daemon. They share
 
 Each binding translates language-native inputs into requests to `antd`, then maps daemon responses back into that language's models and errors.
 
-The current merged pattern is:
+The pattern is:
 
 1. your application talks to a language client
 2. the language client talks to `antd`
@@ -44,7 +44,7 @@ Check the individual page before assuming a transport is available in your langu
 
 Several bindings include daemon discovery helpers based on the `daemon.port` file written by `antd` on startup.
 
-Examples from the current merged packages:
+Examples from the current packages:
 
 - JavaScript: `RestClient.autoDiscover()`
 - Python: `discover_daemon_url()` and `discover_grpc_target()`
@@ -55,7 +55,7 @@ Some bindings use discovery only through explicit helper APIs rather than by def
 
 ## Current naming differences
 
-The current merged bindings use different entry points:
+The bindings use different entry points:
 
 | Language | Current entry point |
 |------|------|

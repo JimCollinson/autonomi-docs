@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The Dart SDK is the current merged Dart client for the `antd` daemon.
+The Dart SDK is the Dart client for the `antd` daemon.
 
 ## Install
 

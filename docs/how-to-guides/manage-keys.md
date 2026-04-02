@@ -22,7 +22,7 @@
   verification_mode: current-merged-truth
 -->
 
-This guide shows how the current merged toolchain consumes existing wallet and signing keys.
+This guide shows how the Autonomi toolchain consumes existing wallet and signing keys.
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ This guide shows how the current merged toolchain consumes existing wallet and s
 
 ### 1. Configure a wallet for `antd`
 
-The current merged daemon consumes a hex private key through `AUTONOMI_WALLET_KEY`.
+The daemon consumes a hex private key through `AUTONOMI_WALLET_KEY`.
 
 ```bash
 export AUTONOMI_WALLET_KEY="<hex_private_key>"

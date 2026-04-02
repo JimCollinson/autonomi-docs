@@ -1,4 +1,4 @@
-# Install antd
+# Build with the SDKs
 
 <!-- verification:
   source_repo: ant-sdk
@@ -8,7 +8,9 @@
   verification_mode: current-merged-truth
 -->
 
-This page gets the `antd` daemon built locally and confirms its REST API is reachable. By the end, you will have the current merged daemon running and know what is required for read-only versus write operations.
+Use this path when you want to build on Autonomi through language SDKs and a local daemon. `antd` runs on your machine, talks to the network for you, and exposes REST and gRPC so your application can work through a stable local API.
+
+This is usually the best starting point if you are building in Python, JavaScript, TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, or another SDK language.
 
 ## Prerequisites
 
@@ -21,7 +23,7 @@ This page gets the `antd` daemon built locally and confirms its REST API is reac
 
 ### 1. Build the daemon from source
 
-`antd` currently lives in the `ant-sdk` repo. Build it from source:
+Install `antd` from the `ant-sdk` repo:
 
 ```bash
 git clone https://github.com/WithAutonomi/ant-sdk.git
@@ -37,7 +39,7 @@ Verify the binary starts:
 
 ### 2. Start the daemon
 
-For a read-only daemon on the default network:
+For a read-only local gateway on the default network:
 
 ```bash
 ./target/release/antd
@@ -59,7 +61,7 @@ ant dev start
 
 `ant dev start` expects the `ant-node` repo to be cloned as a sibling of `ant-sdk`.
 
-### 3. Confirm the daemon responds
+### 3. Confirm the gateway responds
 
 The current default REST endpoint is `http://localhost:8082`:
 
@@ -78,21 +80,28 @@ Expected response:
 
 If you started a local devnet, the `network` value is `local`.
 
-### 4. Note the connection defaults
+### 4. Know what this path gives you
 
-The current merged daemon defaults are:
+By default, `antd` provides:
 
 - REST: `http://localhost:8082`
 - gRPC: `localhost:50051`
 
 On startup, `antd` also writes a `daemon.port` file. SDKs can use that file to discover non-default ports automatically.
 
+This path is useful when you want:
+
+- a single local process that multiple apps or tools can share
+- SDK ergonomics in non-Rust languages
+- a stable local REST or gRPC interface instead of direct P2P networking in your app
+
 ## What happened
 
-You built the current merged `antd` daemon from the `ant-sdk` repo and started its local REST/gRPC gateway. The health check confirms the daemon is reachable; write endpoints stay unavailable until the daemon has wallet configuration or a local devnet helper has provisioned one.
+You built `antd` and started a local gateway for the Autonomi SDKs. The health check confirms that the daemon is reachable; write endpoints stay unavailable until the daemon has wallet configuration or a local devnet helper has provisioned one.
 
 ## Next steps
 
-- [Your First Upload](hello-world.md)
+- [Your First Upload with the SDKs](hello-world.md)
 - [ant-sdk Overview](../sdk-reference/overview.md)
 - [REST API](../sdk-reference/rest-api.md)
+- [Use the ant CLI](using-ant-client.md)

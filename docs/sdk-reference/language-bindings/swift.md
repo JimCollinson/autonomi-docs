@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-The current Swift SDK is a macOS-oriented REST/gRPC client for the `antd` daemon.
+The Swift SDK is a macOS-oriented REST/gRPC client for the `antd` daemon.
 
 ## Install
 
