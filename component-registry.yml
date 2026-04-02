@@ -1,0 +1,293 @@
+# Component Registry — Autonomi Developer Documentation
+# Maps components within each repo to the documentation pages they feed.
+# See CLAUDE.md for how agents use this during writing and auditing.
+# See repo-registry.yml for repo-level scope and behaviour.
+
+components:
+
+  # === ant-sdk ===
+
+  antd:
+    repo: ant-sdk
+    kind: rust-binary
+    path: antd/
+    topics:
+      - daemon
+      - rest-api
+      - grpc
+      - install
+    feeds_pages:
+      - getting-started/install.md
+      - sdk-reference/overview.md
+      - sdk-reference/rest-api.md
+      - sdk-reference/daemon-cli.md
+
+  openapi:
+    repo: ant-sdk
+    kind: api-spec
+    path: antd/openapi.yaml
+    topics:
+      - rest-api
+    feeds_pages:
+      - sdk-reference/rest-api.md
+
+  proto:
+    repo: ant-sdk
+    kind: grpc-spec
+    path: antd/proto/
+    topics:
+      - grpc
+    feeds_pages:
+      - sdk-reference/grpc-services.md
+
+  antd-rust:
+    repo: ant-sdk
+    kind: rust-crate
+    path: antd-rust/
+    topics:
+      - rust-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/rust.md
+
+  antd-py:
+    repo: ant-sdk
+    kind: python-package
+    path: antd-py/
+    topics:
+      - python-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/python.md
+
+  antd-js:
+    repo: ant-sdk
+    kind: js-package
+    path: antd-js/
+    topics:
+      - javascript-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/javascript.md
+
+  antd-go:
+    repo: ant-sdk
+    kind: go-module
+    path: antd-go/
+    topics:
+      - go-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/go.md
+
+  antd-java:
+    repo: ant-sdk
+    kind: java-package
+    path: antd-java/
+    topics:
+      - java-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/java.md
+
+  antd-csharp:
+    repo: ant-sdk
+    kind: dotnet-package
+    path: antd-csharp/
+    topics:
+      - csharp-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/csharp.md
+
+  antd-kotlin:
+    repo: ant-sdk
+    kind: kotlin-package
+    path: antd-kotlin/
+    topics:
+      - kotlin-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/kotlin.md
+
+  antd-swift:
+    repo: ant-sdk
+    kind: swift-package
+    path: antd-swift/
+    topics:
+      - swift-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/swift.md
+
+  antd-ruby:
+    repo: ant-sdk
+    kind: ruby-gem
+    path: antd-ruby/
+    topics:
+      - ruby-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/ruby.md
+
+  antd-php:
+    repo: ant-sdk
+    kind: php-package
+    path: antd-php/
+    topics:
+      - php-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/php.md
+
+  antd-cpp:
+    repo: ant-sdk
+    kind: cpp-library
+    path: antd-cpp/
+    topics:
+      - cpp-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/cpp.md
+
+  antd-dart:
+    repo: ant-sdk
+    kind: dart-package
+    path: antd-dart/
+    topics:
+      - dart-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/dart.md
+
+  antd-zig:
+    repo: ant-sdk
+    kind: zig-package
+    path: antd-zig/
+    topics:
+      - zig-binding
+    feeds_pages:
+      - sdk-reference/language-bindings/zig.md
+
+  # === ant-client ===
+
+  ant-core:
+    repo: ant-client
+    kind: rust-crate
+    path: ant-core/
+    topics:
+      - data-types
+      - files
+      - payments
+      - devnet
+    feeds_pages:
+      - core-concepts/data-types.md
+      - how-to-guides/store-and-retrieve-data.md
+      - how-to-guides/handle-payments.md
+      - cli-reference/ant-core-library.md
+
+  ant-cli:
+    repo: ant-client
+    kind: rust-binary
+    path: ant-cli/
+    topics:
+      - cli
+      - node-management
+    feeds_pages:
+      - cli-reference/overview.md
+      - cli-reference/command-reference.md
+      - getting-started/using-ant-client.md
+
+  # === ant-node ===
+
+  ant-node:
+    repo: ant-node
+    kind: rust-binary
+    path: src/
+    topics:
+      - node
+      - local-network
+      - payment-model
+    feeds_pages:
+      - core-concepts/payment-model.md
+      - how-to-guides/setup-local-network.md
+      - how-to-guides/embed-a-node.md
+
+  ant-devnet:
+    repo: ant-node
+    kind: rust-binary
+    path: src/bin/ant-devnet/
+    topics:
+      - devnet-launcher
+    feeds_pages:
+      - how-to-guides/setup-local-network.md
+
+  # === Foundational single-crate repos ===
+
+  saorsa-core:
+    repo: saorsa-core
+    kind: rust-crate
+    path: src/
+    topics:
+      - dht
+      - routing
+      - trust
+      - architecture
+    feeds_pages:
+      - core-concepts/overview.md
+      - architecture/system-overview.md
+
+  saorsa-transport:
+    repo: saorsa-transport
+    kind: rust-crate
+    path: src/
+    topics:
+      - transport
+      - nat-traversal
+    feeds_pages:
+      - architecture/system-overview.md
+
+  saorsa-pqc:
+    repo: saorsa-pqc
+    kind: rust-crate
+    path: src/
+    topics:
+      - pqc
+      - key-derivation
+    feeds_pages:
+      - core-concepts/post-quantum-cryptography.md
+      - core-concepts/key-derivation.md
+
+  self_encryption:
+    repo: self_encryption
+    kind: rust-crate
+    path: src/
+    topics:
+      - self-encryption
+      - datamaps
+    feeds_pages:
+      - core-concepts/self-encryption.md
+      - core-concepts/data-types.md
+
+  evmlib:
+    repo: evmlib
+    kind: rust-crate
+    path: src/
+    topics:
+      - payments
+      - wallet-integration
+    feeds_pages:
+      - core-concepts/payment-model.md
+      - how-to-guides/handle-payments.md
+      - how-to-guides/manage-keys.md
+
+  ant-merkle:
+    repo: ant-merkle
+    kind: rust-crate
+    path: src/
+    topics:
+      - batch-payments
+      - gas-optimisation
+      - merkle-payment-flows
+    feeds_pages:
+      - how-to-guides/handle-payments.md
+
+  # === Specialist ===
+
+  ant-keygen:
+    repo: ant-keygen
+    kind: rust-binary
+    path: src/
+    topics:
+      - release-signing
+      - key-management
+    feeds_pages: []
+    notes: "Only feeds pages if key management docs are created."

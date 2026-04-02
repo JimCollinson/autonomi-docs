@@ -1,0 +1,116 @@
+# Set Up a Local Network
+
+<!-- verification:
+  source_repo: ant-sdk
+  source_ref: main
+  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
+  verified_date: 2026-04-02
+  verification_mode: current-merged-truth
+-->
+
+Use the current `ant-dev` workflow to start a local devnet plus `antd` on your machine.
+
+## Prerequisites
+
+- Rust toolchain
+- Python 3.10+
+- A local checkout of `ant-sdk`
+- A local checkout of `ant-node`
+
+## Steps
+
+### 1. Clone the required repos
+
+If you do not already have them locally:
+
+```bash
+git clone https://github.com/WithAutonomi/ant-sdk.git
+git clone https://github.com/WithAutonomi/ant-node.git
+```
+
+### 2. Install the local dev CLI
+
+From the `ant-sdk` repo root:
+
+```bash
+cd ant-sdk
+pip install -e ant-dev/
+```
+
+This installs the `ant` command provided by the current `ant-dev` package.
+
+### 3. Start the local environment
+
+Point `ant dev start` at your `ant-node` checkout:
+
+```bash
+ant dev start --ant-node-dir ../ant-node
+```
+
+If the two repos are already laid out as siblings and discovery works in your environment, `--ant-node-dir` can be omitted.
+
+The current merged start flow launches:
+
+- a local `ant-devnet`
+- `antd --network local`
+- a wallet-enabled local environment with REST health on `http://localhost:8082/health`
+
+### 4. Check status and wallet
+
+```bash
+ant dev status
+ant dev wallet show
+```
+
+`ant dev status` checks the local processes and the daemon health endpoint. `ant dev wallet show` prints the configured local wallet address, token balance, and gas balance.
+
+### 5. Verify the daemon responds
+
+```bash
+curl http://localhost:8082/health
+```
+
+Expected response shape:
+
+```json
+{
+  "status": "ok",
+  "network": "local"
+}
+```
+
+### 6. Store and retrieve a quick test payload
+
+```bash
+DATA_B64=$(printf 'Local network test' | base64)
+
+curl -X POST http://localhost:8082/v1/data/public \
+  -H "Content-Type: application/json" \
+  -d "{\"data\":\"$DATA_B64\"}"
+
+curl http://localhost:8082/v1/data/public/<address>
+```
+
+### 7. Stop the local environment
+
+```bash
+ant dev stop
+```
+
+## Verify it worked
+
+The local network is working when `ant dev status` reports a healthy daemon and a test public upload can be fetched back through the same `antd` instance.
+
+## Common errors
+
+**No local environment running**: Re-run `ant dev start` and check that the `ant-node` path is correct.
+
+**Cannot reach `http://localhost:8082/health`**: Use `ant dev status` and `ant dev logs` to inspect the daemon.
+
+**Wallet not configured**: Restart the environment; the current local start flow provisions wallet access from the generated devnet manifest.
+
+## Next steps
+
+- [Your First Upload](../getting-started/hello-world.md)
+- [Store and Retrieve Data](store-and-retrieve-data.md)
+- [Handle Payments](handle-payments.md)

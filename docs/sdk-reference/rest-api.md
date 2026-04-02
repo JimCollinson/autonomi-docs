@@ -1,0 +1,548 @@
+# REST API
+
+<!-- verification:
+  source_repo: ant-sdk
+  source_ref: main
+  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
+  verified_date: 2026-04-02
+  verification_mode: current-merged-truth
+-->
+
+This page describes the current merged REST surface exposed by `antd`. By default, the daemon listens on `http://localhost:8082`.
+
+All current REST payloads are JSON. When you send or receive binary data, the bytes are base64-encoded inside a `data` field.
+
+## Health
+
+### `GET /health`
+
+Returns daemon health and the selected network.
+
+**Response:**
+
+```json
+{
+  "status": "ok",
+  "network": "default"
+}
+```
+
+**Example:**
+
+```bash
+curl http://localhost:8082/health
+```
+
+## Data
+
+### `POST /v1/data/public`
+
+Stores public data and returns the public address that can be shared with readers.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `data` | string | Yes | Base64-encoded payload |
+| `payment_mode` | string | No | `auto`, `merkle`, or `single` |
+
+**Response:**
+
+```json
+{
+  "address": "<64_hex_address>",
+  "chunks_stored": <chunk_count>,
+  "payment_mode_used": "auto"
+}
+```
+
+**Example:**
+
+```bash
+DATA_B64=$(printf 'Hello, Autonomi!' | base64)
+
+curl -X POST http://localhost:8082/v1/data/public \
+  -H "Content-Type: application/json" \
+  -d "{\"data\":\"$DATA_B64\"}"
+```
+
+### `GET /v1/data/public/{addr}`
+
+Fetches public data by address.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `addr` | path | Yes | 64-character hex data address |
+
+**Response:**
+
+```json
+{
+  "data": "SGVsbG8sIEF1dG9ub21pIQ=="
+}
+```
+
+**Example:**
+
+```bash
+curl http://localhost:8082/v1/data/public/<addr>
+```
+
+### `GET /v1/data/public/{addr}/stream`
+
+Current merged code exposes this streaming endpoint, but the handler is still a stub at this commit and currently returns an empty SSE stream.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `addr` | path | Yes | 64-character hex data address |
+
+**Example:**
+
+```bash
+curl -N http://localhost:8082/v1/data/public/<addr>/stream
+```
+
+### `POST /v1/data/private`
+
+Stores private data and returns a serialized DataMap instead of a public address.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `data` | string | Yes | Base64-encoded payload |
+| `payment_mode` | string | No | `auto`, `merkle`, or `single` |
+
+**Response:**
+
+```json
+{
+  "data_map": "<hex_encoded_datamap>",
+  "chunks_stored": <chunk_count>,
+  "payment_mode_used": "auto"
+}
+```
+
+**Example:**
+
+```bash
+DATA_B64=$(printf 'Secret message' | base64)
+
+curl -X POST http://localhost:8082/v1/data/private \
+  -H "Content-Type: application/json" \
+  -d "{\"data\":\"$DATA_B64\"}"
+```
+
+### `GET /v1/data/private`
+
+Retrieves private data using the returned DataMap.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `data_map` | query | Yes | Hex-encoded serialized DataMap |
+
+**Response:**
+
+```json
+{
+  "data": "U2VjcmV0IG1lc3NhZ2U="
+}
+```
+
+**Example:**
+
+```bash
+curl "http://localhost:8082/v1/data/private?data_map=<hex_encoded_datamap>"
+```
+
+### `POST /v1/data/cost`
+
+Estimates the storage cost for a data payload without uploading it.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `data` | string | Yes | Base64-encoded payload |
+
+**Response:**
+
+```json
+{
+  "cost": "<atto_token_amount>"
+}
+```
+
+**Example:**
+
+```bash
+DATA_B64=$(printf 'Hello, Autonomi!' | base64)
+
+curl -X POST http://localhost:8082/v1/data/cost \
+  -H "Content-Type: application/json" \
+  -d "{\"data\":\"$DATA_B64\"}"
+```
+
+## Chunks
+
+### `POST /v1/chunks`
+
+Stores a raw chunk.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `data` | string | Yes | Base64-encoded chunk bytes |
+
+**Response:**
+
+```json
+{
+  "cost": "<atto_token_amount>",
+  "address": "<64_hex_address>"
+}
+```
+
+**Example:**
+
+```bash
+CHUNK_B64=$(printf 'chunk bytes' | base64)
+
+curl -X POST http://localhost:8082/v1/chunks \
+  -H "Content-Type: application/json" \
+  -d "{\"data\":\"$CHUNK_B64\"}"
+```
+
+### `GET /v1/chunks/{addr}`
+
+Retrieves a raw chunk by address.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `addr` | path | Yes | 64-character hex chunk address |
+
+**Response:**
+
+```json
+{
+  "data": "Y2h1bmsgYnl0ZXM="
+}
+```
+
+**Example:**
+
+```bash
+curl http://localhost:8082/v1/chunks/<addr>
+```
+
+## Files and directories
+
+These endpoints work on paths visible to the machine running `antd`.
+
+### `POST /v1/files/upload/public`
+
+Uploads a local file and stores its DataMap publicly.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `path` | string | Yes | Local file path |
+| `payment_mode` | string | No | `auto`, `merkle`, or `single` |
+
+**Response:**
+
+```json
+{
+  "cost": "",
+  "address": "<64_hex_address>"
+}
+```
+
+At this commit the handler returns a `cost` field but does not populate it for file and directory uploads.
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/files/upload/public \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/absolute/path/to/document.pdf"}'
+```
+
+### `POST /v1/files/download/public`
+
+Downloads a file to a local destination path.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `address` | string | Yes | 64-character hex file address |
+| `dest_path` | string | Yes | Local destination path |
+
+**Response:** HTTP `200 OK` with no JSON body
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/files/download/public \
+  -H "Content-Type: application/json" \
+  -d '{"address":"<64_hex_address>","dest_path":"/absolute/path/to/downloaded.pdf"}'
+```
+
+### `POST /v1/dirs/upload/public`
+
+Uploads a local directory recursively.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `path` | string | Yes | Local directory path |
+| `payment_mode` | string | No | `auto`, `merkle`, or `single` |
+
+**Response:**
+
+```json
+{
+  "cost": "",
+  "address": "<64_hex_address>"
+}
+```
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/dirs/upload/public \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/absolute/path/to/my-folder"}'
+```
+
+### `POST /v1/dirs/download/public`
+
+Downloads a directory to a local destination path.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `address` | string | Yes | 64-character hex directory address |
+| `dest_path` | string | Yes | Local destination path |
+
+**Response:** HTTP `200 OK` with no JSON body
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/dirs/download/public \
+  -H "Content-Type: application/json" \
+  -d '{"address":"<64_hex_address>","dest_path":"/absolute/path/to/output-folder"}'
+```
+
+### `POST /v1/cost/file`
+
+Estimates upload cost for a local file.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `path` | string | Yes | Local file path |
+| `is_public` | boolean | No | Defaults to `true` |
+
+**Response:**
+
+```json
+{
+  "cost": "<atto_token_amount>"
+}
+```
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/cost/file \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/absolute/path/to/document.pdf","is_public":true}'
+```
+
+## Wallet
+
+### `GET /v1/wallet/address`
+
+Returns the configured wallet address.
+
+**Response:**
+
+```json
+{
+  "address": "0x1234abcd..."
+}
+```
+
+**Example:**
+
+```bash
+curl http://localhost:8082/v1/wallet/address
+```
+
+### `GET /v1/wallet/balance`
+
+Returns token and gas balances.
+
+**Response:**
+
+```json
+{
+  "balance": "<atto_token_balance>",
+  "gas_balance": "<wei_balance>"
+}
+```
+
+**Example:**
+
+```bash
+curl http://localhost:8082/v1/wallet/balance
+```
+
+### `POST /v1/wallet/approve`
+
+Approves token spend for payment contracts.
+
+**Parameters:** None
+
+**Response:**
+
+```json
+{
+  "approved": true
+}
+```
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/wallet/approve \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+## External signer flow
+
+### `POST /v1/data/prepare`
+
+Prepares an in-memory data upload for external signing.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `data` | string | Yes | Base64-encoded payload |
+
+**Response:**
+
+```json
+{
+  "upload_id": "<hex_id>",
+  "payments": [
+    {
+      "quote_hash": "0x...",
+      "rewards_address": "0x...",
+      "amount": "<atto_token_amount>"
+    }
+  ],
+  "total_amount": "<atto_token_amount>",
+  "data_payments_address": "0x...",
+  "payment_token_address": "0x...",
+  "rpc_url": "http://127.0.0.1:8545"
+}
+```
+
+**Example:**
+
+```bash
+DATA_B64=$(printf 'Hello, Autonomi!' | base64)
+
+curl -X POST http://localhost:8082/v1/data/prepare \
+  -H "Content-Type: application/json" \
+  -d "{\"data\":\"$DATA_B64\"}"
+```
+
+### `POST /v1/upload/prepare`
+
+Prepares a file upload for external signing.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `path` | string | Yes | Local file path |
+
+**Response:** Same shape as `POST /v1/data/prepare`
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/upload/prepare \
+  -H "Content-Type: application/json" \
+  -d '{"path":"/absolute/path/to/document.pdf"}'
+```
+
+### `POST /v1/upload/finalize`
+
+Finalizes a prepared upload after the external signer has submitted payment transactions.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `upload_id` | string | Yes | Value returned by a prepare endpoint |
+| `tx_hashes` | object | Yes | Map of `quote_hash` to `tx_hash` |
+| `store_data_map` | boolean | No | If `true`, also stores the DataMap on-network |
+
+**Response:**
+
+```json
+{
+  "data_map": "<hex_encoded_datamap>",
+  "address": "<64_hex_address>",
+  "chunks_stored": <chunk_count>
+}
+```
+
+The `address` field is only present when `store_data_map` is `true`.
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8082/v1/upload/finalize \
+  -H "Content-Type: application/json" \
+  -d '{"upload_id":"<hex_id>","tx_hashes":{"0xquote":"0xtx"},"store_data_map":true}'
+```
+
+## Error codes
+
+| Code | Meaning | Resolution |
+|------|---------|------------|
+| `400` | Bad request | Check base64 encoding, address length, data map format, and local paths |
+| `402` | Payment required | Fund the configured wallet or reduce the upload size |
+| `404` | Not found | Check the address or `upload_id` |
+| `413` | Payload too large | Split the upload or switch to file/directory endpoints |
+| `500` | Internal server error | Check daemon logs and retry |
+| `502` | Network unreachable | Confirm the daemon can reach the Autonomi network |
+| `503` | Service unavailable | Configure a wallet before calling wallet or write endpoints |
+
+## Related pages
+
+- [Install antd](../getting-started/install.md)
+- [Your First Upload](../getting-started/hello-world.md)
+- [Store and Retrieve Data](../how-to-guides/store-and-retrieve-data.md)

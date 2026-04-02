@@ -1,0 +1,180 @@
+# Repo Registry — Autonomi Developer Documentation
+# This file tells agents and automation how to treat each upstream repo.
+# See CLAUDE.md for how agents use this during writing and auditing.
+
+repos:
+  # === BROAD SOURCE ===
+  # Main developer-facing surfaces. Default starting point for writing and auditing.
+  # On change: broad re-verification of all mapped pages.
+
+  ant-sdk:
+    class: broad-source
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-sdk
+    watch_mode: broad
+    default_for_drafting: true
+    topics:
+      - getting-started
+      - sdk-reference
+      - bindings
+      - how-to-guides
+    on_change: reverify-and-update
+
+  ant-client:
+    class: broad-source
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-client
+    watch_mode: broad
+    default_for_drafting: true
+    topics:
+      - cli-reference
+      - rust-usage
+      - local-devnet
+      - data-flows
+    on_change: reverify-and-update
+
+  ant-node:
+    class: broad-source
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-node
+    watch_mode: broad
+    default_for_drafting: true
+    topics:
+      - node-behaviour
+      - local-network
+      - architecture
+      - payment-model
+    on_change: reverify-and-update
+
+  # === TARGETED FOUNDATIONAL ===
+  # Authoritative for specific technical topics. Pulled in only when a page requires them.
+  # On change: re-verify only pages linked to affected components.
+
+  saorsa-core:
+    class: targeted-foundational
+    org: saorsa-labs
+    url: https://github.com/saorsa-labs/saorsa-core
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - dht
+      - routing
+      - trust
+      - architecture
+    on_change: reverify-linked-pages
+
+  saorsa-transport:
+    class: targeted-foundational
+    org: saorsa-labs
+    url: https://github.com/saorsa-labs/saorsa-transport
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - transport
+      - nat-traversal
+      - connectivity
+    on_change: reverify-linked-pages
+
+  saorsa-pqc:
+    class: targeted-foundational
+    org: saorsa-labs
+    url: https://github.com/saorsa-labs/saorsa-pqc
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - pqc
+      - signatures
+      - key-derivation
+    on_change: reverify-linked-pages
+
+  self_encryption:
+    class: targeted-foundational
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/self_encryption
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - data-types
+      - self-encryption
+      - file-internals
+    on_change: reverify-linked-pages
+
+  evmlib:
+    class: targeted-foundational
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/evmlib
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - payments
+      - wallet-integration
+      - evm-flows
+    on_change: reverify-linked-pages
+
+  ant-merkle:
+    class: targeted-foundational
+    org: MaidSafe  # moving to WithAutonomi
+    url: https://github.com/maidsafe/ant-merkle
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - batch-payments
+      - gas-optimisation
+      - merkle-payment-flows
+    on_change: reverify-linked-pages
+
+  # === SPECIALIST ===
+  # Only relevant for certain docs areas. Used only for explicitly related pages.
+
+  ant-keygen:
+    class: specialist
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-keygen
+    watch_mode: manual
+    default_for_drafting: false
+    topics:
+      - release-signing
+      - key-management
+    on_change: review-if-docs-exist
+
+  # === WATCHLIST ===
+  # Not source-of-truth for new docs. Flag if still referenced.
+
+  ant-evm:
+    class: watchlist
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-evm
+    watch_mode: issue-only
+    default_for_drafting: false
+    topics:
+      - legacy-payment-references
+    on_change: flag-if-still-referenced
+    notes: "Collapsed into evmlib. Watch until all references disappear from merged code."
+
+  # === EXCLUDED ===
+  # Ignored by default. Do not read, reference, or verify against.
+
+  ant-quic:
+    class: excluded
+    org: saorsa-labs
+    url: https://github.com/saorsa-labs/ant-quic
+    watch_mode: none
+    default_for_drafting: false
+    topics: []
+    on_change: ignore
+    notes: "Confirmed by Mick as older ancestor/fork. Use saorsa-transport instead."
+
+  # === TANGENTIAL ===
+  # Not part of core network, but must be accurate when referenced.
+
+  x0x:
+    class: tangential
+    org: saorsa-labs
+    url: https://github.com/saorsa-labs/x0x
+    watch_mode: manual
+    default_for_drafting: false
+    topics:
+      - agent-networking
+      - gossip
+    on_change: review-if-referenced
+    notes: "Should be accurate when mentioned in docs and its features described."
