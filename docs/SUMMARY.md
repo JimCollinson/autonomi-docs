@@ -27,6 +27,7 @@
 - [Store and Retrieve Data with the SDKs](how-to-guides/store-and-retrieve-data.md)
 - [Manage Keys and Wallets](how-to-guides/manage-keys.md)
 - [Handle Payments](how-to-guides/handle-payments.md)
+- [Use the Autonomi MCP Server](how-to-guides/use-the-mcp-server.md)
 - [Use antd as a Local Service](how-to-guides/run-as-daemon.md)
 - [Use External Signers](how-to-guides/use-external-signers.md)
 - [Test Your Application](how-to-guides/test-your-application.md)
@@ -38,6 +39,7 @@
 - [SDK Overview](sdk-reference/overview.md)
 - [REST API](sdk-reference/rest-api.md)
 - [gRPC Services](sdk-reference/grpc-services.md)
+- [MCP Server Reference](sdk-reference/mcp-server.md)
 - [Daemon Command Reference](sdk-reference/daemon-cli.md)
 - **Language Bindings**
   - [How Bindings Work](sdk-reference/language-bindings/overview.md)

@@ -1,13 +1,14 @@
 # Autonomi Developer Docs
 
-This repo is the curated developer documentation assembly for building on Autonomi.
+This repo is the curated developer documentation assembly for building on Autonomi and is intended to power what developers consume through `docs.autonomi.com/developers`.
 
 The upstream repositories remain the implementation truth. This repo brings their merged surfaces together into one coherent developer experience so people do not have to jump between multiple repos and reconstruct how the network and tooling fit together.
 
 It is designed to serve several purposes at once:
 
-- human-readable documentation for the developer site
+- a GitBook-driven, human-navigable documentation space alongside the rest of the Autonomi docs
 - structured Markdown that remains useful for AI agents and LLM retrieval workflows
+- AI-agent-friendly, parseable content designed for `llms.txt`-style consumption and GEO-aware discovery
 - a verification layer that ties published claims back to specific upstream commits
 - a future automation target that can detect upstream drift and keep the docs aligned
 
