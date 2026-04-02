@@ -14,6 +14,7 @@ Use the current `ant-dev` workflow to start a local devnet plus `antd` on your m
 
 - Rust toolchain
 - Python 3.10+
+- `protoc` (Protocol Buffers compiler) available on your machine
 - A local checkout of `ant-sdk`
 - A local checkout of `ant-node`
 
@@ -39,6 +40,8 @@ pip install -e ant-dev/
 
 This installs the `ant` command provided by the current `ant-dev` package.
 
+If `antd` has not been built on this machine before, make sure `protoc` is installed first. On macOS, one working setup is `brew install protobuf`.
+
 ### 3. Start the local environment
 
 Point `ant dev start` at your `ant-node` checkout:
@@ -48,6 +51,8 @@ ant dev start --ant-node-dir ../ant-node
 ```
 
 If the two repos are already laid out as siblings and discovery works in your environment, `--ant-node-dir` can be omitted.
+
+On the first run, this step can take longer than usual because local components may still be compiling in release mode. If the command times out on a cold build, run it again after the initial compilation completes.
 
 The local start flow launches:
 

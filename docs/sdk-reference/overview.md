@@ -80,6 +80,8 @@ Do not assume perfect parity from this page alone. The SDKs expose the same daem
 - Python examples use `AntdClient()` from `antd`
 - some SDK READMEs document both REST and gRPC, while others are REST-only today
 
+At this commit, the daemon and some SDK response models are not perfectly aligned for upload cost fields. For data uploads, rely on the returned address and successful retrieval first; if you need authoritative cost information, use the explicit cost endpoints.
+
 Use the binding-specific page when you need package names, constructors, or transport details.
 
 ## Related pages

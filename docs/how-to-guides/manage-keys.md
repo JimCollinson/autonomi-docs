@@ -10,7 +10,7 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 1fb95f03f8010db60e4b1e9a26957b3bb2acd8bc
+  source_commit: 727a75c46bebc6d5948ea7754debd4220ead9400
   verified_date: 2026-04-02
   verification_mode: current-merged-truth
 -->
@@ -46,7 +46,7 @@ The direct-network CLI uses `SECRET_KEY`.
 
 ```bash
 export SECRET_KEY="0x<hex_private_key>"
-ant wallet address --evm-network arbitrum-one
+ant --evm-network arbitrum-one wallet address
 ```
 
 ### 3. Verify the active wallet
@@ -60,8 +60,8 @@ curl http://localhost:8082/v1/wallet/balance
 {% endtab %}
 {% tab title="ant" %}
 ```bash
-SECRET_KEY=0x... ant wallet address --evm-network arbitrum-one
-SECRET_KEY=0x... ant wallet balance --evm-network arbitrum-one
+SECRET_KEY=0x... ant --evm-network arbitrum-one wallet address
+SECRET_KEY=0x... ant --evm-network arbitrum-one wallet balance
 ```
 {% endtab %}
 {% endtabs %}

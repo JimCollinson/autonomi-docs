@@ -10,7 +10,7 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 1fb95f03f8010db60e4b1e9a26957b3bb2acd8bc
+  source_commit: 727a75c46bebc6d5948ea7754debd4220ead9400
   verified_date: 2026-04-02
   verification_mode: current-merged-truth
 -->
@@ -45,7 +45,7 @@
 <!-- verification:
   source_repo: self_encryption
   source_ref: master
-  source_commit: 5f9d164c895f8609754c6ff2a8faf99375695276
+  source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
   verified_date: 2026-04-02
   verification_mode: current-merged-truth
 -->

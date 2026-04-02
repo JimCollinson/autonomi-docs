@@ -3,7 +3,7 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 1fb95f03f8010db60e4b1e9a26957b3bb2acd8bc
+  source_commit: 727a75c46bebc6d5948ea7754debd4220ead9400
   verified_date: 2026-04-02
   verification_mode: current-merged-truth
 -->
@@ -16,11 +16,15 @@ Reference for the `ant` CLI.
 
 **Command:** `ant [FLAGS] <COMMAND>`
 
+Root flags must appear before the subcommand.
+
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `--json` | boolean | No | Emit structured JSON |
+| `-V` | boolean | No | Print the short version and exit |
+| `--version` | boolean | No | Print the long version, project description, repo URL, and license |
 | `-b, --bootstrap <IP:PORT>` | socket list | No | Bootstrap peers for data operations |
 | `--devnet-manifest <PATH>` | path | No | Local devnet manifest JSON |
 | `--allow-loopback` | boolean | No | Allow loopback connections for local testing |
@@ -55,7 +59,7 @@ Uploads a file with self-encryption and EVM payment.
 **Example:**
 
 ```bash
-SECRET_KEY=0x... ant file upload my_data.bin --public --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local
+SECRET_KEY=0x... ant --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local file upload my_data.bin --public
 ```
 
 ### Download a file
@@ -75,7 +79,7 @@ Downloads a public file by address or a private file using a local DataMap file.
 **Example:**
 
 ```bash
-ant file download a1b2c3... -o restored.bin --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local
+ant --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local file download a1b2c3... -o restored.bin
 ```
 
 ## Chunk commands
@@ -89,7 +93,7 @@ Stores a single chunk from a file or stdin.
 **Example:**
 
 ```bash
-echo "hello autonomi" | SECRET_KEY=0x... ant chunk put --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local
+echo "hello autonomi" | SECRET_KEY=0x... ant --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local chunk put
 ```
 
 ### Get a chunk
@@ -108,7 +112,7 @@ Retrieves a single chunk by address.
 **Example:**
 
 ```bash
-ant chunk get a1b2c3... -o output.bin --bootstrap 1.2.3.4:12000 --evm-network arbitrum-one
+ant --bootstrap 1.2.3.4:12000 --evm-network arbitrum-one chunk get a1b2c3... -o output.bin
 ```
 
 ## Wallet commands
@@ -122,7 +126,7 @@ Prints the current wallet address derived from `SECRET_KEY`.
 **Example:**
 
 ```bash
-SECRET_KEY=0x... ant wallet address --evm-network arbitrum-one
+SECRET_KEY=0x... ant --evm-network arbitrum-one wallet address
 ```
 
 ### Show wallet balance
@@ -134,7 +138,7 @@ Prints the token balance for the configured EVM network.
 **Example:**
 
 ```bash
-SECRET_KEY=0x... ant wallet balance --evm-network arbitrum-one
+SECRET_KEY=0x... ant --evm-network arbitrum-one wallet balance
 ```
 
 ## Node commands
@@ -233,6 +237,27 @@ Clears node data, logs, and registry state.
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `--force` | boolean | No | Skip confirmation prompt |
+
+## Update command
+
+### Update the CLI
+
+**Command:** `ant update`
+
+Checks GitHub Releases for a newer version of the CLI, downloads it if one is available, and replaces the current executable in place.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `--force` | boolean | No | Re-download even if the current version is already latest |
+
+**Example:**
+
+```bash
+ant update
+ant update --force
+```
 
 ## Related pages
 

@@ -3,12 +3,12 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 1fb95f03f8010db60e4b1e9a26957b3bb2acd8bc
+  source_commit: 727a75c46bebc6d5948ea7754debd4220ead9400
   verified_date: 2026-04-02
   verification_mode: current-merged-truth
 -->
 
-`ant` is the command-line interface for Autonomi. It gives you direct shell access to uploads, downloads, wallet inspection, chunk operations, and node-management workflows without running the SDK daemon.
+`ant` is the command-line interface for Autonomi. It gives you direct shell access to uploads, downloads, wallet inspection, self-update, chunk operations, and node-management workflows without running the SDK daemon.
 
 ## When to use the CLI
 
@@ -28,10 +28,12 @@ The CLI has these top-level groups:
 - `ant chunk`
 - `ant wallet`
 - `ant node`
+- `ant update`
 
 It also accepts global flags such as:
 
 - `--json`
+- `-V`, `--version`
 - `--bootstrap`
 - `--devnet-manifest`
 - `--allow-loopback`

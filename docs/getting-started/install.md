@@ -16,6 +16,7 @@ This is usually the best starting point if you are building in Python, Node.js /
 
 - Git
 - Rust toolchain
+- `protoc` (Protocol Buffers compiler) available on your machine
 - For write operations on the default network: a wallet private key exported as `AUTONOMI_WALLET_KEY`
 - For a fully local devnet: Python 3.10+ and a sibling `ant-node` checkout if you plan to use `ant dev start`
 
@@ -31,6 +32,12 @@ Install `antd` from the `ant-sdk` repo:
 git clone https://github.com/WithAutonomi/ant-sdk.git
 cd ant-sdk/antd
 cargo build --release
+```
+
+`antd` currently needs `protoc` during the build. On macOS, one working setup is:
+
+```bash
+brew install protobuf
 ```
 
 Verify the binary starts:
@@ -62,6 +69,8 @@ ant dev start
 ```
 
 `ant dev start` expects the `ant-node` repo to be cloned as a sibling of `ant-sdk`.
+
+On the first run, `ant dev start` can take longer than usual while local components compile in release mode. If it times out on a cold build, run it again after the initial compilation has completed.
 
 ### 3. Confirm the gateway responds
 
