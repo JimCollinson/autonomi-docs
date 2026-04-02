@@ -56,6 +56,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 The crate does not store anything on the network for you. Persisting the encrypted chunks and keeping the `DataMap` somewhere safe is the caller's responsibility. That is why higher-level tools build on top of it: they handle payment, network storage, and the public/private retrieval choices around the `DataMap`.
 
+## Upstream sources
+
+- [self_encryption](https://github.com/WithAutonomi/self_encryption)
+
 ## Related pages
 
 - [Data Types](data-types.md)

@@ -52,6 +52,11 @@ See [Build Directly in Rust](../getting-started/build-directly-in-rust.md) and [
 | Good fit | SDK-style app development | native Rust control |
 | Closest equivalent | Python / Node.js / TypeScript SDKs | no daemon equivalent |
 
+## Upstream sources
+
+- [ant-sdk](https://github.com/WithAutonomi/ant-sdk)
+- [ant-client](https://github.com/WithAutonomi/ant-client)
+
 ## Related pages
 
 - [Build Directly in Rust](../getting-started/build-directly-in-rust.md)

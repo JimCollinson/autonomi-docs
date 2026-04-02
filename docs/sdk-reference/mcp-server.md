@@ -203,6 +203,10 @@ Structured `AntdError` responses include:
 
 Unexpected errors include `error`, `message`, and `network`, but may not include `status_code`.
 
+## Upstream sources
+
+- [ant-sdk](https://github.com/WithAutonomi/ant-sdk)
+
 ## Related pages
 
 - [Use the Autonomi MCP Server](../how-to-guides/use-the-mcp-server.md)

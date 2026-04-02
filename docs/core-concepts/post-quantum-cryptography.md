@@ -70,6 +70,12 @@ ant-keygen verify \
   --signature ./artifact.sig
 ```
 
+## Upstream sources
+
+- [saorsa-pqc](https://github.com/saorsa-labs/saorsa-pqc)
+- [saorsa-transport](https://github.com/saorsa-labs/saorsa-transport)
+- [ant-keygen](https://github.com/WithAutonomi/ant-keygen)
+
 ## Related pages
 
 - [Key Derivation](key-derivation.md)

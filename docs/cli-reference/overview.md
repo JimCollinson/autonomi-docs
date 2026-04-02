@@ -61,6 +61,10 @@ The CLI, SDK, and native Rust paths reach the same network, but they have differ
 | Local process model | requires `antd` | no daemon for data commands | no daemon |
 | Main entry point | REST/gRPC via `antd` | `ant` command | `ant-core` crate |
 
+## Upstream sources
+
+- [ant-client](https://github.com/WithAutonomi/ant-client)
+
 ## Related pages
 
 - [Use the ant CLI](../getting-started/using-ant-client.md)

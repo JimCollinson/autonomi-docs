@@ -84,6 +84,10 @@ At this commit, the daemon and some SDK response models are not perfectly aligne
 
 Use the binding-specific page when you need package names, constructors, or transport details.
 
+## Upstream sources
+
+- [ant-sdk](https://github.com/WithAutonomi/ant-sdk)
+
 ## Related pages
 
 - [Build with the SDKs](../getting-started/install.md)

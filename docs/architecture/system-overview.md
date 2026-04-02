@@ -99,6 +99,16 @@ In the repos used for this page, `ant-node` documents chunk storage as its activ
 
 On the client side, `self_encryption` turns uploaded content into a `DataMap` plus encrypted chunks. Higher-level tools then store or retrieve those chunks through `antd`, `ant-core`, or `ant-node` depending on which layer you are working in.
 
+## Upstream sources
+
+- [ant-sdk](https://github.com/WithAutonomi/ant-sdk)
+- [ant-client](https://github.com/WithAutonomi/ant-client)
+- [ant-node](https://github.com/WithAutonomi/ant-node)
+- [self_encryption](https://github.com/WithAutonomi/self_encryption)
+- [saorsa-core](https://github.com/saorsa-labs/saorsa-core)
+- [saorsa-transport](https://github.com/saorsa-labs/saorsa-transport)
+- [saorsa-pqc](https://github.com/saorsa-labs/saorsa-pqc)
+
 ## Related pages
 
 - [Core Concepts Overview](../core-concepts/overview.md)
