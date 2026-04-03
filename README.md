@@ -171,6 +171,8 @@ The files that support that model are:
 
 At the moment, the repo is still in an agent-assisted hardening phase. Automation is being introduced deliberately rather than all at once.
 
+This docs repo is also the first place to trial review automation before wiring upstream repositories into that flow.
+
 ## Publishing Model
 
 Current working model:
