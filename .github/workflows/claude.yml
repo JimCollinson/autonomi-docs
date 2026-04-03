@@ -25,4 +25,4 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_args: |
             --allowedTools WebFetch
-            --max-turns 6
+            --max-turns 10
