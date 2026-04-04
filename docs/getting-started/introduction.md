@@ -1,27 +1,5 @@
 # What is Autonomi?
 
-<!-- verification:
-  source_repo: ant-sdk
-  source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
-  verification_mode: current-merged-truth
--->
-<!-- verification:
-  source_repo: ant-client
-  source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
-  verification_mode: current-merged-truth
--->
-<!-- verification:
-  source_repo: self_encryption
-  source_ref: master
-  source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
-  verified_date: 2026-04-02
-  verification_mode: current-merged-truth
--->
-
 {% hint style="warning" %}
 This is preview documentation for Autonomi 2.0 ahead of the planned network launch on 7 April 2026. Content is under active review and may change before launch.
 {% endhint %}
@@ -32,11 +10,11 @@ Autonomi is a decentralized peer-to-peer network for permanent, immutable data s
 
 At a high level, Autonomi gives you:
 
-- immutable storage, where changing the content produces a new address instead of mutating the old one
-- client-side encryption through self-encryption before chunks are stored on the network
-- public and private retrieval paths through addresses and DataMaps
-- pay-once storage, where you pay in Autonomi Network Token (ANT) when you upload and downloads are free
-- post-quantum cryptography in the transport and security model
+* immutable storage, where changing the content produces a new address instead of mutating the old one
+* client-side encryption through self-encryption before chunks are stored on the network
+* public and private retrieval paths through addresses and DataMaps
+* pay-once storage, where you pay in Autonomi Network Token (ANT) when you upload and downloads are free
+* post-quantum cryptography in the transport and security model
 
 ## Ways to build on Autonomi
 
@@ -46,9 +24,7 @@ You can build on Autonomi in several ways.
 
 This is the easiest starting point for most developers.
 
-- `antd` runs as a local daemon on your machine
-- it exposes REST and gRPC endpoints
-- SDKs are available in more than 15 languages
+A daemon called `antd` running on the users machine, exposing REST and gRPC endpoints with SDKs available in more than 15 languages
 
 Choose this route if you want to build with Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, or another supported SDK language.
 
@@ -68,17 +44,17 @@ Choose it when you want direct Rust control over networking, payment flows, and 
 
 Start with these core concepts:
 
-- [Data Types](../core-concepts/data-types.md)
-- [Self-Encryption](../core-concepts/self-encryption.md)
-- [Payment Model](../core-concepts/payment-model.md)
-- [Post-Quantum Cryptography](../core-concepts/post-quantum-cryptography.md)
-- [Key Derivation](../core-concepts/key-derivation.md)
+* [Data Types](../core-concepts/data-types.md)
+* [Self-Encryption](../core-concepts/self-encryption.md)
+* [Payment Model](../core-concepts/payment-model.md)
+* [Post-Quantum Cryptography](../core-concepts/post-quantum-cryptography.md)
+* [Key Derivation](../core-concepts/key-derivation.md)
 
 You do not need to understand every network detail before you store and retrieve data, but it helps to understand that uploads are content-addressed, immutable, and paid for at write time.
 
 ## Next steps
 
-- [Build with the SDKs](install.md)
-- [Use the ant CLI](using-ant-client.md)
-- [Build in Rust with ant-core](build-directly-in-rust.md)
-- [GitHub](../github.md)
+* [Build with the SDKs](install.md)
+* [Use the ant CLI](using-ant-client.md)
+* [Build in Rust with ant-core](build-directly-in-rust.md)
+* [GitHub](../github.md)
