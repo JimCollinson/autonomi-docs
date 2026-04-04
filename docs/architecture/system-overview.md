@@ -95,7 +95,7 @@ In the repos used for this page, `ant-node` documents chunk storage as its activ
 
 `saorsa-core` provides the P2P node, DHT, bootstrap handling, trust system, and routing-table logic around typed addresses and peer identity. `saorsa-transport` provides QUIC transport, NAT traversal, address discovery, and relay-assisted connectivity for peers that cannot rely on direct hole punching alone.
 
-At the current merged refs in scope, the transport story includes:
+The transport story includes:
 
 - observed-address discovery and address propagation across the network
 - peer-ID-based hole-punch coordination

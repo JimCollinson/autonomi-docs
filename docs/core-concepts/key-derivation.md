@@ -15,11 +15,11 @@
   verification_mode: current-merged-truth
 -->
 
-In the repos in scope, key derivation appears as a generic cryptographic primitive in `saorsa-pqc` and as domain-separated signing contexts in `ant-keygen`.
+In the repos covered here, key derivation appears as a generic cryptographic primitive in `saorsa-pqc` and as domain-separated signing contexts in `ant-keygen`.
 
 ## Why it matters
 
-This page is narrower than the earlier draft version. The sources in scope support HKDF and signing-context separation, but they do not document one Autonomi-wide master-key hierarchy for storage, signing, and payments.
+This page is narrower than the earlier draft version. The sources covered here support HKDF and signing-context separation, but they do not document one Autonomi-wide master-key hierarchy for storage, signing, and payments.
 
 ## How it works
 

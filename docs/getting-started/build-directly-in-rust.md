@@ -1,4 +1,4 @@
-# Build in Rust with ant-core
+# Build in Rust without the daemon
 
 <!-- verification:
   source_repo: ant-client
@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-Use `ant-core` when you want native, daemon-free Rust access to the Autonomi network. It is the most direct programmatic route for applications that want to control networking, uploads, and payments in Rust.
+You can build on Autonomi in Rust without running the local daemon. This approach uses the Rust library `ant-core` and gives your application direct access to networking, uploads, and payments.
 
 ## Prerequisites
 
@@ -37,7 +37,7 @@ bytes = "1"
 tokio = { version = "1", features = ["full"] }
 ```
 
-### 2. Start a local devnet and upload data directly from Rust
+### 2. Start a local devnet and upload data from Rust
 
 Replace `src/main.rs` with:
 
@@ -72,7 +72,7 @@ This example starts a local Autonomi development network, creates a funded Rust 
 
 ## What happened
 
-Your Rust application talked to the network through `ant-core` directly, without `antd` or a CLI wrapper. `ant-core` started a local devnet, created a funded client, handled self-encryption and payment, and gave you direct access to the upload and download results in Rust.
+Your Rust application talked to the network through `ant-core`, without `antd` or a CLI wrapper. `ant-core` started a local devnet, created a funded client, handled self-encryption and payment, and gave you direct access to the upload and download results in Rust.
 
 ## Next steps
 

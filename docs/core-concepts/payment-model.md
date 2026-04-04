@@ -26,13 +26,13 @@ Autonomi uses a pay-once storage model. You pay in Autonomi Network Token (ANT) 
 
 ## Why it matters
 
-You cannot treat uploads as fire-and-forget writes. The daemon and direct-network tooling both require wallet context for paid storage operations, and the interfaces differ in where they expose cost estimation, wallet approval, and payment-mode control.
+You cannot treat uploads as fire-and-forget writes. The daemon, CLI, and native Rust library all require wallet context for paid storage operations, and they differ in where they expose cost estimation, wallet approval, and payment-mode control.
 
 ## How it works
 
 ### Pay once on upload
 
-Autonomi is designed around immutable storage rather than renewable storage leases. In practice, that means the payment event happens when you upload data. There are no recurring storage fees or separate retrieval payments in the documented developer flows.
+Autonomi is designed around immutable storage rather than renewable storage leases. In practice, that means the payment event happens when you upload data. There are no recurring storage fees or separate retrieval payments.
 
 ### Wallet-backed writes
 
@@ -80,7 +80,7 @@ Nodes verify the payment proof that arrives with each write. That includes signa
 
 ### What happens on retrieval
 
-Downloads do not require a separate payment step. In the documented tools, payments are tied to storing data, chunks, files, directories, or node-management operations that require wallet context.
+Downloads do not require a separate payment step. Payments are tied to storing data, chunks, files, directories, or node-management operations that require wallet context.
 
 ## Practical example
 

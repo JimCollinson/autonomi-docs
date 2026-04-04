@@ -45,7 +45,7 @@ Read more in [Self-Encryption](self-encryption.md).
 
 ## Post-quantum cryptography
 
-The cryptography stack in scope uses ML-DSA-65 for signatures and ML-KEM-768 for key encapsulation. Those algorithms matter most when you are reasoning about network identity, transport security, or the broader security model.
+The cryptography stack uses ML-DSA-65 for signatures and ML-KEM-768 for key encapsulation. Those algorithms matter most when you are reasoning about network identity, transport security, or the broader security model.
 
 Read more in [Post-Quantum Cryptography](post-quantum-cryptography.md).
 
