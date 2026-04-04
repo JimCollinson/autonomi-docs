@@ -45,7 +45,7 @@ The daemon defaults are:
 - REST: `http://localhost:8082`
 - gRPC: `localhost:50051`
 
-On startup, `antd` writes a `daemon.port` file with the resolved REST and gRPC ports. The repo README documents these default locations:
+On startup, `antd` writes a `daemon.port` file with the resolved REST and gRPC ports. The default locations are:
 
 | Platform | `daemon.port` location |
 |------|------|

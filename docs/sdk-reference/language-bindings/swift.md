@@ -18,7 +18,7 @@ dependencies: [
 ]
 ```
 
-The README says to use a local package dependency until the package is published.
+Use a local package dependency until the package is published.
 
 ## Connect to the daemon
 

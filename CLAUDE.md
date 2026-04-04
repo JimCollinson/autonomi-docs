@@ -95,6 +95,7 @@ All documentation work follows `source audit -> draft -> verify`. Follow the det
 - Use `path` language only on pages where the reader is explicitly choosing between routes. In normal prose, prefer phrases like "using the SDKs", "using the CLI", or "building in Rust with ant-core".
 - Prefer system behavior and user-facing tool names over repo names in ordinary explanatory prose.
 - Avoid provenance terms such as `upstream` and `downstream` in rendered prose unless the page is explicitly about source repositories, contribution workflow, or source verification.
+- Do not narrate the evidence in rendered prose. Avoid phrases like `the README says`, `the README notes`, `the README documents`, `the documentation describes`, `the relevant repos`, or `the sources covered here`. State the system, tool, or workflow directly and confidently. If a claim is not strong enough to state directly, re-audit it or remove it.
 - Expand important acronyms on first use when that helps a first-time reader.
 - See [Audience and objectives](#audience-and-objectives) for reader assumptions
 

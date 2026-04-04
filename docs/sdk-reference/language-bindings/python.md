@@ -83,7 +83,7 @@ except AntdError as error:
     print(error)
 ```
 
-REST and gRPC share the same high-level API, but the README notes that wallet operations and `payment_mode` are REST-only today.
+REST and gRPC share the same high-level API, but wallet operations and `payment_mode` are REST-only.
 
 ## Full API reference
 

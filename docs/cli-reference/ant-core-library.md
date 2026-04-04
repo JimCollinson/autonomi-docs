@@ -12,7 +12,7 @@
 
 ## Install
 
-The README documents `ant-core` as a local dependency from an `ant-client` checkout:
+Use `ant-core` as a local dependency from an `ant-client` checkout:
 
 ```toml
 [dependencies]

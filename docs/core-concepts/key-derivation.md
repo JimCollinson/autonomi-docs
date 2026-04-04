@@ -19,13 +19,13 @@ In the repos covered here, key derivation appears as a generic cryptographic pri
 
 ## Why it matters
 
-This page is narrower than the earlier draft version. The sources covered here support HKDF and signing-context separation, but they do not document one Autonomi-wide master-key hierarchy for storage, signing, and payments.
+This page focuses on the parts of key derivation that are actually documented in the current stack. Autonomi uses HKDF primitives and signing-context separation, but it does not define one unified key hierarchy for storage, signing, and payments.
 
 ## How it works
 
 ### HKDF in saorsa-pqc
 
-The `saorsa-pqc` README documents HKDF-SHA3-256 and HKDF-SHA3-512 as available key-derivation primitives.
+`saorsa-pqc` provides HKDF-SHA3-256 and HKDF-SHA3-512 as key-derivation primitives.
 
 That means the crypto library can derive new key material from shared secrets or existing key material, but the repo does not by itself define how application-level Autonomi keys should be organized.
 

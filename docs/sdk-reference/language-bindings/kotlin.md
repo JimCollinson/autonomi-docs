@@ -18,7 +18,7 @@ dependencies {
 }
 ```
 
-The README notes that, until published, you should use the project as a local dependency or composite build.
+Until the package is published, use the project as a local dependency or composite build.
 
 ## Connect to the daemon
 

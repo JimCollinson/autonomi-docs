@@ -32,7 +32,7 @@ If you are reasoning about security, transport identity, or release authenticity
 
 ### saorsa-pqc
 
-The `saorsa-pqc` README describes a broader PQC library that includes:
+`saorsa-pqc` is a broader PQC library that includes:
 
 - ML-KEM key encapsulation variants
 - ML-DSA signature variants
@@ -43,12 +43,12 @@ So the library itself is broader than any single Autonomi-facing transport choic
 
 ### saorsa-transport
 
-The `saorsa-transport` README describes its transport layer as pure post-quantum and highlights this pair for transport use:
+`saorsa-transport` describes its transport layer as pure post-quantum and highlights this pair for transport use:
 
 - ML-KEM-768 for key exchange
 - ML-DSA-65 for signatures
 
-The transport documentation describes this surface as having no classical fallback.
+The transport layer has no classical fallback.
 
 ### ant-keygen
 
