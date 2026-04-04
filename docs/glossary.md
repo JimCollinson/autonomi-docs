@@ -112,7 +112,7 @@ Canonical terms used throughout this docs set.
 
 ## N
 
-**NAT traversal** — Observed-address discovery, hole punching, and relay-assisted connectivity used by the transport layer to keep peers reachable across NAT boundaries, including harder cases such as symmetric NAT.
+**NAT traversal** — Observed-address discovery and hole punching used to keep peers reachable across NAT boundaries. Relay fallback may be needed for some CGNAT cases.
 
 ## P
 
@@ -122,7 +122,7 @@ Canonical terms used throughout this docs set.
 
 ## Q
 
-**QUIC** — UDP-based transport protocol used for peer connections, NAT traversal coordination, and relay-assisted connectivity.
+**QUIC** — UDP-based transport protocol used for peer connections and NAT traversal coordination.
 
 ## S
 

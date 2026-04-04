@@ -7,6 +7,13 @@
   verified_date: 2026-04-02
   verification_mode: current-merged-truth
 -->
+<!-- verification:
+  source_repo: ant-client
+  source_ref: main
+  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
+  verified_date: 2026-04-04
+  verification_mode: current-merged-truth
+-->
 
 Use the two-phase upload flow when your application signs EVM payment transactions outside `antd`.
 
