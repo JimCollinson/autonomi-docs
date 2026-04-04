@@ -97,5 +97,6 @@ The daemon is healthy when `/health` returns `status: ok` and your application c
 ## Next steps
 
 * [Build with the SDKs](../getting-started/install.md)
+* [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)
 * [Daemon Command Reference](../sdk-reference/daemon-cli.md)
 * [REST API](../sdk-reference/rest-api.md)

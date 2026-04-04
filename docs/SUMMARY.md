@@ -8,6 +8,7 @@
 
 * [What is Autonomi?](getting-started/introduction.md)
 * [Build with the SDKs](getting-started/install.md)
+* [Using the Autonomi Daemon](getting-started/using-the-autonomi-daemon.md)
 * [Your First Upload with the SDKs](getting-started/hello-world.md)
 * [Use the ant CLI](getting-started/using-ant-client.md)
 * [Build in Rust with ant-core](getting-started/build-directly-in-rust.md)

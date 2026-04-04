@@ -24,7 +24,7 @@ You can build on Autonomi in several ways.
 
 This is the easiest starting point for most developers.
 
-A daemon called `antd` running on the users machine, exposing REST and gRPC endpoints with SDKs available in more than 15 languages
+`antd` runs as a local daemon on your machine. It exposes REST and gRPC endpoints, and SDKs are available in more than 15 languages.
 
 Choose this route if you want to build with Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, or another supported SDK language.
 
@@ -55,6 +55,7 @@ You do not need to understand every network detail before you store and retrieve
 ## Next steps
 
 * [Build with the SDKs](install.md)
+* [Using the Autonomi Daemon](using-the-autonomi-daemon.md)
 * [Use the ant CLI](using-ant-client.md)
 * [Build in Rust with ant-core](build-directly-in-rust.md)
 * [GitHub](../github.md)

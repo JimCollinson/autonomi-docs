@@ -584,5 +584,6 @@ curl -X POST http://localhost:8082/v1/upload/finalize \
 ## Related pages
 
 - [Build with the SDKs](../getting-started/install.md)
+- [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)
 - [Your First Upload with the SDKs](../getting-started/hello-world.md)
 - [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)

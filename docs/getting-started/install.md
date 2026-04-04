@@ -4,14 +4,7 @@
   source_repo: ant-sdk
   source_ref: main
   source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
-  verification_mode: current-merged-truth
--->
-<!-- verification:
-  source_repo: ant-node
-  source_ref: main
-  source_commit: 2a6e9f2a2066d80c072a7cc2cb644e35def9add3
-  verified_date: 2026-04-03
+  verified_date: 2026-04-04
   verification_mode: current-merged-truth
 -->
 
@@ -19,111 +12,45 @@
 This is preview documentation for Autonomi 2.0 ahead of the planned network launch on 7 April 2026. Content is under active review and may change before launch.
 {% endhint %}
 
-Use the SDKs when you want to build on Autonomi through language bindings and a local daemon. `antd` runs on your machine, talks to the network for you, and exposes REST and gRPC so your application can work through a stable local API.
+Use the SDKs when you want the easiest starting point for application development on Autonomi.
 
-This is usually the best starting point if you are building in Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, or another SDK language.
+This route is built around:
 
-## Prerequisites
+- a local daemon called `antd`
+- REST and gRPC interfaces exposed by that daemon
+- language SDKs in Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, and other supported languages
 
-- Git
-- Rust toolchain
-- `protoc` (Protocol Buffers compiler) available on your machine
-- For write operations on the default network: a wallet private key exported as `AUTONOMI_WALLET_KEY`
-- For a fully local devnet: Python 3.10+ and a sibling `ant-node` checkout if you plan to use `ant dev start`
+## Why use the SDKs
 
-The SDKs are available in many languages. This guide focuses on cURL, Python, Node.js / TypeScript, and Rust in the featured examples. For the full list, see [Language Bindings Overview](../sdk-reference/language-bindings/overview.md).
+Choose the SDKs if you want:
 
-## Steps
+- the easiest path into building an application on Autonomi
+- a stable local API instead of direct peer-to-peer networking in your app
+- one local daemon process that multiple apps, scripts, or tools can share
+- SDK support in the language you already work in
 
-### 1. Build the daemon from source
+## How this route works
 
-Install `antd` from the `ant-sdk` repo:
+`antd` runs on your machine and talks to the network for you. The SDKs, REST API, gRPC clients, and MCP server all build on that same local daemon.
 
-```bash
-git clone https://github.com/WithAutonomi/ant-sdk.git
-cd ant-sdk/antd
-cargo build --release
-```
+If you would rather work directly from the terminal, use [the ant CLI](using-ant-client.md). If you want daemon-free Rust access, build in Rust with `ant-core` instead.
 
-`antd` currently needs `protoc` during the build. On macOS, one working setup is:
+## What to do next
 
-```bash
-brew install protobuf
-```
+### 1. Using the Autonomi Daemon
 
-Verify the binary starts:
+Start with [Using the Autonomi Daemon](using-the-autonomi-daemon.md) to learn what `antd` is, how to install it, and how to verify that it is running.
 
-```bash
-./target/release/antd --help
-```
+### 2. Your first upload
 
-### 2. Start the daemon
+Once the daemon is running, continue to [Your First Upload with the SDKs](hello-world.md).
 
-For a read-only local gateway on the default network:
+### 3. Language-specific references
 
-```bash
-./target/release/antd
-```
+If you already know your target language, use the [Language Bindings](../sdk-reference/language-bindings/overview.md) section for setup and API details.
 
-To enable write endpoints on the default network, restart it with a wallet key:
+## Related pages
 
-```bash
-AUTONOMI_WALLET_KEY="<hex_private_key>" ./target/release/antd
-```
-
-If you want a local devnet instead, use the helper from the repo root:
-
-```bash
-cd ..
-pip install -e ant-dev/
-ant dev start
-```
-
-`ant dev start` expects the `ant-node` repo to be cloned as a sibling of `ant-sdk`.
-
-On the first run, `ant dev start` can take longer than usual while local components compile in release mode. If it times out on a cold build, run it again after the initial compilation has completed.
-
-### 3. Confirm the gateway responds
-
-The default REST endpoint is `http://localhost:8082`:
-
-```bash
-curl http://localhost:8082/health
-```
-
-Expected response:
-
-```json
-{
-  "status": "ok",
-  "network": "default"
-}
-```
-
-If you started a local devnet, the `network` value is `local`.
-
-### 4. Know what the SDKs give you
-
-By default, `antd` provides:
-
-- REST: `http://localhost:8082`
-- gRPC: `localhost:50051`
-
-On startup, `antd` also writes a `daemon.port` file. SDKs can use that file to discover non-default ports automatically.
-
-This approach is useful when you want:
-
-- a single local process that multiple apps or tools can share
-- SDK ergonomics in non-Rust languages
-- a stable local REST or gRPC interface instead of direct P2P networking in your app
-
-## What happened
-
-You built `antd` and started a local gateway for the Autonomi SDKs. The health check confirms that the daemon is reachable; write endpoints stay unavailable until the daemon has wallet configuration or a local devnet helper has provisioned one.
-
-## Next steps
-
+- [Using the Autonomi Daemon](using-the-autonomi-daemon.md)
 - [Your First Upload with the SDKs](hello-world.md)
 - [SDK Overview](../sdk-reference/overview.md)
-- [REST API](../sdk-reference/rest-api.md)
-- [Use the ant CLI](using-ant-client.md)

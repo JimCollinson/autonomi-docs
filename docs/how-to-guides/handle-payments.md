@@ -16,7 +16,7 @@ Featured examples on this page use cURL, Python, Node.js / TypeScript, and Rust.
 
 ## Prerequisites
 
-- `antd` running on `http://localhost:8082`
+- `antd` running on `http://localhost:8082` (see [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md))
 - A configured wallet for write operations, or a local devnet started with `ant dev start`
 
 ## Steps

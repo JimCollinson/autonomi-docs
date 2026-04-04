@@ -19,7 +19,7 @@ Use the two-phase upload flow when your application signs EVM payment transactio
 
 ## Prerequisites
 
-- `antd` running without `AUTONOMI_WALLET_KEY`
+- `antd` running without `AUTONOMI_WALLET_KEY` (see [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md))
 - EVM configuration available to the daemon for the target network
 - An external signer or wallet stack that can submit the required payment transactions
 

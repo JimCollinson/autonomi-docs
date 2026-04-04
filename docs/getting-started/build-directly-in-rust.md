@@ -16,7 +16,7 @@ You can build on Autonomi in Rust without running the local daemon. This approac
 - A local checkout of `ant-client`
 - A new or existing Rust application
 
-If you want a local REST or gRPC gateway instead, start with [Build with the SDKs](install.md). If you want shell access instead of writing Rust code, see [Use the ant CLI](using-ant-client.md).
+If you want a local REST or gRPC gateway instead, start with [Build with the SDKs](install.md) and [Using the Autonomi Daemon](using-the-autonomi-daemon.md). If you want shell access instead of writing Rust code, see [Use the ant CLI](using-ant-client.md).
 
 ## Steps
 

@@ -16,7 +16,7 @@ Use the `ant` CLI when you want direct command-line access to the Autonomi netwo
 - `SECRET_KEY` set for uploads and wallet commands
 - A file to upload for the quickstart example below
 
-If you want to build an application in another language, start with [Build with the SDKs](install.md). If you want daemon-free programmatic Rust access, see [Build in Rust with ant-core](build-directly-in-rust.md).
+If you want to build an application in another language, start with [Build with the SDKs](install.md) and [Using the Autonomi Daemon](using-the-autonomi-daemon.md). If you want daemon-free programmatic Rust access, see [Build in Rust with ant-core](build-directly-in-rust.md).
 
 ## Steps
 

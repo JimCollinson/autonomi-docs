@@ -18,7 +18,7 @@ Use the SDKs if you want the easiest starting point for application development 
 
 A daemon called `antd` running on the users machine, exposing REST and gRPC endpoints giving your application a stable REST and gRPC interface to the network.
 
-Start with [Build with the SDKs](getting-started/install.md), then [Your First Upload with the SDKs](getting-started/hello-world.md).
+Start with [Build with the SDKs](getting-started/install.md), then [Using the Autonomi Daemon](getting-started/using-the-autonomi-daemon.md), then [Your First Upload with the SDKs](getting-started/hello-world.md).
 
 ### Use the CLI
 

@@ -12,7 +12,7 @@ Use the Autonomi MCP server when you want an MCP-compatible client such as Claud
 
 ## Prerequisites
 
-- `antd` running on your machine or reachable at a known base URL
+- `antd` running on your machine or reachable at a known base URL (see [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md))
 - Python 3.10+
 - A local checkout of `ant-sdk`
 - `antd` Python SDK installed with REST support
@@ -93,5 +93,5 @@ Your MCP client is configured correctly when it can see the `antd-autonomi` serv
 ## Next steps
 
 - [MCP Server Reference](../sdk-reference/mcp-server.md)
-- [Build with the SDKs](../getting-started/install.md)
+- [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)
 - [REST API](../sdk-reference/rest-api.md)

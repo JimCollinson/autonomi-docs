@@ -16,7 +16,7 @@ Featured examples on this page use cURL, Python, Node.js / TypeScript, and Rust.
 
 ## Prerequisites
 
-- `antd` running on `http://localhost:8082`
+- `antd` running on `http://localhost:8082` (see [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md))
 - A configured wallet for write operations, or a local devnet started with `ant dev start`
 - Optional: Python, Node.js, or Rust toolchain if you want to use the SDK examples
 
@@ -393,3 +393,4 @@ For raw data, compare the retrieved bytes to the original payload. For files and
 - [Your First Upload with the SDKs](../getting-started/hello-world.md)
 - [REST API](../sdk-reference/rest-api.md)
 - [SDK Overview](../sdk-reference/overview.md)
+- [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)

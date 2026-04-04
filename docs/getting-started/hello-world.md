@@ -12,7 +12,7 @@ In this guide, you use `antd`, the local daemon used by the SDKs, to store a sma
 
 ## Prerequisites
 
-- `antd` installed and running on `http://localhost:8082` (see [Build with the SDKs](install.md))
+- `antd` installed and running on `http://localhost:8082` (see [Using the Autonomi Daemon](using-the-autonomi-daemon.md))
 - For write operations: start `antd` with `AUTONOMI_WALLET_KEY` set, or use `ant dev start` for a local devnet
 - Optional: Python, Node.js, or Rust toolchain if you want to use the SDK examples
 

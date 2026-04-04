@@ -87,5 +87,6 @@ antd --log-level debug
 ## Related pages
 
 - [Build with the SDKs](../getting-started/install.md)
+- [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)
 - [Use antd as a Local Service](../how-to-guides/run-as-daemon.md)
 - [REST API](rest-api.md)

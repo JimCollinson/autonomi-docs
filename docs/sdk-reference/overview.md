@@ -95,6 +95,7 @@ Use the binding-specific page when you need package names, constructors, or tran
 ## Related pages
 
 - [Build with the SDKs](../getting-started/install.md)
+- [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)
 - [Your First Upload with the SDKs](../getting-started/hello-world.md)
 - [Use the Autonomi MCP Server](../how-to-guides/use-the-mcp-server.md)
 - [MCP Server Reference](mcp-server.md)
