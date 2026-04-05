@@ -14,14 +14,6 @@
   verified_date: 2026-04-04
   verification_mode: current-merged-truth
 -->
-<!-- verification:
-  source_repo: ant-keygen
-  source_ref: main
-  source_commit: 3a2953f384a3b16391968de451b703843b98ed86
-  verified_date: 2026-04-02
-  verification_mode: current-merged-truth
--->
-
 Use this guide when you need a wallet that can pay for uploads.
 
 It explains:
@@ -30,6 +22,8 @@ It explains:
 - what local development gives you automatically
 - what changes on Arbitrum Sepolia and Arbitrum One
 - how to check the wallet, token balance, and gas balance before you upload
+
+If you want to understand public addresses and `DataMap` handling rather than upload wallets, see [Keys and Access Material](../core-concepts/keys-and-access-material.md).
 
 ## Prerequisites
 
@@ -40,7 +34,7 @@ It explains:
 
 ### 1. Know which tools need which wallet input
 
-The current toolchain expects:
+The toolchain expects:
 
 - `antd` -> `AUTONOMI_WALLET_KEY`
 - `ant` -> `SECRET_KEY`
@@ -135,4 +129,4 @@ You are correctly configured when the chosen tool reports the expected wallet ad
 - [Handle Payments](handle-payments.md)
 - [Use External Signers](use-external-signers.md)
 - [Build a Read-Only Application](build-a-read-only-application.md)
-- [Key Derivation](../core-concepts/key-derivation.md)
+- [Keys and Access Material](../core-concepts/keys-and-access-material.md)

@@ -97,4 +97,5 @@ The tooling maps cleanly onto these surfaces:
 
 - [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
 - [Payment Model](payment-model.md)
+- [Keys and Access Material](keys-and-access-material.md)
 - [Self-Encryption](self-encryption.md)

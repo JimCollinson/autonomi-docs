@@ -17,6 +17,7 @@
 
 * [Overview](core-concepts/overview.md)
 * [Data Types](core-concepts/data-types.md)
+* [Keys and Access Material](core-concepts/keys-and-access-material.md)
 * [Self-Encryption](core-concepts/self-encryption.md)
 * [Post-Quantum Cryptography](core-concepts/post-quantum-cryptography.md)
 * [Key Derivation](core-concepts/key-derivation.md)

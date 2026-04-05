@@ -114,6 +114,9 @@ In both examples, payment happens as part of the upload flow, but the daemon exa
 
 ## Related pages
 
+- [Keys and Access Material](keys-and-access-material.md)
+- [Prepare a Wallet for Uploads](../how-to-guides/manage-keys.md)
 - [Handle Payments](../how-to-guides/handle-payments.md)
 - [Use External Signers](../how-to-guides/use-external-signers.md)
+- [Build a Read-Only Application](../how-to-guides/build-a-read-only-application.md)
 - [Data Types](data-types.md)
