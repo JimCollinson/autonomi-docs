@@ -1,4 +1,4 @@
-# Handle Payments
+# Estimate Costs and Handle Upload Payments
 
 <!-- verification:
   source_repo: ant-sdk
@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-In this guide, you use `antd`, the local daemon used by the SDKs, to check balances, approve token spend, estimate uploads, and choose a payment mode.
+In this guide, you use `antd`, the local daemon used by the SDKs, to estimate costs, check balances, approve token spend, and choose a payment mode before you upload data.
 
 If you want to work from the command line instead, see [Use the ant CLI](../getting-started/using-ant-client.md). If you want direct Rust access, see [Build in Rust with ant-core](../getting-started/build-directly-in-rust.md).
 
@@ -84,6 +84,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 The wallet balance response returns token balance as atto tokens and gas balance as wei.
 
+On public EVM networks, both values matter:
+
+- ANT covers storage payment
+- gas covers the transaction itself
+
 ### 2. Approve token spend
 
 Fresh wallets may need an approval transaction before uploads can spend tokens through the payment contracts.
@@ -141,6 +146,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### 3. Estimate storage cost
 
 Cost estimation uses the daemon's current pricing logic and returns a string amount in atto tokens.
+
+Use this step before uploads when you want to show a user the likely storage cost or validate that the wallet has enough balance.
 
 {% tabs %}
 {% tab title="cURL" %}
@@ -201,6 +208,14 @@ The daemon accepts three payment modes: `auto`, `merkle`, and `single`.
 - `auto` is the default
 - `merkle` forces Merkle batch payments
 - `single` forces per-chunk payments
+
+For larger uploads, `merkle` reduces gas by using a batch payment flow.
+
+### 5. Understand local versus public-network testing
+
+On a local devnet, the test wallet is provisioned for you. On Arbitrum Sepolia or Arbitrum One, you must bring your own funded wallet.
+
+That makes the local devnet the easiest place to verify upload payment logic before you move to a public EVM network.
 
 {% tabs %}
 {% tab title="cURL" %}
@@ -272,6 +287,9 @@ Check the wallet balance before and after a paid upload, then fetch the stored d
 
 ## Next steps
 
+- [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)
+- [Prepare a Wallet for Uploads](manage-keys.md)
 - [Store and Retrieve Data with the SDKs](store-and-retrieve-data.md)
-- [Use External Signers](use-external-signers.md)
+- [Let Users Pay with External Signers](use-external-signers.md)
+- [Build Read-Only Features](build-a-read-only-application.md)
 - [REST API](../sdk-reference/rest-api.md)

@@ -37,6 +37,12 @@ Autonomi stores data as immutable, content-addressed chunks. The developer-facin
 
 Read more in [Data Types](data-types.md).
 
+## Keys, addresses, and DataMaps
+
+Wallet keys pay for writes, public addresses retrieve public data, and `DataMap` values are the critical retrieval material for private data.
+
+Read more in [Keys, Addresses, and DataMaps](keys-addresses-and-datamaps.md).
+
 ## Self-encryption
 
 Before uploaded content is stored, it is encrypted and split into chunks. The `self_encryption` crate and the higher-level upload paths in `ant-sdk` and `ant-core` are responsible for producing the DataMap and chunk layout used later for retrieval.
@@ -60,6 +66,7 @@ Read more in [Payment Model](payment-model.md).
 Start here depending on what you need next:
 
 - If you are building an application: [Data Types](data-types.md), then [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
+- If you need to understand wallets, public addresses, and private retrieval material: [Keys, Addresses, and DataMaps](keys-addresses-and-datamaps.md)
 - If you need to understand the encryption path: [Self-Encryption](self-encryption.md)
-- If you need to understand upload costs and wallets: [Payment Model](payment-model.md), then [Handle Payments](../how-to-guides/handle-payments.md)
+- If you need to understand upload costs and wallets: [Payment Model](payment-model.md), then [Estimate Costs and Handle Upload Payments](../how-to-guides/handle-payments.md)
 - If you need the security context: [Post-Quantum Cryptography](post-quantum-cryptography.md)

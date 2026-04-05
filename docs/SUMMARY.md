@@ -17,19 +17,20 @@
 
 * [Overview](core-concepts/overview.md)
 * [Data Types](core-concepts/data-types.md)
+* [Keys, Addresses, and DataMaps](core-concepts/keys-addresses-and-datamaps.md)
 * [Self-Encryption](core-concepts/self-encryption.md)
 * [Post-Quantum Cryptography](core-concepts/post-quantum-cryptography.md)
-* [Key Derivation](core-concepts/key-derivation.md)
 * [Payment Model](core-concepts/payment-model.md)
 
 ## How-To Guides
 
 * [Set Up a Local Network](how-to-guides/setup-local-network.md)
 * [Store and Retrieve Data with the SDKs](how-to-guides/store-and-retrieve-data.md)
-* [Manage Keys and Wallets](how-to-guides/manage-keys.md)
-* [Handle Payments](how-to-guides/handle-payments.md)
+* [Prepare a Wallet for Uploads](how-to-guides/manage-keys.md)
+* [Estimate Costs and Handle Upload Payments](how-to-guides/handle-payments.md)
+* [Build Read-Only Features](how-to-guides/build-a-read-only-application.md)
 * [Use the Daemon as a Local Service](how-to-guides/run-as-daemon.md)
-* [Use External Signers](how-to-guides/use-external-signers.md)
+* [Let Users Pay with External Signers](how-to-guides/use-external-signers.md)
 * [Use the Autonomi MCP Server](how-to-guides/use-the-mcp-server.md)
 * [Test Your Application](how-to-guides/test-your-application.md)
 * [Deploy to Mainnet](how-to-guides/deploy-to-mainnet.md)

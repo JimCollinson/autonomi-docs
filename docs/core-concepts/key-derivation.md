@@ -76,5 +76,5 @@ The docs can verify that HKDF primitives and signing contexts exist. They cannot
 ## Related pages
 
 - [Post-Quantum Cryptography](post-quantum-cryptography.md)
-- [Handle Payments](../how-to-guides/handle-payments.md)
-- [Use External Signers](../how-to-guides/use-external-signers.md)
+- [Estimate Costs and Handle Upload Payments](../how-to-guides/handle-payments.md)
+- [Let Users Pay with External Signers](../how-to-guides/use-external-signers.md)

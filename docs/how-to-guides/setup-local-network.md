@@ -15,7 +15,9 @@
   verification_mode: current-merged-truth
 -->
 
-Use the current `ant-dev` workflow to start a local devnet plus `antd` on your machine.
+Use the `ant-dev` workflow to start a local devnet plus `antd` on your machine.
+
+This is the best place to test uploads before you move to Arbitrum Sepolia or Arbitrum One, because the local environment also provisions a funded wallet for you.
 
 ## Prerequisites
 
@@ -67,6 +69,13 @@ The local start flow launches:
 - `antd --network local`
 - a wallet-enabled local environment with REST health on `http://localhost:8082/health`
 
+That means local testing gives you:
+
+- a network to upload to
+- a daemon to talk to
+- a wallet you can inspect
+- token and gas balances for upload testing
+
 ### 4. Check status and wallet
 
 ```bash
@@ -75,6 +84,8 @@ ant dev wallet show
 ```
 
 `ant dev status` checks the local processes and the daemon health endpoint. `ant dev wallet show` prints the configured local wallet address, token balance, and gas balance.
+
+This is the easiest way to confirm that your local environment is actually ready for paid upload tests.
 
 ### 5. Verify the daemon responds
 
@@ -111,7 +122,7 @@ ant dev stop
 
 ## Verify it worked
 
-The local network is working when `ant dev status` reports a healthy daemon and a test public upload can be fetched back through the same `antd` instance.
+The local network is working when `ant dev status` reports a healthy daemon, `ant dev wallet show` reports a funded wallet, and a test public upload can be fetched back through the same `antd` instance.
 
 ## Common errors
 
@@ -123,6 +134,8 @@ The local network is working when `ant dev status` reports a healthy daemon and 
 
 ## Next steps
 
+- [Using the Autonomi Daemon](../getting-started/using-the-autonomi-daemon.md)
+- [Prepare a Wallet for Uploads](manage-keys.md)
 - [Your First Upload with the SDKs](../getting-started/hello-world.md)
 - [Store and Retrieve Data with the SDKs](store-and-retrieve-data.md)
-- [Handle Payments](handle-payments.md)
+- [Estimate Costs and Handle Upload Payments](handle-payments.md)

@@ -1,4 +1,4 @@
-# Use External Signers
+# Let Users Pay with External Signers
 
 <!-- verification:
   source_repo: ant-sdk
@@ -15,7 +15,13 @@
   verification_mode: current-merged-truth
 -->
 
-Use the two-phase upload flow when your application signs EVM payment transactions outside `antd`.
+Use the two-phase upload flow when your application needs a wallet outside `antd` to sign the payment transaction.
+
+This is the right approach when:
+
+- your users pay for their own uploads
+- your app should not custody a wallet key for them
+- you need to integrate with an external signer or wallet stack
 
 ## Prerequisites
 
@@ -117,6 +123,7 @@ Finalize succeeds when the daemon accepts the `upload_id` and the external trans
 
 ## Next steps
 
-- [Handle Payments](handle-payments.md)
+- [Prepare a Wallet for Uploads](manage-keys.md)
+- [Estimate Costs and Handle Upload Payments](handle-payments.md)
 - [REST API](../sdk-reference/rest-api.md)
 - [Use antd as a Local Service](run-as-daemon.md)
