@@ -19,7 +19,7 @@ Autonomi stores content as immutable, content-addressed chunks. As a developer, 
 
 ## Why it matters
 
-If you treat those interfaces as unrelated storage types, the model becomes harder to understand than it really is. The SDK and CLI are mostly giving you different ways to package content, publish retrieval metadata, and retrieve chunked data.
+Because Autonomi stores content as immutable, content-addressed chunks, developers need to understand the higher-level interfaces they use to package, publish, and retrieve that data. This page explains how public data, private data, files, directories, and DataMap handling fit together.
 
 ## One storage primitive underneath
 
