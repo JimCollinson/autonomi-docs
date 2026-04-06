@@ -62,7 +62,7 @@ The `antd` surface exposes cost estimation explicitly:
 - `POST /v1/data/cost`
 - `POST /v1/cost/file`
 
-Those endpoints return string amounts in the smallest token units used by the daemon surface.
+Those endpoints return the estimated upload cost as a string amount in atto tokens.
 
 ### Payment modes
 

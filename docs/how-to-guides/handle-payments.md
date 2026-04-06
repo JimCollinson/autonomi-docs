@@ -145,7 +145,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 3. Estimate storage cost
 
-Cost estimation uses the daemon's current pricing logic and returns a string amount in atto tokens.
+The daemon exposes cost-estimation endpoints and returns the estimated upload cost as a string amount in atto tokens.
 
 Use this step before uploads when you want to show a user the likely storage cost or validate that the wallet has enough balance.
 
