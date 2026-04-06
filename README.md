@@ -102,7 +102,7 @@ Rules:
 ## Repository Structure
 
 ```text
-autonomi-docs/
+repository-root/
 ├── .gitbook.yaml                # GitBook config; published content lives in docs/
 ├── CLAUDE.md                    # Repo rules for AI-assisted docs work
 ├── repo-registry.yml            # In-scope source repos and source-of-truth config

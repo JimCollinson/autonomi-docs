@@ -196,7 +196,7 @@ The ant-sdk monorepo contains **16** language directories: Python, Rust, Go, Jav
 
 ### Phase 1: POC under jimcollinson (now → pre-launch)
 
-- Create `jimcollinson/autonomi-docs` on GitHub
+- Create the initial personal docs repo on GitHub
 - Scaffold directory structure, SUMMARY.md, .gitbook.yaml
 - Connect GitBook Git Sync to verify the pipeline
 - Write and verify all P0 pages
@@ -204,7 +204,7 @@ The ant-sdk monorepo contains **16** language directories: Python, Rust, Go, Jav
 
 ### Phase 2: Move to WithAutonomi (post-launch or when David is bought in)
 
-- Transfer or recreate repo under WithAutonomi org
+- Transfer and rename repo to `WithAutonomi/autonomi-developer-docs`
 - Update GitBook Git Sync URL (5-minute change)
 - Present as a working, battle-tested system — not a proposal
 - Add team write access, branch protection rules
@@ -473,7 +473,7 @@ jobs:
       - uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.DOCS_REPO_TOKEN }}
-          repository: jimcollinson/autonomi-docs  # or WithAutonomi/autonomi-docs later
+          repository: WithAutonomi/autonomi-developer-docs
           event-type: upstream-change
           client-payload: '{"repo": "${{ github.repository }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
 ```
@@ -893,9 +893,9 @@ See Section 8 for automation architecture and Section 9 for detailed AI tooling,
 
 ## 14. NEXT STEPS (IMMEDIATE)
 
-1. **Create the docs repo** under `jimcollinson/autonomi-docs`
-2. **Scaffold the directory structure**: All directories, placeholder files, SUMMARY.md, .gitbook.yaml
-3. **Connect GitBook Git Sync** to verify the pipeline
-4. **Begin P0 page generation** starting with getting-started section
-5. **Chase dev confirmation** on conceptual guide v2 diffs
-6. **Confirm ant-sdk branch situation** — which branch ships on April 7?
+1. **Transfer and rename the docs repo** to `WithAutonomi/autonomi-developer-docs`
+2. **Reconnect and verify GitBook Git Sync** after transfer and rename
+3. **Confirm maintainer and contributor PR flow** under `WithAutonomi`
+4. **Verify Claude reviews and secrets** under the organisation setup
+5. **Add repo governance basics**: branch protection, CODEOWNERS, contribution guidance
+6. **Introduce upstream-triggered review automation** once the org setup is stable
