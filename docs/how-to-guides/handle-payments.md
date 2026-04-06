@@ -7,6 +7,13 @@
   verified_date: 2026-04-02
   verification_mode: current-merged-truth
 -->
+<!-- verification:
+  source_repo: evmlib
+  source_ref: main
+  source_commit: 82f2fccff243b48de0e04ceb71ccb2aa17d810af
+  verified_date: 2026-04-06
+  verification_mode: current-merged-truth
+-->
 
 In this guide, you use `antd`, the local daemon used by the SDKs, to estimate costs, check balances, approve token spend, and choose a payment mode before you upload data.
 
@@ -92,6 +99,8 @@ On public EVM networks, both values matter:
 ### 2. Approve token spend
 
 Fresh wallets may need an approval transaction before uploads can spend tokens through the payment contracts.
+
+This approval currently grants the payment contracts an unlimited token allowance.
 
 {% tabs %}
 {% tab title="cURL" %}

@@ -98,8 +98,11 @@ If you do not want `antd` to hold a wallet key, run it without `AUTONOMI_WALLET_
 EVM_RPC_URL=https://your-rpc-endpoint \
 EVM_PAYMENT_TOKEN_ADDRESS=0x... \
 EVM_DATA_PAYMENTS_ADDRESS=0x... \
+EVM_MERKLE_PAYMENTS_ADDRESS=0x... \
 ./target/release/antd
 ```
+
+Include `EVM_MERKLE_PAYMENTS_ADDRESS` when you want Merkle batch payment support in this configuration.
 
 That keeps signing outside the daemon and pushes transaction submission into your wallet or signer integration.
 

@@ -14,6 +14,13 @@
   verified_date: 2026-04-04
   verification_mode: current-merged-truth
 -->
+<!-- verification:
+  source_repo: evmlib
+  source_ref: main
+  source_commit: 82f2fccff243b48de0e04ceb71ccb2aa17d810af
+  verified_date: 2026-04-06
+  verification_mode: current-merged-truth
+-->
 
 Use the two-phase upload flow when your application needs a wallet outside `antd` to sign the payment transaction.
 
@@ -39,8 +46,11 @@ The daemon does not have an `--external-signer` flag. External-signer mode is th
 EVM_RPC_URL=https://your-rpc-endpoint \
 EVM_PAYMENT_TOKEN_ADDRESS=0x... \
 EVM_DATA_PAYMENTS_ADDRESS=0x... \
+EVM_MERKLE_PAYMENTS_ADDRESS=0x... \
 ./target/release/antd
 ```
+
+Include `EVM_MERKLE_PAYMENTS_ADDRESS` when you want Merkle batch payment support in the external-signer flow.
 
 ### 2. Prepare the upload
 

@@ -21,6 +21,13 @@
   verified_date: 2026-04-03
   verification_mode: current-merged-truth
 -->
+<!-- verification:
+  source_repo: evmlib
+  source_ref: main
+  source_commit: 82f2fccff243b48de0e04ceb71ccb2aa17d810af
+  verified_date: 2026-04-06
+  verification_mode: current-merged-truth
+-->
 
 Autonomi uses a pay-once storage model. You pay in Autonomi Network Token (ANT) when you upload data, then retrieve it later without ongoing storage charges or download fees.
 
