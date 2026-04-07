@@ -4,7 +4,7 @@
   source_repo: ant-node
   source_ref: main
   source_commit: 2a6e9f2a2066d80c072a7cc2cb644e35def9add3
-  verified_date: 2026-04-03
+  verified_date: 2026-04-07
   verification_mode: current-merged-truth
 -->
 
@@ -20,9 +20,11 @@ Use the `ant-node` API when your Rust application needs to own a node runtime di
 
 ### 1. Add ant-node
 
+Use the published `ant-node` crate from crates.io:
+
 ```toml
 [dependencies]
-ant-node = "0.10.0-rc.1"
+ant-node = "0.9.0"
 tokio = { version = "1", features = ["full"] }
 ```
 

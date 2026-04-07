@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: 0ceb761cf0511f5c4fd2bd0367dc6e1a34a1a2e6
+  verified_date: 2026-04-07
   verification_mode: current-merged-truth
 -->
 
@@ -147,7 +147,7 @@ Fetches a raw chunk and returns base64-encoded data.
 
 **Tool:** `prepare_upload(path)`
 
-Prepares a file upload for external signing and returns payment details.
+Prepares a file upload for external signing and returns payment details plus a `payment_type` discriminator.
 
 ### Prepare a Data Upload
 
@@ -155,11 +155,22 @@ Prepares a file upload for external signing and returns payment details.
 
 Prepares a data upload for external signing. The input is base64-encoded.
 
-### Finalize an Upload
+Both prepare tools return either:
+
+- `payment_type: "wave_batch"` with quote-level `payments`
+- `payment_type: "merkle"` with `depth`, `pool_commitments`, `merkle_payment_timestamp`, and `merkle_payments_address`
+
+### Finalize a Wave-Batch Upload
 
 **Tool:** `finalize_upload(upload_id, tx_hashes)`
 
-Finalizes an externally-signed upload.
+Finalizes an externally-signed upload when the prepare step returned `payment_type: "wave_batch"`.
+
+### Finalize a Merkle Upload
+
+**Tool:** `finalize_merkle_upload(upload_id, winner_pool_hash)`
+
+Finalizes an externally-signed upload when the prepare step returned `payment_type: "merkle"`.
 
 ## Payment modes
 
