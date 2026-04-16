@@ -1,9 +1,5 @@
 # What is Autonomi?
 
-{% hint style="warning" %}
-This is preview documentation for Autonomi 2.0 ahead of the planned network launch on 7 April 2026. Content is under active review and may change before launch.
-{% endhint %}
-
 Autonomi is a decentralized peer-to-peer network for permanent, immutable data storage. Data is encrypted before upload, stored using content-addressing, and paid for once when you write it to the network.
 
 ## What makes Autonomi different

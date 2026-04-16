@@ -8,10 +8,6 @@
   verification_mode: current-merged-truth
 -->
 
-{% hint style="warning" %}
-This is preview documentation for Autonomi 2.0 ahead of the planned network launch on 7 April 2026. Content is under active review and may change before launch.
-{% endhint %}
-
 The Autonomi SDKs center on `antd`, a local gateway daemon that exposes REST and gRPC APIs, plus language SDKs and local developer tooling around that daemon.
 
 ## Architecture

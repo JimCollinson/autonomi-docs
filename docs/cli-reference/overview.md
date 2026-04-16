@@ -1,9 +1,5 @@
 # CLI Overview
 
-{% hint style="warning" %}
-This is preview documentation for Autonomi 2.0 ahead of the planned network launch on 7 April 2026. Content is under active review and may change before launch.
-{% endhint %}
-
 `ant` is the command-line interface for Autonomi. It gives you direct shell access to uploads, downloads, wallet inspection, self-update, chunk operations, and node-management workflows without running the SDK daemon.
 
 ## When to use the CLI

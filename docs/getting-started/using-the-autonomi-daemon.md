@@ -15,10 +15,6 @@
   verification_mode: current-merged-truth
 -->
 
-{% hint style="warning" %}
-This is preview documentation for Autonomi 2.0 ahead of the planned network launch on 7 April 2026. Content is under active review and may change before launch.
-{% endhint %}
-
 `antd` is the local daemon used by the SDKs and MCP server. It runs on your machine, talks to the network for you, and exposes REST and gRPC so your applications can work through a stable local API.
 
 Use `antd` when you want:

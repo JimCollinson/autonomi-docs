@@ -15,10 +15,6 @@
   verification_mode: current-merged-truth
 -->
 
-{% hint style="warning" %}
-This is preview documentation for Autonomi 2.0 ahead of the planned network launch on 7 April 2026. Content is under active review and may change before launch.
-{% endhint %}
-
 Rust gives you two supported ways to build on Autonomi.
 
 ## Choose your Rust route
