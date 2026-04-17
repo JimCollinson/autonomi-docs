@@ -8,13 +8,13 @@
   verification_mode: current-merged-truth
 -->
 
-Install `ant`, confirm it works, retrieve public data from the network, and then move into uploads or local devnet testing when you need them. Choose the CLI when you want shell-first workflows without needing to run the local daemon, `antd`, first.
+Install `ant`, confirm it works, retrieve public data from the network, and then move into uploads or local devnet testing when you need them. Choose the CLI when you want shell-first workflows without needing to run the local daemon, [`antd`](using-the-autonomi-daemon.md), first.
 
 ## Prerequisites
 
 - `curl` or PowerShell to run the installer, or a Rust toolchain if you prefer to build from source
 - `SECRET_KEY` for the upload step and for wallet commands. You do not need it for the first download step.
-- A local file to upload later in the guide. You can reuse `lucky.jpg` from the download step or use your own file.
+- A local file to upload later in the guide, unless you use the sample `greeting.txt` command in the upload step.
 
 If you want SDK ergonomics in another language, see [Build with the SDKs](install.md) and [Start the Local Daemon](using-the-autonomi-daemon.md). If you want daemon-free programmatic Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
 
@@ -73,17 +73,18 @@ ant file download 711c7e20006ff3e0ac6c1f3063286a0c1a3e4c409642e8c526173fa60bb707
 {% step %}
 ### Store a file on the default network
 
-Set `SECRET_KEY`, then upload a file. This example reuses the file from the previous step, but any local file works.
+Set `SECRET_KEY`, create a small local file, and then upload it on the default network.
 
 ```bash
+printf "hello autonomi\n" > greeting.txt
 export SECRET_KEY="0x<hex_private_key>"
-ant file upload lucky.jpg --public
+ant file upload greeting.txt --public
 ```
 
 Expected output includes a public address you can share with other readers, plus the stored chunk count, file size, and total cost.
 {% endstep %}
 {% step %}
-### Use a local devnet when you need isolated testing
+### Optional: Use a local devnet for isolated testing
 
 If you already have a devnet manifest, pass it before the subcommand:
 

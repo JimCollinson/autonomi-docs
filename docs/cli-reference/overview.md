@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-`ant` is the command-line interface for Autonomi. It gives you direct shell access to file, chunk, wallet, self-update, and node-management workflows without needing to run the local daemon, `antd`, first. You can also use it alongside `antd` when you want terminal-driven workflows in the same environment.
+`ant` is the command-line interface for Autonomi. It gives you direct shell access to file, chunk, wallet, self-update, and node-management workflows without needing to run the local daemon, [`antd`](../getting-started/using-the-autonomi-daemon.md), first. You can also use it alongside `antd` when you want terminal-driven workflows in the same environment.
 
 ## Installation
 
@@ -40,7 +40,7 @@ The CLI can be a good fit for things like:
 
 - direct shell access for file, chunk, wallet, or node-management workflows
 - shell-first automation or operational workflows
-- direct control over network entry, local devnet manifests, and EVM network selection
+- direct control over bootstrap peers, local devnet manifests, and EVM network selection
 
 If you want SDK ergonomics in another language, see [Build with the SDKs](../getting-started/install.md) and [Start the Local Daemon](../getting-started/using-the-autonomi-daemon.md). If you want daemon-free programmatic Rust access, see [Build Directly in Rust](../getting-started/build-directly-in-rust.md) and [Developing in Rust](../rust-reference/overview.md).
 
@@ -67,7 +67,7 @@ The CLI, SDK, and native Rust paths reach the same network, but they have differ
 | Local process model | requires `antd`                   | no daemon for data commands    | no daemon                    |
 | Main entry point    | REST/gRPC via `antd`              | `ant` command                  | `ant-core` crate             |
 
-## Advanced network entry
+## Advanced bootstrap setup
 
 The CLI needs a bootstrap source for data operations.
 
