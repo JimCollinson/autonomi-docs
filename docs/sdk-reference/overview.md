@@ -80,7 +80,9 @@ Do not assume perfect parity from this page alone. The SDKs expose the same daem
 - Python examples use `AntdClient()` from `antd`
 - some SDK READMEs document both REST and gRPC, while others are REST-only today
 
-Data and chunk writes still return `PutResult`-style shapes with `cost` plus an address or DataMap. File and directory uploads return richer results that include `storage_cost_atto`, `gas_cost_wei`, `chunks_stored`, and the actual `payment_mode_used`.
+Chunk writes still return `PutResult`-style shapes with `cost` plus an address. REST data writes return an address or `data_map` plus `chunks_stored` and `payment_mode_used`. File and directory uploads return the richer shape with `storage_cost_atto`, `gas_cost_wei`, `chunks_stored`, and the actual `payment_mode_used`.
+
+When you need authoritative pricing separate from the write itself, use the explicit cost endpoints such as `POST /v1/data/cost` and `POST /v1/cost/file`.
 
 Use the binding-specific page when you need package names, constructors, or transport details.
 

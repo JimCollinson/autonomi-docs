@@ -195,6 +195,8 @@ Examples:
 }
 ```
 
+Example `upload_file` or `upload_dir` response:
+
 ```json
 {
   "address": "abc123...",
@@ -205,6 +207,8 @@ Examples:
   "network": "local"
 }
 ```
+
+`put_data` responses omit `storage_cost_atto` and `gas_cost_wei`.
 
 Structured `AntdError` responses include:
 

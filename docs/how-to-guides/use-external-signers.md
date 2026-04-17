@@ -164,6 +164,8 @@ The `address` field is only present when `store_data_map` is `true`.
 
 The daemon SDKs follow the same prepare/finalize split. Merkle-capable bindings expose `payment_type` on prepare results and a `finalize_merkle_upload` helper for the Merkle path.
 
+Use the REST API when you need the full finalize response surface, such as the raw `data_map` value or explicit `store_data_map` control on wave-batch finalize requests.
+
 If you are building in Rust with ant-core instead of the daemon, the library exposes native external-payment helpers such as `data_prepare_upload`, `file_prepare_upload`, `prepare_merkle_batch_external`, and `finalize_merkle_batch`.
 
 ## Verify it worked
