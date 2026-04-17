@@ -3,94 +3,109 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: d46a73d38731a31fbd9815394fe8a2943eb38246
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
-Use the `ant` CLI when you want direct command-line access to the Autonomi network without running `antd`. This path is a good fit for shell workflows, scripts, operational tasks, and developers who want to upload, download, or inspect data directly from the terminal.
+Install `ant`, confirm it works, retrieve public data from the network, and then move into uploads or local devnet testing when you need them. Choose this route when you want shell-first workflows without running `antd`.
 
 ## Prerequisites
 
-- A local devnet manifest or bootstrap peer information for the network you want to use
-- `SECRET_KEY` set for uploads and wallet commands
-- A file to upload for the quickstart example below
+- `curl` or PowerShell to run the installer, or a Rust toolchain if you prefer to build from source
+- `SECRET_KEY` for the upload step and for wallet commands. You do not need it for the first download step.
+- A local file to upload later in the guide. You can reuse `lucky.jpg` from the download step or use your own file.
 
-If you want to build an application in another language, start with [Build with the SDKs](install.md) and [Start the Local Daemon](using-the-autonomi-daemon.md). If you want daemon-free programmatic Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
+If you want SDK ergonomics in another language, start with [Build with the SDKs](install.md) and [Start the Local Daemon](using-the-autonomi-daemon.md). If you want daemon-free programmatic Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
 
 ## Steps
 
-For the `ant` CLI, root flags such as `--devnet-manifest`, `--allow-loopback`, and `--evm-network` come before the subcommand.
+{% stepper %}
+{% step %}
+### Install the CLI
 
-### 1. Install the CLI
-
-On Linux or macOS:
-
+{% tabs %}
+{% tab title="Linux and macOS" %}
 ```bash
 curl -fsSL https://raw.githubusercontent.com/WithAutonomi/ant-client/main/install.sh | bash
 ```
-
-Or build from source:
-
+{% endtab %}
+{% tab title="Windows" %}
+```powershell
+irm https://raw.githubusercontent.com/WithAutonomi/ant-client/main/install.ps1 | iex
+```
+{% endtab %}
+{% tab title="Build from source" %}
 ```bash
 git clone https://github.com/WithAutonomi/ant-client.git
 cd ant-client
 cargo build --release --bin ant
 ```
+{% endtab %}
+{% endtabs %}
 
-### 2. Confirm the CLI works
+The installer also writes `bootstrap_peers.toml` into the standard `ant` config directory, so public-network reads usually work without extra `--bootstrap` flags.
+
+If you build `ant` from source instead, provide your own bootstrap config or pass `--bootstrap` yourself for data commands.
+{% endstep %}
+{% step %}
+### Confirm the CLI works
 
 ```bash
 ant --help
-SECRET_KEY=0x... ant --evm-network arbitrum-one wallet address
 ```
 
-### 3. Upload a public file on a local devnet
+For the `ant` CLI, root flags such as `--bootstrap`, `--devnet-manifest`, `--allow-loopback`, and `--evm-network` come before the subcommand.
+
+The CLI needs a bootstrap source for data operations. The installer usually provides one through `bootstrap_peers.toml`. Use `--bootstrap` to override it, or use `--devnet-manifest` together with `--allow-loopback` for a local devnet.
+{% endstep %}
+{% step %}
+### Retrieve a public file from the network
+
+This example downloads a public JPEG of Lucky the dog.
 
 ```bash
-SECRET_KEY=0x... ant \
+ant file download 711c7e20006ff3e0ac6c1f3063286a0c1a3e4c409642e8c526173fa60bb7078a -o lucky.jpg
+```
+
+`-o lucky.jpg` chooses the local filename for the downloaded copy. The address identifies the content on the network, not the original filename.
+{% endstep %}
+{% step %}
+### Store a file on the default network
+
+Set `SECRET_KEY`, then upload a file. This example reuses the file from the previous step, but any local file works.
+
+```bash
+export SECRET_KEY="0x<hex_private_key>"
+ant file upload lucky.jpg --public
+```
+
+Expected output includes a public address you can share with other readers, plus the stored chunk count, file size, and total cost.
+{% endstep %}
+{% step %}
+### Use a local devnet when you need isolated testing
+
+If you already have a devnet manifest, pass it before the subcommand:
+
+```bash
+SECRET_KEY="0x<hex_private_key>" ant \
   --devnet-manifest /tmp/devnet.json \
   --allow-loopback \
   --evm-network local \
-  file upload photo.jpg --public
+  file upload lucky.jpg --public
 ```
 
-Expected output shape:
-
-```text
-ADDRESS=<hex_address>
-MODE=public
-CHUNKS=<chunk_count>
-TOTAL_SIZE=<bytes>
-```
-
-### 4. Download it back
-
-```bash
-ant \
-  --devnet-manifest /tmp/devnet.json \
-  --allow-loopback \
-  --evm-network local \
-  file download <hex_address> -o photo_copy.jpg
-```
-
-### 5. Try a low-level chunk operation
-
-```bash
-echo "hello autonomi" | SECRET_KEY=0x... ant \
-  --devnet-manifest /tmp/devnet.json \
-  --allow-loopback \
-  --evm-network local \
-  chunk put
-```
+Use this mode when you want local nodes and a local EVM chain instead of the public network. For the full setup, see [Set Up a Local Network](../how-to-guides/setup-local-network.md).
+{% endstep %}
+{% endstepper %}
 
 ## What happened
 
-`ant` connected directly to the network instead of talking through a local daemon. File commands handled self-encryption, payment, and DataMap management for you, while the chunk command stored a single low-level payload without file splitting.
+You installed `ant`, used the configured bootstrap source to reach the Autonomi Network, and downloaded public content directly from the terminal. When you added `SECRET_KEY`, the same CLI handled self-encryption, upload payment, and DataMap management for file writes.
 
 ## Next steps
 
 - [CLI Overview](../cli-reference/overview.md)
 - [CLI Command Reference](../cli-reference/command-reference.md)
-- [Developing in Rust](../rust-reference/overview.md)
+- [Set Up a Local Network](../how-to-guides/setup-local-network.md)
 - [Build Directly in Rust](build-directly-in-rust.md)

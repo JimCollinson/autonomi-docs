@@ -3,35 +3,62 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: d46a73d38731a31fbd9815394fe8a2943eb38246
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
-Reference for the `ant` CLI.
+Reference for the `ant` CLI command tree and its current flags.
 
-## Global flags
+## Command tree
 
-### Main command
+```text
+ant
+├── node
+│   ├── add
+│   ├── daemon
+│   │   ├── start
+│   │   ├── stop
+│   │   ├── status
+│   │   └── info
+│   ├── reset
+│   ├── start
+│   ├── status
+│   └── stop
+├── wallet
+│   ├── address
+│   └── balance
+├── file
+│   ├── upload
+│   └── download
+├── chunk
+│   ├── put
+│   └── get
+└── update
+```
 
-**Command:** `ant [FLAGS] <COMMAND>`
+## Global command
 
-Root flags must appear before the subcommand.
+### `ant [OPTIONS] <COMMAND>`
+
+The root command accepts the global flags used across data and node operations. Root flags must appear before the subcommand.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `--json` | boolean | No | Emit structured JSON |
-| `-V` | boolean | No | Print the short version and exit |
-| `--version` | boolean | No | Print the long version, project description, repo URL, and license |
-| `-b, --bootstrap <IP:PORT>` | socket list | No | Bootstrap peers for data operations |
-| `--devnet-manifest <PATH>` | path | No | Local devnet manifest JSON |
-| `--allow-loopback` | boolean | No | Allow loopback connections for local testing |
-| `--timeout-secs <N>` | integer | No | Network timeout in seconds, default `60` |
-| `--chunk-concurrency <N>` | integer | No | Upload chunk concurrency override |
-| `--log-level <LEVEL>` | string | No | `trace`, `debug`, `info`, `warn`, `error` |
-| `--evm-network <NET>` | string | No | `arbitrum-one`, `arbitrum-sepolia`, or `local` |
+| `-b, --bootstrap <IP:PORT>` | socket list | No | Bootstrap peers for data operations. Can be comma-separated or repeated. |
+| `--devnet-manifest <PATH>` | path | No | Path to a local devnet manifest JSON file |
+| `--allow-loopback` | boolean | No | Allow loopback connections for local devnet or local testing |
+| `--quote-timeout-secs <N>` | integer | No | Timeout for lightweight network operations such as DHT lookups |
+| `--store-timeout-secs <N>` | integer | No | Timeout for chunk store and retrieve operations |
+| `--quote-concurrency <N>` | integer | No | Maximum number of chunks quoted or downloaded concurrently |
+| `--store-concurrency <N>` | integer | No | Maximum number of chunks stored concurrently during uploads. `--chunk-concurrency` is accepted as an alias. |
+| `-v, --verbose...` | count | No | Increase log verbosity: `-v`, `-vv`, or `-vvv` |
+| `--evm-network <NET>` | string | No | EVM network for payments: `arbitrum-one`, `arbitrum-sepolia`, or `local` |
+| `-h, --help` | boolean | No | Print help |
+| `-V, --version` | boolean | No | Print version |
 
 **Environment:**
 
@@ -39,11 +66,15 @@ Root flags must appear before the subcommand.
 |------|------|
 | `SECRET_KEY` | Required for uploads and wallet commands |
 
+**Example:**
+
+```bash
+ant --help
+```
+
 ## File commands
 
-### Upload a file
-
-**Command:** `ant file upload <PATH>`
+### `ant file upload <PATH>`
 
 Uploads a file with self-encryption and EVM payment.
 
@@ -52,19 +83,19 @@ Uploads a file with self-encryption and EVM payment.
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `PATH` | path | Yes | File to upload |
-| `--public` | boolean | No | Store the DataMap on-network |
+| `--public` | boolean | No | Store the DataMap on-network so anyone with the address can download the file |
 | `--merkle` | boolean | No | Force Merkle batch payment |
 | `--no-merkle` | boolean | No | Force single per-chunk payments |
+| `--store-timeout <N>` | integer | No | Override the chunk store timeout for this upload |
+| `--store-concurrency <N>` | integer | No | Override upload chunk concurrency for this upload |
 
 **Example:**
 
 ```bash
-SECRET_KEY=0x... ant --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local file upload my_data.bin --public
+SECRET_KEY=0x<hex_private_key> ant file upload photo.jpg --public
 ```
 
-### Download a file
-
-**Command:** `ant file download [ADDRESS]`
+### `ant file download [ADDRESS]`
 
 Downloads a public file by address or a private file using a local DataMap file.
 
@@ -72,33 +103,37 @@ Downloads a public file by address or a private file using a local DataMap file.
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `ADDRESS` | string | No | Public DataMap address |
+| `ADDRESS` | string | Conditionally | Public DataMap address. Required unless `--datamap` is provided. |
 | `--datamap <PATH>` | path | No | Local `.datamap` file for private download |
-| `-o, --output <PATH>` | path | No | Output file path |
+| `-o, --output <PATH>` | path | Yes | Output file path |
 
 **Example:**
 
 ```bash
-ant --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local file download a1b2c3... -o restored.bin
+ant file download 711c7e20006ff3e0ac6c1f3063286a0c1a3e4c409642e8c526173fa60bb7078a -o lucky.jpg
 ```
+
+The output path is your local filename. In this example, the command downloads a public JPEG of Lucky the dog and saves it as `lucky.jpg`.
 
 ## Chunk commands
 
-### Store a chunk
+### `ant chunk put [FILE]`
 
-**Command:** `ant chunk put [FILE]`
+Stores a single chunk from a file or from standard input.
 
-Stores a single chunk from a file or stdin.
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `FILE` | path | No | Input file. If omitted, `ant` reads from standard input. |
 
 **Example:**
 
 ```bash
-echo "hello autonomi" | SECRET_KEY=0x... ant --devnet-manifest /tmp/devnet.json --allow-loopback --evm-network local chunk put
+echo "hello autonomi" | SECRET_KEY=0x<hex_private_key> ant chunk put
 ```
 
-### Get a chunk
-
-**Command:** `ant chunk get <ADDRESS>`
+### `ant chunk get <ADDRESS>`
 
 Retrieves a single chunk by address.
 
@@ -106,70 +141,104 @@ Retrieves a single chunk by address.
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `ADDRESS` | string | Yes | 64-character hex chunk address |
-| `-o, --output <PATH>` | path | No | Write to file instead of stdout |
+| `ADDRESS` | string | Yes | Hex-encoded chunk address (64 hex characters) |
+| `-o, --output <PATH>` | path | No | Write the chunk to a file instead of stdout |
 
 **Example:**
 
 ```bash
-ant --bootstrap 1.2.3.4:12000 --evm-network arbitrum-one chunk get a1b2c3... -o output.bin
+ant chunk get <chunk_address> -o chunk.bin
 ```
 
 ## Wallet commands
 
-### Show wallet address
+### `ant wallet address`
 
-**Command:** `ant wallet address`
+Prints the wallet address derived from `SECRET_KEY`.
 
-Prints the current wallet address derived from `SECRET_KEY`.
+**Parameters:**
+
+This command has no command-specific parameters.
 
 **Example:**
 
 ```bash
-SECRET_KEY=0x... ant --evm-network arbitrum-one wallet address
+SECRET_KEY=0x<hex_private_key> ant wallet address
 ```
 
-### Show wallet balance
-
-**Command:** `ant wallet balance`
+### `ant wallet balance`
 
 Prints the token balance for the configured EVM network.
 
+**Parameters:**
+
+This command has no command-specific parameters.
+
 **Example:**
 
 ```bash
-SECRET_KEY=0x... ant --evm-network arbitrum-one wallet balance
+SECRET_KEY=0x<hex_private_key> ant wallet balance
 ```
 
 ## Node commands
 
-### Start the node daemon
+### `ant node daemon start`
 
-**Command:** `ant node daemon start`
+Launches the node daemon as a detached background process.
 
-Starts the node-management daemon in the background.
+**Parameters:**
 
-### Stop the node daemon
+This command has no command-specific parameters.
 
-**Command:** `ant node daemon stop`
+**Example:**
 
-Stops the node-management daemon.
+```bash
+ant node daemon start
+```
 
-### Check node daemon status
+### `ant node daemon stop`
 
-**Command:** `ant node daemon status`
+Shuts down the running node daemon.
 
-Shows daemon status and node counts.
+**Parameters:**
 
-### Show node daemon info
+This command has no command-specific parameters.
 
-**Command:** `ant node daemon info`
+**Example:**
 
-Outputs programmatic connection details for the daemon.
+```bash
+ant node daemon stop
+```
 
-### Add nodes
+### `ant node daemon status`
 
-**Command:** `ant node add`
+Shows whether the node daemon is running and reports summary stats.
+
+**Parameters:**
+
+This command has no command-specific parameters.
+
+**Example:**
+
+```bash
+ant node daemon status
+```
+
+### `ant node daemon info`
+
+Outputs daemon connection details for programmatic use. This command always emits JSON.
+
+**Parameters:**
+
+This command has no command-specific parameters.
+
+**Example:**
+
+```bash
+ant node daemon info
+```
+
+### `ant node add`
 
 Adds one or more nodes to the registry.
 
@@ -178,29 +247,27 @@ Adds one or more nodes to the registry.
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `--rewards-address <ADDR>` | string | Yes | Wallet address for node earnings |
-| `--count <N>` | integer | No | Number of nodes, default `1` |
-| `--node-port <PORT|RANGE>` | string | No | Node port or range |
-| `--metrics-port <PORT|RANGE>` | string | No | Metrics port or range |
+| `--count <N>` | integer | No | Number of nodes to add |
+| `--node-port <PORT|RANGE>` | string | No | Node port or port range |
+| `--metrics-port <PORT|RANGE>` | string | No | Metrics port or port range |
 | `--data-dir-path <PATH>` | path | No | Custom data directory prefix |
 | `--log-dir-path <PATH>` | path | No | Custom log directory prefix |
-| `--network-id <ID>` | integer | No | Network ID, default `1` |
+| `--network-id <ID>` | integer | No | Network ID. Default `1` is mainnet. |
 | `--path <PATH>` | path | No | Local node binary path |
 | `--version <X.Y.Z>` | string | No | Download a specific node version |
-| `--url <URL>` | string | No | Download a node archive from URL |
-| `--bootstrap <ADDRS>` | string list | No | Bootstrap peers |
+| `--url <URL>` | string | No | Download a node archive from a URL |
+| `--bootstrap <ADDRS>` | string list | No | Bootstrap peers for the node binary itself |
 | `--env <K=V>` | string list | No | Node environment variables |
 
 **Example:**
 
 ```bash
-ant node add --rewards-address 0xYourWallet --count 3 --node-port 12000-12002 --path /path/to/antnode
+ant node add --rewards-address 0xYourWallet --count 1
 ```
 
-### Start nodes
+### `ant node start`
 
-**Command:** `ant node start`
-
-Starts all nodes, or one named node with `--service-name`.
+Starts all registered nodes, or one named node with `--service-name`.
 
 **Parameters:**
 
@@ -208,11 +275,29 @@ Starts all nodes, or one named node with `--service-name`.
 |------|------|----------|-------------|
 | `--service-name <NAME>` | string | No | Start one named node instead of all nodes |
 
-### Stop nodes
+**Example:**
 
-**Command:** `ant node stop`
+```bash
+ant node start --service-name node1
+```
 
-Stops all nodes, or one named node with `--service-name`.
+### `ant node status`
+
+Shows the status of all registered nodes.
+
+**Parameters:**
+
+This command has no command-specific parameters.
+
+**Example:**
+
+```bash
+ant node status
+```
+
+### `ant node stop`
+
+Stops all registered nodes, or one named node with `--service-name`.
 
 **Parameters:**
 
@@ -220,29 +305,31 @@ Stops all nodes, or one named node with `--service-name`.
 |------|------|----------|-------------|
 | `--service-name <NAME>` | string | No | Stop one named node instead of all nodes |
 
-### Check node status
+**Example:**
 
-**Command:** `ant node status`
+```bash
+ant node stop --service-name node1
+```
 
-Shows the status of registered nodes.
+### `ant node reset`
 
-### Reset node state
-
-**Command:** `ant node reset`
-
-Clears node data, logs, and registry state.
+Resets node state, including data, logs, and registry information.
 
 **Parameters:**
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `--force` | boolean | No | Skip confirmation prompt |
+| `--force` | boolean | No | Skip the confirmation prompt |
+
+**Example:**
+
+```bash
+ant node reset --force
+```
 
 ## Update command
 
-### Update the CLI
-
-**Command:** `ant update`
+### `ant update`
 
 Checks GitHub Releases for a newer version of the CLI, downloads it if one is available, and replaces the current executable in place.
 
