@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-Install `ant`, confirm it works, retrieve public data from the network, and then move into uploads or local devnet testing when you need them. Choose this route when you want shell-first workflows without running `antd`.
+Install `ant`, confirm it works, retrieve public data from the network, and then move into uploads or local devnet testing when you need them. Choose the CLI when you want shell-first workflows without needing to run the local daemon, `antd`, first.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ Install `ant`, confirm it works, retrieve public data from the network, and then
 - `SECRET_KEY` for the upload step and for wallet commands. You do not need it for the first download step.
 - A local file to upload later in the guide. You can reuse `lucky.jpg` from the download step or use your own file.
 
-If you want SDK ergonomics in another language, start with [Build with the SDKs](install.md) and [Start the Local Daemon](using-the-autonomi-daemon.md). If you want daemon-free programmatic Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
+If you want SDK ergonomics in another language, see [Build with the SDKs](install.md) and [Start the Local Daemon](using-the-autonomi-daemon.md). If you want daemon-free programmatic Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
 
 ## Steps
 

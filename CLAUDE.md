@@ -131,6 +131,7 @@ On first mention in rendered prose, expand important acronyms when that helps a 
 - Every page must be **self-contained**. No "as we discussed in the previous section" or "see above."
 - An agent reading any single page via llms.txt should understand the topic without needing other pages.
 - Link to related pages at the end, not inline as prerequisites.
+- When you mention another supported tool, route, or approach that is not explained on the current page, add an inline link to the relevant page if one exists.
 - Getting Started and How-to pages must explain what tool or route they cover, why you would choose it, and where the alternatives live when multiple supported routes exist.
 - Explain a tool or interface before telling the reader to install, run, or configure it.
 - Titles should describe user outcomes or choices, not internal mechanisms, unless the mechanism name itself is the thing the page teaches.

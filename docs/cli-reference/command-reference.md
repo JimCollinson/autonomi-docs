@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-Reference for the `ant` CLI command tree and its current flags.
+Reference for the `ant` CLI command tree and its current flags. The command tree and option order below mirror the current `ant --help` output so you can compare the docs directly with the CLI.
 
 ## Command tree
 
