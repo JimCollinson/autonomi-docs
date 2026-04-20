@@ -28,6 +28,7 @@ Thanks for helping improve the Autonomi developer docs.
 - Keep pages interface-pure unless they are explicitly comparison or chooser pages.
 - Use tabs for languages or equivalent interfaces within one interface, not for switching between interfaces.
 - In user-facing prose, name the specific tool or interface rather than using abstract words like `route` or `path`.
+- Inside each interface section in `SUMMARY.md`, use `### Start`, `### How-To`, and `### Reference` in that order. Omit a subgroup if no pages exist for it yet.
 
 ## Pull Requests
 

@@ -137,6 +137,7 @@ On first mention in rendered prose, expand important acronyms when that helps a 
 - Keep pages interface-pure unless they are explicitly comparison or chooser pages.
 - Use tabs for languages or equivalent interfaces within one interface, never for switching between interfaces.
 - In user-facing prose, name the specific tool or interface rather than using abstract words like `route` or `path`.
+- Inside each interface section in `SUMMARY.md`, use `### Start`, `### How-To`, and `### Reference` in that order. Omit a subgroup if no pages exist for it yet.
 - Getting Started and How-to pages must explain what tool or route they cover, why you would choose it, and where the alternatives live when multiple supported routes exist.
 - Explain a tool or interface before telling the reader to install, run, or configure it.
 - Titles should describe user outcomes or choices, not internal mechanisms, unless the mechanism name itself is the thing the page teaches.

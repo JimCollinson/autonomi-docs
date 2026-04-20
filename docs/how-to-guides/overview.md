@@ -1,27 +1,28 @@
-# How-To Guides
+# Overview
 
-Use these guides when you already know the interface you want to use and you want to accomplish a specific task.
+Guides cover tasks that apply across more than one way of building on Autonomi — setting up a local network, preparing a wallet, handling payments, building read-only features, testing, and deploying.
 
-The guides are grouped by the main ways people work with Autonomi:
+If you are looking for tasks that are specific to one interface, look inside that interface's section instead:
 
-- SDK
-- MCP
-- Direct Rust
-- Common Tasks that apply across more than one interface
-
-CLI-specific task guides are still limited. For now, start with [Use the CLI](../getting-started/using-ant-client.md) and the [CLI Command Reference](../cli-reference/command-reference.md).
-
-If you are still deciding how you want to build, start with [What is Autonomi?](../index.md).
+- SDK-specific task guides live under [SDK](../getting-started/install.md).
+- MCP-specific task guides live under [MCP](../getting-started/use-mcp-with-ai-tools.md).
+- Direct Rust-specific task guides live under [Direct Rust](../getting-started/build-directly-in-rust.md).
+- CLI task recipes are still limited. Start with [Use the CLI](../getting-started/using-ant-client.md) and the [CLI Command Reference](../cli-reference/command-reference.md).
 
 ## What is here
 
-Use the SDK guides when you are working through `antd` from an application or service.
+- [Set Up a Local Network](setup-local-network.md) — run a local Autonomi network for development and testing.
+- [Prepare a Wallet for Uploads](manage-keys.md) — create and fund a wallet so your application can pay for uploads.
+- [Estimate Costs and Handle Upload Payments](handle-payments.md) — understand upload pricing and wire payment handling into your code.
+- [Build Read-Only Features](build-a-read-only-application.md) — retrieve public data without needing to upload or pay.
+- [Test Your Application](test-your-application.md) — strategies for testing code that reads from and writes to the network.
+- [Deploy to Mainnet](deploy-to-mainnet.md) — move from local network and testing to the production Autonomi network.
 
-Use the MCP guides when you want an AI tool to call Autonomi through MCP.
+Each page calls out which interfaces it applies to and links to the interface-specific equivalent where one exists.
 
-Use the Direct Rust guides when you want in-process control through `ant-core`.
+## If you are still deciding how to build
 
-Use Common Tasks for setup, deployment, testing, and other guides that apply across more than one interface.
+Start with [What is Autonomi?](../index.md) for a short introduction to the network and a chooser across the four interfaces.
 
 ## Next steps
 
