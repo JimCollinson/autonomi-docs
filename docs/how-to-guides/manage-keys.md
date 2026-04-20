@@ -17,7 +17,7 @@
 
 Use this guide when you need a wallet that can pay for uploads.
 
-This guide is intentionally cross-route. It covers the shared wallet setup concerns across the SDK, CLI, and direct Rust paths.
+This guide covers the shared wallet setup concerns across the SDK, CLI, and direct Rust interfaces.
 
 It explains:
 

@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-Use this guide when you have already chosen the MCP path and you want to install and configure the Autonomi MCP server against a running `antd` instance. It is the deeper setup guide for AI clients that talk to Autonomi through MCP tools instead of raw HTTP requests.
+Use this guide when you want to install and configure the Autonomi MCP server against a running `antd` instance. It is the deeper setup guide for AI clients that talk to Autonomi through MCP tools instead of raw HTTP requests.
 
 ## Prerequisites
 

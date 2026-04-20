@@ -28,6 +28,7 @@ Thanks for helping improve the Autonomi developer docs.
 - Keep pages route-pure unless they are explicitly comparison or chooser pages.
 - Use `Common Tasks` for pages that genuinely apply across more than one route.
 - Use tabs for languages or equivalent interfaces within one route, not for switching between routes.
+- In user-facing prose, name the specific tool or interface rather than using abstract words like `route` or `path`.
 
 ## Pull Requests
 

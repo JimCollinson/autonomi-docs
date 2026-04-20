@@ -4,11 +4,11 @@
   source_repo: ant-sdk
   source_ref: main
   source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-16
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
-Use `antd` to retrieve existing public data from the Autonomi Network without wallet setup. Choose this route when you want the simplest read-only flow through the daemon before you decide whether your application also needs uploads.
+Use `antd` to retrieve existing public data from the Autonomi Network without wallet setup. This is the simplest read-only flow through the daemon before you decide whether your application also needs uploads.
 
 If you would rather use shell commands without running `antd`, see [Use the CLI](using-ant-client.md). If you want daemon-free Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
 
@@ -156,7 +156,7 @@ The REST API returns base64 inside JSON:
 
 The SDK bindings decode the bytes for you, so the Python, Node.js / TypeScript, and Rust examples print the retrieved content directly.
 
-If you need to retrieve private content next, continue to [Build Read-Only Features](../how-to-guides/build-a-read-only-application.md) for the `DataMap` route.
+If you need to retrieve private content next, continue to [Build Read-Only Features](../how-to-guides/build-a-read-only-application.md) for the `DataMap` workflow.
 {% endstep %}
 {% endstepper %}
 

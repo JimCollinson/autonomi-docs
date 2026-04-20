@@ -4,16 +4,16 @@
   source_repo: ant-sdk
   source_ref: main
   source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-16
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
-Use `antd` to store a small public payload on the Autonomi Network and read it back again so you can see how the daemon route handles writes.
+Use `antd` to store a small public payload on the Autonomi Network and read it back again so you can see how the daemon-backed SDK workflow handles writes.
 
 ## Prerequisites
 
 - `antd` installed and running on `http://localhost:8082` (see [Start the Local Daemon](using-the-autonomi-daemon.md))
-- A write-enabled daemon. On the default network, restart `antd` with wallet configuration before you continue. On a local devnet, `ant dev start` provisions the upload settings for you. See [Prepare a Wallet for Uploads](../how-to-guides/manage-keys.md) for the default-network path.
+- A write-enabled daemon. On the default network, restart `antd` with wallet configuration before you continue. On a local devnet, `ant dev start` provisions the upload settings for you. See [Prepare a Wallet for Uploads](../how-to-guides/manage-keys.md) for the default-network setup.
 - Optional: the runtime or toolchain for the SDK examples you want to run, such as Python, Node.js, or Rust
 
 If you would rather use shell commands or direct Rust instead, see [Use the CLI](using-ant-client.md) and [Build Directly in Rust](build-directly-in-rust.md). If your application should keep the signing key outside `antd`, start with [Use External Signers for Upload Payments](../how-to-guides/use-external-signers.md) instead of this guide.

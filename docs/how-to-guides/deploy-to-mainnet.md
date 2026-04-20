@@ -17,7 +17,7 @@
 
 Move from local testing to a mainnet-facing configuration for either `antd` or `ant`.
 
-This guide is intentionally cross-route. It covers the daemon-backed SDK path and the direct CLI path because mainnet deployment decisions usually touch both.
+This guide covers both the daemon-backed SDK deployment workflow and the direct CLI deployment workflow because mainnet decisions usually touch both.
 
 ## Prerequisites
 

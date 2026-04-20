@@ -24,7 +24,7 @@
 
 Test against the local tooling first, then move outward to more production-like environments.
 
-This guide is intentionally cross-route. It focuses on the shared testing progression that applies across SDK, CLI, and direct Rust work, even though the local daemon environment is the first concrete example.
+This guide focuses on the shared testing progression that applies across SDK, CLI, and direct Rust work, even though the local daemon environment is the first concrete example.
 
 ## Prerequisites
 

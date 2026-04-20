@@ -14,7 +14,7 @@ At a high level, Autonomi gives you:
 
 ## Choose how you want to build
 
-You can build on Autonomi through four main interfaces. Choose the one that matches how you want to work, then stay in that path until you need something more advanced.
+You can build on Autonomi through four main interfaces. Choose the one that matches how you want to work, then stay with that interface until you need something more advanced.
 
 ### SDK
 
@@ -22,15 +22,15 @@ This is the simplest integration model for most application developers.
 
 `antd` runs as a local daemon on your machine. It exposes REST and gRPC endpoints, and SDKs are available in more than 15 languages.
 
-Choose this route if you want to build with Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, or another supported SDK language.
+Use the SDK if you want to build with Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, or another supported SDK language.
 
 ### MCP
 
 This is the best fit when you want AI tools to interact with Autonomi through structured tool calls.
 
-The MCP server talks to `antd` for you, so you still use the daemon-backed path under the hood, but the interface is an MCP-compatible client such as Claude Desktop or Claude Code.
+The MCP server talks to `antd` for you, so your AI client can use the daemon without calling it directly.
 
-Choose this route when you want AI-assisted storage and retrieval rather than a traditional application or shell workflow.
+Use MCP when you want AI-assisted storage and retrieval rather than a traditional application or shell workflow.
 
 ### CLI
 
@@ -40,7 +40,7 @@ Choose it when you want shell access, scripts, or a daemon-free operational work
 
 ### Direct Rust
 
-This route uses the native Rust library instead of the daemon.
+Direct Rust uses the native Rust library instead of the daemon.
 
 Choose it when you want direct Rust control over networking, payment flows, and upload logic in your application.
 

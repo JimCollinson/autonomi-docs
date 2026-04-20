@@ -4,14 +4,14 @@
   source_repo: ant-sdk
   source_ref: main
   source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-16
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
   source_commit: d3f5ba969b8ccf98ca0c50b661a3762aec904634
-  verified_date: 2026-04-16
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
@@ -33,7 +33,7 @@ Use `antd` when you want:
 
 ### 1. Build `antd` from source
 
-Your application code does not need to be Rust, but the supported `antd` install route in these docs is to build the daemon from the `ant-sdk` repo:
+Your application code does not need to be Rust, but the supported `antd` install method in these docs is to build the daemon from the `ant-sdk` repo:
 
 ```bash
 git clone https://github.com/WithAutonomi/ant-sdk.git

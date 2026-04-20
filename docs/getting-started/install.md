@@ -4,13 +4,13 @@
   source_repo: ant-sdk
   source_ref: main
   source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-16
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
 Use the SDKs when you want a simpler application integration model on Autonomi.
 
-This route is built around:
+This approach combines:
 
 - a local daemon called `antd`
 - REST and gRPC interfaces exposed by that daemon
@@ -25,11 +25,11 @@ Choose the SDKs if you want:
 - one local daemon process that multiple apps, scripts, or tools can share
 - SDK support in the language you already work in
 
-## How this route works
+## How the SDKs work
 
 `antd` runs on your machine and talks to the network for you. The SDKs, REST API, gRPC clients, and MCP server all build on that same local daemon.
 
-Your application code can still be Python, Node.js / TypeScript, Go, Rust, or another supported language. The supported `antd` install route in these docs is to build the daemon from the `ant-sdk` repo, then connect to it from the SDK language you choose.
+Your application code can still be Python, Node.js / TypeScript, Go, Rust, or another supported language. The supported `antd` install method in these docs is to build the daemon from the `ant-sdk` repo, then connect to it from the SDK language you choose.
 
 If you would rather work directly from the terminal, use [the CLI](using-ant-client.md). If you want daemon-free Rust access, see [Build Directly in Rust](build-directly-in-rust.md).
 
@@ -43,7 +43,7 @@ Start with [Start the Local Daemon](using-the-autonomi-daemon.md) to build `antd
 
 If you only need read-only features, continue to [Retrieve Data from the Network](retrieve-data-from-the-network.md).
 
-### 3. Choose an upload path when you need writes
+### 3. Choose how you want to handle writes
 
 If you need uploads after the read-only flow, choose one of these next steps:
 
@@ -53,7 +53,7 @@ If you need uploads after the read-only flow, choose one of these next steps:
 
 ### 4. Store data on the network
 
-Once the daemon is running and you have chosen a write path, continue to [Store Data on the Network](hello-world.md).
+Once the daemon is running and you have set up writes, continue to [Store Data on the Network](hello-world.md).
 
 ### 5. Language-specific references
 

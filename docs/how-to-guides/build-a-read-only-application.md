@@ -17,7 +17,7 @@
 
 Build read-only Autonomi features when you only need to retrieve data that has already been stored and paid for.
 
-This guide is intentionally cross-route. It helps you compare the SDK, CLI, and direct Rust retrieval paths so you can choose the right read-only architecture for your application.
+This guide compares the SDK, CLI, and direct Rust ways to build read-only retrieval features so you can choose the right read-only architecture for your application.
 
 ## Why this matters
 
@@ -40,23 +40,23 @@ That can make retrieval-only tools, dashboards, content browsers, and other read
   - the `ant` CLI
   - native Rust with `ant-core`
 
-If you do not already have an address or `DataMap`, create one first by following [Store and Retrieve Data with the SDKs](store-and-retrieve-data.md) or the equivalent CLI/Rust route.
+If you do not already have an address or `DataMap`, create one first by following [Store and Retrieve Data with the SDKs](store-and-retrieve-data.md) or by storing data through the CLI or direct Rust.
 
 ## Steps
 
-### 1. Choose the route you want to use
+### 1. Choose the interface you want to use
 
-For the SDK route:
+With the SDK:
 
 - [Build with the SDKs](../getting-started/install.md)
 - [Start the Local Daemon](../getting-started/using-the-autonomi-daemon.md)
 - [Retrieve Data from the Network](../getting-started/retrieve-data-from-the-network.md)
 
-For the CLI route:
+With the CLI:
 
 - [Use the CLI](../getting-started/using-ant-client.md)
 
-For the Direct Rust route:
+With Direct Rust:
 
 - [Build Directly in Rust](../getting-started/build-directly-in-rust.md)
 
@@ -66,7 +66,7 @@ For public data, you need a public address.
 
 For private data, you need the `DataMap` or equivalent private retrieval material.
 
-For the SDK route, `antd` can run without `AUTONOMI_WALLET_KEY` when you only need retrieval.
+With the SDK, `antd` can run without `AUTONOMI_WALLET_KEY` when you only need retrieval.
 
 Public retrieval through the daemon:
 
@@ -82,7 +82,7 @@ curl "http://localhost:8082/v1/data/private?data_map=<hex_encoded_datamap>"
 
 The private retrieval response is JSON with the content returned as base64 in the `data` field.
 
-For the CLI route, public and private file retrieval use `ant file download` with either a public address or a local `.datamap` file:
+With the CLI, public and private file retrieval use `ant file download` with either a public address or a local `.datamap` file:
 
 ```bash
 ant file download <public_address> -o downloaded.bin --bootstrap 1.2.3.4:12000

@@ -3,12 +3,12 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: d46a73d38731a31fbd9815394fe8a2943eb38246
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
-Use `ant-core` when you want to build on Autonomi in Rust without running the local daemon. This approach gives your application direct access to networking, uploads, and payments.
+Build directly in Rust when you want your application to talk to the Autonomi Network without using `antd`. This approach gives your application direct access to networking, uploads, and downloads from your Rust code. The library that provides that interface is `ant-core`.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ Use `ant-core` when you want to build on Autonomi in Rust without running the lo
 - A local checkout of `ant-client`
 - A new or existing Rust application
 
-If you want a local REST or gRPC gateway instead, start with [Build with the SDKs](install.md) and [Start the Local Daemon](using-the-autonomi-daemon.md). If you want shell access instead of writing Rust code, see [Use the CLI](using-ant-client.md).
+If you want a daemon-backed local gateway instead, see [Build with the SDKs](install.md) and [Start the Local Daemon](using-the-autonomi-daemon.md). If you want shell access instead of writing Rust code, see [Use the CLI](using-ant-client.md).
 
 ## Steps
 

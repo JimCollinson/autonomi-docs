@@ -30,6 +30,7 @@
 
 ## How-To Guides
 
+* [How-To Guides](how-to-guides/overview.md)
 ### SDK
 * [Store and Retrieve Data with the SDKs](how-to-guides/store-and-retrieve-data.md)
 * [Use the Daemon as a Local Service](how-to-guides/run-as-daemon.md)

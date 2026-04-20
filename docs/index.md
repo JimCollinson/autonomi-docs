@@ -4,33 +4,16 @@ Autonomi is a decentralized peer-to-peer network for permanent, immutable data s
 \
 These guides will help you get started building with the Autonomi Network!
 
-## How to build on Autonomi
+## Start here
 
-You can build on Autonomi in four main ways: with the SDKs, through MCP-compatible AI tools, through the CLI, or directly in Rust.
+To understand what Autonomi is and choose how you want to build with it, start with [What is Autonomi?](getting-started/introduction.md).
 
-### SDK
+If you already know the interface you want to use, go straight to one of these entry points:
 
-Use the SDKs if you want the simplest integration model for application development in Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, and other supported languages.
-
-`antd` runs on your machine and exposes REST and gRPC endpoints so your application can use a stable local interface to the network.
-
-Start with [Build with the SDKs](getting-started/install.md), then [Start the Local Daemon](getting-started/using-the-autonomi-daemon.md), then [Retrieve Data from the Network](getting-started/retrieve-data-from-the-network.md), then [Store Data on the Network](getting-started/hello-world.md).
-
-### MCP
-
-Use MCP when you want AI tools such as Claude Desktop, Claude Code, or another MCP-compatible client to call Autonomi through structured tools. This path still uses `antd` under the hood, but the MCP server handles the bridge between your AI client and the daemon.
-
-Start with [Use MCP with AI Tools](getting-started/use-mcp-with-ai-tools.md), then continue to [Use the Autonomi MCP Server](how-to-guides/use-the-mcp-server.md).
-
-### CLI
-
-[Use the CLI](getting-started/using-ant-client.md) when you want direct shell access for uploads, downloads, wallet checks, chunk operations, or node-management workflows.
-
-### Direct Rust
-
-Build in Rust without the daemon when you want direct programmatic control over networking, uploads, and payments in your application.
-
-Start with [Build Directly in Rust](getting-started/build-directly-in-rust.md).
+- [Build with the SDKs](getting-started/install.md)
+- [Use MCP with AI Tools](getting-started/use-mcp-with-ai-tools.md)
+- [Use the CLI](getting-started/using-ant-client.md)
+- [Build Directly in Rust](getting-started/build-directly-in-rust.md)
 
 ## Core Concepts
 

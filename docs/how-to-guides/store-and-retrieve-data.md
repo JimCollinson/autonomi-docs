@@ -4,7 +4,7 @@
   source_repo: ant-sdk
   source_ref: main
   source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-16
+  verified_date: 2026-04-17
   verification_mode: current-merged-truth
 -->
 
@@ -17,7 +17,7 @@ Featured examples on this page use cURL, Python, Node.js / TypeScript, and Rust.
 ## Prerequisites
 
 - `antd` running on `http://localhost:8082` (see [Start the Local Daemon](../getting-started/using-the-autonomi-daemon.md))
-- For the write examples on this page, a write-enabled daemon. On the default network, restart `antd` with wallet configuration first. On a local devnet, `ant dev start` provisions that for you. See [Prepare a Wallet for Uploads](manage-keys.md) for the default-network path.
+- For the write examples on this page, a write-enabled daemon. On the default network, restart `antd` with wallet configuration first. On a local devnet, `ant dev start` provisions that for you. See [Prepare a Wallet for Uploads](manage-keys.md) for the default-network setup.
 - Optional: the runtime or toolchain for the SDK examples you want to run, such as Python, Node.js, or Rust
 
 The read examples work with any running daemon if you already have an address or DataMap. The write examples on this page require the write-enabled setup above.

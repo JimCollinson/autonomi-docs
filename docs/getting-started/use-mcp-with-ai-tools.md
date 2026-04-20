@@ -8,7 +8,7 @@
   verification_mode: current-merged-truth
 -->
 
-Use MCP when you want an AI tool such as Claude Desktop, Claude Code, or another MCP-compatible client to store and retrieve data on Autonomi through structured tools instead of direct HTTP requests. This path still uses `antd` under the hood, but the MCP server handles the bridge between your AI client and the daemon.
+Use MCP when you want an AI tool such as Claude Desktop, Claude Code, or another MCP-compatible client to store and retrieve data on Autonomi through structured tools instead of direct HTTP requests. This setup still uses `antd` under the hood, but the MCP server handles the bridge between your AI client and the daemon.
 
 ## Prerequisites
 
@@ -57,7 +57,7 @@ Use the full setup guide next. It covers daemon discovery, SSE mode, and overrid
 
 ## What happened
 
-You chose the MCP path as your entry point into Autonomi. Your AI client talks to `antd-mcp`, and the MCP server calls `antd` on your behalf.
+Your AI client talks to `antd-mcp`, and the MCP server calls `antd` on your behalf.
 
 ## Next steps
 

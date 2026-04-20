@@ -17,7 +17,7 @@
 
 Rust gives you two supported ways to build on Autonomi.
 
-## Choose your Rust route
+## Choose how you'll work in Rust
 
 ### Rust through the SDK daemon
 
