@@ -65,8 +65,8 @@ Read more in [Payment Model](payment-model.md).
 
 Start here depending on what you need next:
 
-- If you are building an application: [Data Types](data-types.md), then [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
+- If you are building an application: [Data Types](data-types.md), then [Store and Retrieve Data with the SDKs](../sdk/how-to-guides/store-and-retrieve-data.md)
 - If you need to understand wallets, public addresses, and private retrieval material: [Keys, Addresses, and DataMaps](keys-addresses-and-datamaps.md)
 - If you need to understand the encryption path: [Self-Encryption](self-encryption.md)
-- If you need to understand upload costs and wallets: [Payment Model](payment-model.md), then [Estimate Costs and Handle Upload Payments](../how-to-guides/handle-payments.md)
+- If you need to understand upload costs and wallets: [Payment Model](payment-model.md), then [Estimate Costs and Handle Upload Payments](../guides/estimate-costs-and-handle-upload-payments.md)
 - If you need the security context: [Post-Quantum Cryptography](post-quantum-cryptography.md)

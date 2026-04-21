@@ -107,7 +107,7 @@ The tooling maps cleanly onto these interfaces:
 
 ## Related pages
 
-- [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](../sdk/how-to-guides/store-and-retrieve-data.md)
 - [Payment Model](payment-model.md)
 - [Keys, Addresses, and DataMaps](keys-addresses-and-datamaps.md)
 - [Self-Encryption](self-encryption.md)

@@ -1,18 +1,6 @@
 # Table of contents
 
-## Developer Documentation
-
-* [Introduction](index.md)
-
-## Getting Started
-
-* [What is Autonomi?](getting-started/introduction.md)
-* [Build with the SDKs](getting-started/install.md)
-* [Start the Local Daemon](getting-started/using-the-autonomi-daemon.md)
-* [Retrieve Data from the Network](getting-started/retrieve-data-from-the-network.md)
-* [Store Data on the Network](getting-started/hello-world.md)
-* [Use the CLI](getting-started/using-ant-client.md)
-* [Build Directly in Rust](getting-started/build-directly-in-rust.md)
+* [What is Autonomi?](index.md)
 
 ## Core Concepts
 
@@ -23,62 +11,71 @@
 * [Post-Quantum Cryptography](core-concepts/post-quantum-cryptography.md)
 * [Payment Model](core-concepts/payment-model.md)
 
-## How-To Guides
+## SDK
 
-* [Set Up a Local Network](how-to-guides/setup-local-network.md)
-* [Store and Retrieve Data with the SDKs](how-to-guides/store-and-retrieve-data.md)
-* [Prepare a Wallet for Uploads](how-to-guides/manage-keys.md)
-* [Estimate Costs and Handle Upload Payments](how-to-guides/handle-payments.md)
-* [Build Read-Only Features](how-to-guides/build-a-read-only-application.md)
-* [Use the Daemon as a Local Service](how-to-guides/run-as-daemon.md)
-* [Use External Signers for Upload Payments](how-to-guides/use-external-signers.md)
-* [Use the Autonomi MCP Server](how-to-guides/use-the-mcp-server.md)
-* [Test Your Application](how-to-guides/test-your-application.md)
-* [Deploy to Mainnet](how-to-guides/deploy-to-mainnet.md)
-* [Embed a Node in Your Application](how-to-guides/embed-a-node.md)
+* [Build with the SDKs](sdk/install.md)
+  * [Start the Local Daemon](sdk/start-the-local-daemon.md)
+  * [Retrieve Data from the Network](sdk/retrieve-data-from-the-network.md)
+  * [Store Data on the Network](sdk/store-data-on-the-network.md)
+  * [SDK How-To Guides](sdk/how-to-guides/README.md "How-To Guides")
+    * [Store and Retrieve Data with the SDKs](sdk/how-to-guides/store-and-retrieve-data.md)
+    * [Use the Daemon as a Local Service](sdk/how-to-guides/use-the-daemon-as-a-local-service.md)
+    * [Use External Signers for Upload Payments](sdk/how-to-guides/use-external-signers-for-upload-payments.md)
+  * [SDK Reference](sdk/reference/README.md "Reference")
+    * [SDK Overview](sdk/reference/overview.md)
+    * [REST API](sdk/reference/rest-api.md)
+    * [gRPC Services](sdk/reference/grpc-services.md)
+    * [Daemon Command Reference](sdk/reference/daemon-command-reference.md)
+    * [Language Bindings](sdk/reference/language-bindings/README.md)
+      * [How Bindings Work](sdk/reference/language-bindings/overview.md)
+      * [Python](sdk/reference/language-bindings/python.md)
+      * [JavaScript](sdk/reference/language-bindings/javascript.md)
+      * [Rust](sdk/reference/language-bindings/rust.md)
+      * [Go](sdk/reference/language-bindings/go.md)
+      * [TypeScript](sdk/reference/language-bindings/typescript.md)
+      * [Java](sdk/reference/language-bindings/java.md)
+      * [C#](sdk/reference/language-bindings/csharp.md)
+      * [Kotlin](sdk/reference/language-bindings/kotlin.md)
+      * [Swift](sdk/reference/language-bindings/swift.md)
+      * [Ruby](sdk/reference/language-bindings/ruby.md)
+      * [PHP](sdk/reference/language-bindings/php.md)
+      * [C++](sdk/reference/language-bindings/cpp.md)
+      * [Dart](sdk/reference/language-bindings/dart.md)
+      * [Zig](sdk/reference/language-bindings/zig.md)
 
-## SDK Reference
+## MCP
 
-* [SDK Overview](sdk-reference/overview.md)
-* [REST API](sdk-reference/rest-api.md)
-* [gRPC Services](sdk-reference/grpc-services.md)
-* [MCP Server Reference](sdk-reference/mcp-server.md)
-* [Daemon Command Reference](sdk-reference/daemon-cli.md)
-* [Language Bindings](sdk-reference/language-bindings/README.md)
-  * [How Bindings Work](sdk-reference/language-bindings/overview.md)
-  * [Python](sdk-reference/language-bindings/python.md)
-  * [JavaScript](sdk-reference/language-bindings/javascript.md)
-  * [Rust](sdk-reference/language-bindings/rust.md)
-  * [Go](sdk-reference/language-bindings/go.md)
-  * [TypeScript](sdk-reference/language-bindings/typescript.md)
-  * [Java](sdk-reference/language-bindings/java.md)
-  * [C#](sdk-reference/language-bindings/csharp.md)
-  * [Kotlin](sdk-reference/language-bindings/kotlin.md)
-  * [Swift](sdk-reference/language-bindings/swift.md)
-  * [Ruby](sdk-reference/language-bindings/ruby.md)
-  * [PHP](sdk-reference/language-bindings/php.md)
-  * [C++](sdk-reference/language-bindings/cpp.md)
-  * [Dart](sdk-reference/language-bindings/dart.md)
-  * [Zig](sdk-reference/language-bindings/zig.md)
+* [Use MCP with AI Tools](mcp/use-mcp-with-ai-tools.md)
+* [How to Use the MCP Server](mcp/use-the-autonomi-mcp-server.md)
+* [MCP Server Reference](mcp/mcp-server-reference.md)
 
-## CLI Reference
+## CLI
 
-* [CLI Overview](cli-reference/overview.md)
-* [CLI Command Reference](cli-reference/command-reference.md)
+* [Using the Autonomi CLI](cli/use-the-cli.md)
+* [CLI Command Reference](cli/command-reference.md)
 
-## Rust Reference
+## Developing in Rust
 
-* [Developing in Rust](rust-reference/overview.md)
-* [Rust Library Reference](cli-reference/ant-core-library.md)
+* [Developing in Rust](rust/README.md)
+* [Build Directly in Rust](rust/build-directly-in-rust.md)
+* [How to Embed a Node in Your Application](rust/embed-a-node-in-your-application.md)
+* [Rust Library Reference](rust/library-reference.md)
+
+## Guides
+
+* [Overview](guides/overview.md)
+* [Set Up a Local Network](guides/set-up-a-local-network.md)
+* [Prepare a Wallet for Uploads](guides/prepare-a-wallet-for-uploads.md)
+* [Estimate Costs and Handle Upload Payments](guides/estimate-costs-and-handle-upload-payments.md)
+* [Build Read-Only Features](guides/build-read-only-features.md)
+* [Test Your Application](guides/test-your-application.md)
+* [Deploy to Mainnet](guides/deploy-to-mainnet.md)
 
 ## Architecture
 
 * [System Overview](architecture/system-overview.md)
 
-## GitHub
+## Reference Extras
 
-* [Source Repositories](github.md)
-
-## Additional Resources
-
-* [Glossary](glossary.md)
+* [Source Repositories](reference/source-repositories.md)
+* [Glossary](reference/glossary.md)

@@ -1,48 +1,58 @@
-# Introduction
+# What is Autonomi?
 
-Autonomi is a decentralized peer-to-peer network for permanent, immutable data storage. Data is encrypted before upload, stored using content-addressing, and paid for once at upload.\
-\
-These guides will help you get started building with the Autonomi Network!
+Autonomi is a decentralized peer-to-peer network for permanent, immutable data storage. Data is encrypted before upload, stored using content-addressing, and paid for once when you write it to the network.
 
-## How to build on Autonomi
+## What makes Autonomi different
 
-You can build on Autonomi in several ways, from SDKs in more than 15 languages through a local daemon that exposes REST and gRPC, to direct CLI access, to native Rust with `ant-core`.
+At a high level, Autonomi gives you:
 
-### Build with the SDKs
+- immutable storage, where changing the content produces a new address instead of mutating the old one
+- client-side encryption through self-encryption before chunks are stored on the network
+- public and private retrieval through addresses and DataMaps
+- pay-once storage, where you pay in Autonomi Network Token (ANT) when you upload and downloads are free
+- post-quantum cryptography in the transport and security model
 
-Use the SDKs if you want the simplest integration model for application development in Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, and other supported languages.
+## How you can build on Autonomi
 
-`antd` runs on your machine and exposes REST and gRPC endpoints so your application can use a stable local interface to the network.
+You can work with Autonomi in four main ways.
 
-Start with [Build with the SDKs](getting-started/install.md), then [Start the Local Daemon](getting-started/using-the-autonomi-daemon.md), then [Retrieve Data from the Network](getting-started/retrieve-data-from-the-network.md), then [Store Data on the Network](getting-started/hello-world.md).
+### SDK
 
-### Use the CLI
+Use the SDK when you want to build an application in Python, Node.js / TypeScript, Go, Rust, Java, C#, Kotlin, Swift, Ruby, PHP, Dart, Zig, or another supported language.
 
-[Use the CLI](getting-started/using-ant-client.md) when you want direct shell access for uploads, downloads, wallet checks, chunk operations, or node-management workflows.
+The SDK uses a local daemon called `antd`, which exposes REST and gRPC and keeps the network-facing work out of your application.
 
-### Build directly in Rust
+Start with [Build with the SDKs](sdk/install.md).
 
-Build in Rust without the daemon when you want direct programmatic control over networking, uploads, and payments in your application.
+### MCP
 
-Start with [Build Directly in Rust](getting-started/build-directly-in-rust.md).
+Use the MCP server when you want an AI tool such as Claude Desktop, Claude Code, or another MCP-compatible client to interact with Autonomi through structured tools.
 
-## Core Concepts
+The MCP server also talks to `antd`, but it presents Autonomi through an AI-tool interface rather than through language bindings.
 
-* [Data Types](core-concepts/data-types.md)
-* [Keys, Addresses, and DataMaps](core-concepts/keys-addresses-and-datamaps.md)
-* [Self-Encryption](core-concepts/self-encryption.md)
-* [Payment Model](core-concepts/payment-model.md)
-* [Post-Quantum Cryptography](core-concepts/post-quantum-cryptography.md)
+Start with [Use MCP with AI Tools](mcp/use-mcp-with-ai-tools.md).
 
-## Reference
+### CLI
 
-* [REST API](sdk-reference/rest-api.md)
-* [SDK Overview](sdk-reference/overview.md)
-* [CLI Command Reference](cli-reference/command-reference.md)
-* [Rust Library Reference](cli-reference/ant-core-library.md)
-* [MCP Server Reference](sdk-reference/mcp-server.md)
+Use the CLI when you want direct shell access for uploads, downloads, wallet checks, chunk operations, or node-management workflows.
 
-## Go Deeper
+Start with [Use the CLI](cli/use-the-cli.md).
 
-* [System Overview](architecture/system-overview.md)
-* [GitHub](github.md)
+### Developing in Rust
+
+Build directly in Rust when you want in-process control over networking, uploads, and downloads without using `antd`.
+
+Start with [Developing in Rust](rust/README.md).
+
+## Core concepts
+
+- [Data Types](core-concepts/data-types.md)
+- [Keys, Addresses, and DataMaps](core-concepts/keys-addresses-and-datamaps.md)
+- [Self-Encryption](core-concepts/self-encryption.md)
+- [Payment Model](core-concepts/payment-model.md)
+- [Post-Quantum Cryptography](core-concepts/post-quantum-cryptography.md)
+
+## Go deeper
+
+- [System Overview](architecture/system-overview.md)
+- [Source Repositories](reference/source-repositories.md)

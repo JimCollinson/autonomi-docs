@@ -64,5 +64,5 @@ The crate does not store anything on the network for you. Persisting the encrypt
 
 - [Data Types](data-types.md)
 - [Keys, Addresses, and DataMaps](keys-addresses-and-datamaps.md)
-- [Store and Retrieve Data with the SDKs](../how-to-guides/store-and-retrieve-data.md)
+- [Store and Retrieve Data with the SDKs](../sdk/how-to-guides/store-and-retrieve-data.md)
 - [Core Concepts Overview](overview.md)

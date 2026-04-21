@@ -3,3 +3,60 @@ root: ./docs/
 structure:
   readme: index.md
   summary: SUMMARY.md
+
+redirects:
+  getting-started/introduction: index.md
+  getting-started/install: sdk/install.md
+  getting-started/using-the-autonomi-daemon: sdk/start-the-local-daemon.md
+  getting-started/retrieve-data-from-the-network: sdk/retrieve-data-from-the-network.md
+  getting-started/hello-world: sdk/store-data-on-the-network.md
+  getting-started/use-mcp-with-ai-tools: mcp/use-mcp-with-ai-tools.md
+  getting-started/using-ant-client: cli/use-the-cli.md
+  getting-started/build-directly-in-rust: rust/build-directly-in-rust.md
+  how-to-guides/overview: guides/overview.md
+  how-to-guides/store-and-retrieve-data: sdk/how-to-guides/store-and-retrieve-data.md
+  how-to-guides/run-as-daemon: sdk/how-to-guides/use-the-daemon-as-a-local-service.md
+  how-to-guides/use-external-signers: sdk/how-to-guides/use-external-signers-for-upload-payments.md
+  how-to-guides/use-the-mcp-server: mcp/use-the-autonomi-mcp-server.md
+  how-to-guides/embed-a-node: rust/embed-a-node-in-your-application.md
+  how-to-guides/setup-local-network: guides/set-up-a-local-network.md
+  how-to-guides/manage-keys: guides/prepare-a-wallet-for-uploads.md
+  how-to-guides/handle-payments: guides/estimate-costs-and-handle-upload-payments.md
+  how-to-guides/build-a-read-only-application: guides/build-read-only-features.md
+  how-to-guides/test-your-application: guides/test-your-application.md
+  how-to-guides/deploy-to-mainnet: guides/deploy-to-mainnet.md
+  sdk-reference/overview: sdk/reference/overview.md
+  sdk-reference/rest-api: sdk/reference/rest-api.md
+  sdk-reference/grpc-services: sdk/reference/grpc-services.md
+  sdk-reference/daemon-cli: sdk/reference/daemon-command-reference.md
+  sdk-reference/mcp-server: mcp/reference/mcp-server-reference.md
+  sdk-reference/language-bindings/README: sdk/reference/language-bindings/README.md
+  sdk-reference/language-bindings/overview: sdk/reference/language-bindings/overview.md
+  sdk-reference/language-bindings/python: sdk/reference/language-bindings/python.md
+  sdk-reference/language-bindings/javascript: sdk/reference/language-bindings/javascript.md
+  sdk-reference/language-bindings/rust: sdk/reference/language-bindings/rust.md
+  sdk-reference/language-bindings/go: sdk/reference/language-bindings/go.md
+  sdk-reference/language-bindings/typescript: sdk/reference/language-bindings/typescript.md
+  sdk-reference/language-bindings/java: sdk/reference/language-bindings/java.md
+  sdk-reference/language-bindings/csharp: sdk/reference/language-bindings/csharp.md
+  sdk-reference/language-bindings/kotlin: sdk/reference/language-bindings/kotlin.md
+  sdk-reference/language-bindings/swift: sdk/reference/language-bindings/swift.md
+  sdk-reference/language-bindings/ruby: sdk/reference/language-bindings/ruby.md
+  sdk-reference/language-bindings/php: sdk/reference/language-bindings/php.md
+  sdk-reference/language-bindings/cpp: sdk/reference/language-bindings/cpp.md
+  sdk-reference/language-bindings/dart: sdk/reference/language-bindings/dart.md
+  sdk-reference/language-bindings/zig: sdk/reference/language-bindings/zig.md
+  sdk/store-and-retrieve-data: sdk/how-to-guides/store-and-retrieve-data.md
+  sdk/use-the-daemon-as-a-local-service: sdk/how-to-guides/use-the-daemon-as-a-local-service.md
+  sdk/use-external-signers-for-upload-payments: sdk/how-to-guides/use-external-signers-for-upload-payments.md
+  cli-reference/overview: cli/use-the-cli.md
+  cli-reference/command-reference: cli/command-reference.md
+  cli-reference/ant-core-library: rust/library-reference.md
+  rust-reference/overview: rust/README.md
+  cli/reference/overview: cli/use-the-cli.md
+  cli/reference/command-reference: cli/command-reference.md
+  mcp/reference/mcp-server-reference: mcp/mcp-server-reference.md
+  rust/reference/overview: rust/README.md
+  rust/reference/library-reference: rust/library-reference.md
+  github: reference/source-repositories.md
+  glossary: reference/glossary.md

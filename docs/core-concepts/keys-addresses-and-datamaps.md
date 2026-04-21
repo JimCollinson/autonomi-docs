@@ -90,5 +90,5 @@ The simplest way to think about the split is:
 
 - [Data Types](data-types.md)
 - [Self-Encryption](self-encryption.md)
-- [Prepare a Wallet for Uploads](../how-to-guides/manage-keys.md)
-- [Build Read-Only Features](../how-to-guides/build-a-read-only-application.md)
+- [Prepare a Wallet for Uploads](../guides/prepare-a-wallet-for-uploads.md)
+- [Build Read-Only Features](../guides/build-read-only-features.md)
