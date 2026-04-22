@@ -10,8 +10,8 @@
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: d3f5ba969b8ccf98ca0c50b661a3762aec904634
-  verified_date: 2026-04-17
+  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -123,7 +123,7 @@ ant dev start
 
 `ant dev start` expects the `ant-node` repo to be cloned as a sibling of `ant-sdk`.
 
-It starts a local Autonomi stack and provisions the payment configuration that `antd` needs for uploads on the local network.
+It starts `ant-devnet`, waits for the generated devnet manifest, and then launches `antd` with the bootstrap peers, wallet key, and local EVM payment settings from that manifest.
 
 On the first run, `ant dev start` can take longer than usual while local components compile in release mode. If it times out on a cold build, run it again after the initial compilation has completed.
 

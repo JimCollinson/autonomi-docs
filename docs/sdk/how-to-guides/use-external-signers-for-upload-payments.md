@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 125dce8c33cfdd739ec58f492004922215809a1b
-  verified_date: 2026-04-16
+  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 <!-- verification:
@@ -32,7 +32,7 @@ This is the right approach when:
 
 ## Prerequisites
 
-- `antd` running without `AUTONOMI_WALLET_KEY` (see [Start the Local Daemon](../sdk/start-the-local-daemon.md))
+- `antd` running without `AUTONOMI_WALLET_KEY` (see [Start the Local Daemon](../start-the-local-daemon.md))
 - EVM configuration available to the daemon for the target network
 - An external signer or wallet stack that can submit the required payment transactions
 
@@ -184,5 +184,5 @@ Finalize succeeds when the daemon accepts the `upload_id` plus either the `tx_ha
 
 - [Prepare a Wallet for Uploads](../../guides/prepare-a-wallet-for-uploads.md)
 - [Estimate Costs and Handle Upload Payments](../../guides/estimate-costs-and-handle-upload-payments.md)
-- [REST API](../sdk/reference/rest-api.md)
+- [REST API](../reference/rest-api.md)
 - [Use the Daemon as a Local Service](use-the-daemon-as-a-local-service.md)

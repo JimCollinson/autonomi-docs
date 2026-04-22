@@ -8,6 +8,8 @@
 
 **Operational note**: This file defines site structure and page intent. It is not a source-of-truth document. If any brief, example, or product-surface claim in this file conflicts with `CLAUDE.md` or `planning/verification-workflow.md`, the source-of-truth docs win.
 
+**Route note**: The live docs tree later moved to the route-first layout under `docs/sdk/`, `docs/mcp/`, `docs/cli/`, `docs/rust/`, `docs/guides/`, and `docs/reference/`. Use `docs/SUMMARY.md`, `repo-registry.yml`, and `component-registry.yml` for the current path layout.
+
 ---
 
 ## REVISION NOTES

@@ -4,21 +4,21 @@
   source_repo: saorsa-pqc
   source_ref: main
   source_commit: 1619cb2231db942cd65ab954ca0e0304dd6bc220
-  verified_date: 2026-04-06
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-transport
   source_ref: main
-  source_commit: 421cfccec73e31c955e1b65fd73919d81d2044f2
-  verified_date: 2026-04-06
+  source_commit: c34424efba78546ca08a4bf69382a7fc04aa2789
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-keygen
   source_ref: main
   source_commit: 3a2953f384a3b16391968de451b703843b98ed86
-  verified_date: 2026-04-02
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 

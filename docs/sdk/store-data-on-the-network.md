@@ -16,7 +16,7 @@ Use `antd` to store a small public payload on the Autonomi Network and read it b
 - A write-enabled daemon. On the default network, restart `antd` with wallet configuration before you continue. On a local devnet, `ant dev start` provisions the upload settings for you. See [Prepare a Wallet for Uploads](../guides/prepare-a-wallet-for-uploads.md) for the default-network setup.
 - Optional: the runtime or toolchain for the SDK examples you want to run, such as Python, Node.js, or Rust
 
-If you would rather use shell commands or direct Rust instead, see [Use the CLI](../cli/use-the-cli.md) and [Build Directly in Rust](../rust/build-directly-in-rust.md). If your application should keep the signing key outside `antd`, start with [Use External Signers for Upload Payments](use-external-signers-for-upload-payments.md) instead of this guide.
+If you would rather use shell commands or direct Rust instead, see [Use the CLI](../cli/use-the-cli.md) and [Build Directly in Rust](../rust/build-directly-in-rust.md). If your application should keep the signing key outside `antd`, start with [Use External Signers for Upload Payments](how-to-guides/use-external-signers-for-upload-payments.md) instead of this guide.
 
 If you only need retrieval and do not need uploads yet, start with [Retrieve Data from the Network](retrieve-data-from-the-network.md).
 

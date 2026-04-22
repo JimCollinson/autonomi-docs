@@ -10,15 +10,15 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: d46a73d38731a31fbd9815394fe8a2943eb38246
-  verified_date: 2026-04-17
+  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: d3f5ba969b8ccf98ca0c50b661a3762aec904634
-  verified_date: 2026-04-17
+  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -194,6 +194,6 @@ Your local integration environment is healthy when `ant dev status` reports a ru
 
 ## Next steps
 
-- [Set Up a Local Network](setup-local-network.md)
+- [Set Up a Local Network](set-up-a-local-network.md)
 - [Deploy to Mainnet](deploy-to-mainnet.md)
 - [Store and Retrieve Data with the SDKs](../sdk/how-to-guides/store-and-retrieve-data.md)

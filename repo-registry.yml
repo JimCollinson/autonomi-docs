@@ -113,8 +113,8 @@ repos:
 
   ant-merkle:
     class: targeted-foundational
-    org: MaidSafe  # moving to WithAutonomi
-    url: https://github.com/maidsafe/ant-merkle
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-merkle
     watch_mode: targeted
     default_for_drafting: false
     topics:
@@ -140,16 +140,19 @@ repos:
   # === WATCHLIST ===
   # Not source-of-truth for new docs. Flag if still referenced.
 
-  ant-evm:
+  ant-protocol:
     class: watchlist
     org: WithAutonomi
-    url: https://github.com/WithAutonomi/ant-evm
-    watch_mode: issue-only
+    url: https://github.com/WithAutonomi/ant-protocol
+    watch_mode: manual
     default_for_drafting: false
     topics:
-      - legacy-payment-references
-    on_change: flag-if-still-referenced
-    notes: "Collapsed into evmlib. Watch until all references disappear from merged code."
+      - protocol
+      - wire-format
+      - chunk-messages
+      - payment-proof
+    on_change: assess-if-adopted
+    notes: "Extracted from ant-node. Keep on the watchlist until merged consumers adopt it, then promote it to an active source repo."
 
   # === EXCLUDED ===
   # Ignored by default. Do not read, reference, or verify against.

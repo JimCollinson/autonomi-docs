@@ -17,10 +17,17 @@ components:
       - grpc
       - install
     feeds_pages:
-      - getting-started/install.md
-      - sdk-reference/overview.md
-      - sdk-reference/rest-api.md
-      - sdk-reference/daemon-cli.md
+      - sdk/install.md
+      - sdk/start-the-local-daemon.md
+      - sdk/retrieve-data-from-the-network.md
+      - sdk/store-data-on-the-network.md
+      - sdk/how-to-guides/README.md
+      - sdk/how-to-guides/store-and-retrieve-data.md
+      - sdk/how-to-guides/use-the-daemon-as-a-local-service.md
+      - sdk/how-to-guides/use-external-signers-for-upload-payments.md
+      - sdk/reference/README.md
+      - sdk/reference/overview.md
+      - sdk/reference/daemon-command-reference.md
 
   openapi:
     repo: ant-sdk
@@ -29,7 +36,7 @@ components:
     topics:
       - rest-api
     feeds_pages:
-      - sdk-reference/rest-api.md
+      - sdk/reference/rest-api.md
 
   proto:
     repo: ant-sdk
@@ -38,7 +45,31 @@ components:
     topics:
       - grpc
     feeds_pages:
-      - sdk-reference/grpc-services.md
+      - sdk/reference/grpc-services.md
+
+  ant-dev:
+    repo: ant-sdk
+    kind: python-package
+    path: ant-dev/
+    topics:
+      - local-devnet
+      - local-testing
+    feeds_pages:
+      - sdk/start-the-local-daemon.md
+      - guides/set-up-a-local-network.md
+      - guides/test-your-application.md
+
+  antd-mcp:
+    repo: ant-sdk
+    kind: python-package
+    path: antd-mcp/
+    topics:
+      - mcp
+      - ai-tools
+    feeds_pages:
+      - mcp/use-mcp-with-ai-tools.md
+      - mcp/use-the-autonomi-mcp-server.md
+      - mcp/mcp-server-reference.md
 
   antd-rust:
     repo: ant-sdk
@@ -47,7 +78,7 @@ components:
     topics:
       - rust-binding
     feeds_pages:
-      - sdk-reference/language-bindings/rust.md
+      - sdk/reference/language-bindings/rust.md
 
   antd-py:
     repo: ant-sdk
@@ -56,7 +87,7 @@ components:
     topics:
       - python-binding
     feeds_pages:
-      - sdk-reference/language-bindings/python.md
+      - sdk/reference/language-bindings/python.md
 
   antd-js:
     repo: ant-sdk
@@ -65,7 +96,8 @@ components:
     topics:
       - javascript-binding
     feeds_pages:
-      - sdk-reference/language-bindings/javascript.md
+      - sdk/reference/language-bindings/javascript.md
+      - sdk/reference/language-bindings/typescript.md
 
   antd-go:
     repo: ant-sdk
@@ -74,7 +106,7 @@ components:
     topics:
       - go-binding
     feeds_pages:
-      - sdk-reference/language-bindings/go.md
+      - sdk/reference/language-bindings/go.md
 
   antd-java:
     repo: ant-sdk
@@ -83,7 +115,7 @@ components:
     topics:
       - java-binding
     feeds_pages:
-      - sdk-reference/language-bindings/java.md
+      - sdk/reference/language-bindings/java.md
 
   antd-csharp:
     repo: ant-sdk
@@ -92,7 +124,7 @@ components:
     topics:
       - csharp-binding
     feeds_pages:
-      - sdk-reference/language-bindings/csharp.md
+      - sdk/reference/language-bindings/csharp.md
 
   antd-kotlin:
     repo: ant-sdk
@@ -101,7 +133,7 @@ components:
     topics:
       - kotlin-binding
     feeds_pages:
-      - sdk-reference/language-bindings/kotlin.md
+      - sdk/reference/language-bindings/kotlin.md
 
   antd-swift:
     repo: ant-sdk
@@ -110,7 +142,7 @@ components:
     topics:
       - swift-binding
     feeds_pages:
-      - sdk-reference/language-bindings/swift.md
+      - sdk/reference/language-bindings/swift.md
 
   antd-ruby:
     repo: ant-sdk
@@ -119,7 +151,7 @@ components:
     topics:
       - ruby-binding
     feeds_pages:
-      - sdk-reference/language-bindings/ruby.md
+      - sdk/reference/language-bindings/ruby.md
 
   antd-php:
     repo: ant-sdk
@@ -128,7 +160,7 @@ components:
     topics:
       - php-binding
     feeds_pages:
-      - sdk-reference/language-bindings/php.md
+      - sdk/reference/language-bindings/php.md
 
   antd-cpp:
     repo: ant-sdk
@@ -137,7 +169,7 @@ components:
     topics:
       - cpp-binding
     feeds_pages:
-      - sdk-reference/language-bindings/cpp.md
+      - sdk/reference/language-bindings/cpp.md
 
   antd-dart:
     repo: ant-sdk
@@ -146,7 +178,7 @@ components:
     topics:
       - dart-binding
     feeds_pages:
-      - sdk-reference/language-bindings/dart.md
+      - sdk/reference/language-bindings/dart.md
 
   antd-zig:
     repo: ant-sdk
@@ -155,7 +187,27 @@ components:
     topics:
       - zig-binding
     feeds_pages:
-      - sdk-reference/language-bindings/zig.md
+      - sdk/reference/language-bindings/zig.md
+
+  antd-elixir:
+    repo: ant-sdk
+    kind: elixir-package
+    path: antd-elixir/
+    topics:
+      - elixir-binding
+    feeds_pages:
+      - sdk/reference/language-bindings/overview.md
+    notes: "No standalone Elixir binding page yet; track package presence through the bindings overview."
+
+  antd-lua:
+    repo: ant-sdk
+    kind: lua-package
+    path: antd-lua/
+    topics:
+      - lua-binding
+    feeds_pages:
+      - sdk/reference/language-bindings/overview.md
+    notes: "No standalone Lua binding page yet; track package presence through the bindings overview."
 
   # === ant-client ===
 
@@ -169,10 +221,16 @@ components:
       - payments
       - devnet
     feeds_pages:
+      - core-concepts/overview.md
       - core-concepts/data-types.md
-      - how-to-guides/store-and-retrieve-data.md
-      - how-to-guides/handle-payments.md
-      - cli-reference/ant-core-library.md
+      - core-concepts/keys-addresses-and-datamaps.md
+      - core-concepts/payment-model.md
+      - guides/build-read-only-features.md
+      - guides/deploy-to-mainnet.md
+      - guides/prepare-a-wallet-for-uploads.md
+      - rust/README.md
+      - rust/build-directly-in-rust.md
+      - rust/library-reference.md
 
   ant-cli:
     repo: ant-client
@@ -182,9 +240,11 @@ components:
       - cli
       - node-management
     feeds_pages:
-      - cli-reference/overview.md
-      - cli-reference/command-reference.md
-      - getting-started/using-ant-client.md
+      - cli/use-the-cli.md
+      - cli/command-reference.md
+      - guides/build-read-only-features.md
+      - guides/deploy-to-mainnet.md
+      - guides/prepare-a-wallet-for-uploads.md
 
   # === ant-node ===
 
@@ -197,9 +257,12 @@ components:
       - local-network
       - payment-model
     feeds_pages:
+      - sdk/start-the-local-daemon.md
       - core-concepts/payment-model.md
-      - how-to-guides/setup-local-network.md
-      - how-to-guides/embed-a-node.md
+      - guides/set-up-a-local-network.md
+      - guides/test-your-application.md
+      - rust/embed-a-node-in-your-application.md
+      - architecture/system-overview.md
 
   ant-devnet:
     repo: ant-node
@@ -208,7 +271,9 @@ components:
     topics:
       - devnet-launcher
     feeds_pages:
-      - how-to-guides/setup-local-network.md
+      - sdk/start-the-local-daemon.md
+      - guides/set-up-a-local-network.md
+      - guides/test-your-application.md
 
   # === Foundational single-crate repos ===
 
@@ -233,6 +298,7 @@ components:
       - transport
       - nat-traversal
     feeds_pages:
+      - core-concepts/post-quantum-cryptography.md
       - architecture/system-overview.md
 
   saorsa-pqc:
@@ -243,8 +309,8 @@ components:
       - pqc
       - key-derivation
     feeds_pages:
+      - core-concepts/overview.md
       - core-concepts/post-quantum-cryptography.md
-      - core-concepts/key-derivation.md
 
   self_encryption:
     repo: self_encryption
@@ -254,6 +320,7 @@ components:
       - self-encryption
       - datamaps
     feeds_pages:
+      - core-concepts/overview.md
       - core-concepts/self-encryption.md
       - core-concepts/data-types.md
 
@@ -266,8 +333,8 @@ components:
       - wallet-integration
     feeds_pages:
       - core-concepts/payment-model.md
-      - how-to-guides/handle-payments.md
-      - how-to-guides/manage-keys.md
+      - guides/estimate-costs-and-handle-upload-payments.md
+      - sdk/how-to-guides/use-external-signers-for-upload-payments.md
 
   ant-merkle:
     repo: ant-merkle
@@ -277,8 +344,8 @@ components:
       - batch-payments
       - gas-optimisation
       - merkle-payment-flows
-    feeds_pages:
-      - how-to-guides/handle-payments.md
+    feeds_pages: []
+    notes: "Only feeds pages when Merkle proof internals or contract-level batch details are documented directly."
 
   # === Specialist ===
 
@@ -289,5 +356,6 @@ components:
     topics:
       - release-signing
       - key-management
-    feeds_pages: []
-    notes: "Only feeds pages if key management docs are created."
+    feeds_pages:
+      - core-concepts/post-quantum-cryptography.md
+    notes: "Only feeds additional pages if key management or release-signing docs are created."

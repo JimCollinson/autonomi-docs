@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 125dce8c33cfdd739ec58f492004922215809a1b
-  verified_date: 2026-04-16
+  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -96,5 +96,5 @@ Use the binding-specific page when you need package names, constructors, or tran
 - [Start the Local Daemon](../start-the-local-daemon.md)
 - [Store Data on the Network](../store-data-on-the-network.md)
 - [Use the Autonomi MCP Server](../../mcp/use-the-autonomi-mcp-server.md)
-- [MCP Server Reference](mcp-server.md)
+- [MCP Server Reference](../../mcp/mcp-server-reference.md)
 - [REST API](rest-api.md)

@@ -16,11 +16,12 @@ It is designed to serve several purposes at once:
 
 This repo currently focuses on the Autonomi developer documentation experience.
 
-It documents three main developer paths:
+It documents four primary interfaces:
 
-1. Build an app with the SDKs
-2. Use the `ant` CLI
-3. Build directly in Rust
+1. Build with the SDKs
+2. Use MCP with AI tools
+3. Use the `ant` CLI
+4. Build directly in Rust
 
 The documentation is written primarily for human developers encountering Autonomi for the first time, while also remaining parseable and useful for AI agents.
 
@@ -182,9 +183,7 @@ Planned direction:
 
 - finalize the verified baseline
 - review with developers from GitHub and GitBook preview
-- transfer the repo to `WithAutonomi`
-- reconnect or verify GitBook sync after transfer
-- introduce upstream-triggered automation after the repo is in its final org home
+- introduce upstream-triggered automation in this repo
 
 ## Working In This Repo
 

@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -20,6 +20,8 @@ ant-core = { path = "../ant-client/ant-core" }
 bytes = "1"
 tokio = { version = "1", features = ["full"] }
 ```
+
+For same-machine devnets or local testnets, set `ClientConfig { allow_loopback: true, ..ClientConfig::default() }` before `Client::connect`. Keep the default `false` on public networks.
 
 ## Connect to the network
 
@@ -99,14 +101,14 @@ The native Rust library exposes both wave-batch and Merkle-batch external paymen
 
 For wave-batch uploads, `data_prepare_upload`, `file_prepare_upload`, and `finalize_upload` prepare the upload, collect quotes, and later store the chunks after an external signer returns transaction hashes.
 
-For Merkle batches, `prepare_merkle_batch_external` builds the batch data needed for the on-chain call, and `finalize_merkle_batch` turns the winning pool hash back into per-chunk proofs.
+For Merkle batches, `prepare_merkle_batch_external` and `finalize_merkle_batch` expose the low-level batch helpers, while `finalize_upload_merkle` completes a prepared upload from the winning pool hash.
 
 ## Key types
 
 | Type | Description |
 |------|-------------|
 | `ant_core::data::Client` | Main network client |
-| `ant_core::data::ClientConfig` | Network timeout and concurrency settings |
+| `ant_core::data::ClientConfig` | Separate quote and store timeouts, concurrency limits, and loopback policy |
 | `ant_core::data::PaymentMode` | `Auto`, `Merkle`, or `Single` |
 | `ant_core::data::DataMap` | Private retrieval map for uploaded data |
 | `ant_core::data::LocalDevnet` | Local development helper |
@@ -183,5 +185,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ## Related pages
 
 - [Developing in Rust](README.md)
-- [Build Directly in Rust](../build-directly-in-rust.md)
-- [Rust SDK](../../sdk/reference/language-bindings/rust.md)
+- [Build Directly in Rust](build-directly-in-rust.md)
+- [Rust SDK](../sdk/reference/language-bindings/rust.md)

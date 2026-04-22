@@ -1,6 +1,6 @@
 # Planning
 
-This folder contains the planning documents that drove the creation of the docs repo. They are kept here for context — any agent working in this repo should read these to understand the strategy, scope, and design decisions behind the documentation.
+This folder contains the planning documents that drove the creation of the docs repo. They are kept here for context — agents can read them to understand the strategy, scope, and design decisions behind the documentation, but they are not the live source of truth for paths or page mappings.
 
 ## Files
 

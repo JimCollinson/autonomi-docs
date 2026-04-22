@@ -5,6 +5,8 @@
 **Launch date**: April 7, 2026
 **Last updated**: April 2, 2026
 
+**Route note**: This plan predates the later route-first file reorganization. For the current live docs tree and page paths, use `docs/SUMMARY.md`, `repo-registry.yml`, and `component-registry.yml`.
+
 ---
 
 ## 1. STRATEGIC OVERVIEW

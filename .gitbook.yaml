@@ -29,7 +29,7 @@ redirects:
   sdk-reference/rest-api: sdk/reference/rest-api.md
   sdk-reference/grpc-services: sdk/reference/grpc-services.md
   sdk-reference/daemon-cli: sdk/reference/daemon-command-reference.md
-  sdk-reference/mcp-server: mcp/reference/mcp-server-reference.md
+  sdk-reference/mcp-server: mcp/mcp-server-reference.md
   sdk-reference/language-bindings/README: sdk/reference/language-bindings/README.md
   sdk-reference/language-bindings/overview: sdk/reference/language-bindings/overview.md
   sdk-reference/language-bindings/python: sdk/reference/language-bindings/python.md

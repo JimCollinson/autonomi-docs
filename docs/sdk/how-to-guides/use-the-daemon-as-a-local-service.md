@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 125dce8c33cfdd739ec58f492004922215809a1b
-  verified_date: 2026-04-16
+  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -104,7 +104,7 @@ The daemon is healthy when `/health` returns `status: ok` and your application c
 
 ## Next steps
 
-* [Build with the SDKs](../sdk/install.md)
-* [Start the Local Daemon](../sdk/start-the-local-daemon.md)
-* [Daemon Command Reference](../sdk/reference/daemon-command-reference.md)
-* [REST API](../sdk/reference/rest-api.md)
+- [Build with the SDKs](../install.md)
+- [Start the Local Daemon](../start-the-local-daemon.md)
+- [Daemon Command Reference](../reference/daemon-command-reference.md)
+- [REST API](../reference/rest-api.md)

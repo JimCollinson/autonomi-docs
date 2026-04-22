@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 125dce8c33cfdd739ec58f492004922215809a1b
-  verified_date: 2026-04-16
+  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -99,5 +99,5 @@ antd --quote-timeout-secs 15 --store-timeout-secs 90 --quote-concurrency 32 --st
 
 - [Build with the SDKs](../install.md)
 - [Start the Local Daemon](../start-the-local-daemon.md)
-- [Use the Daemon as a Local Service](../use-the-daemon-as-a-local-service.md)
+- [Use the Daemon as a Local Service](../how-to-guides/use-the-daemon-as-a-local-service.md)
 - [REST API](rest-api.md)

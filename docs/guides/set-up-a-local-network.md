@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 2a6e9f2a2066d80c072a7cc2cb644e35def9add3
-  verified_date: 2026-04-03
+  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -66,6 +66,7 @@ On the first run, this step can take longer than usual because local components 
 The local start flow launches:
 
 - a local `ant-devnet`
+- a generated devnet manifest with bootstrap peers plus local wallet and EVM payment settings
 - `antd --network local`
 - a wallet-enabled local environment with REST health on `http://localhost:8082/health`
 

@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: d46a73d38731a31fbd9815394fe8a2943eb38246
-  verified_date: 2026-04-17
+  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -68,7 +68,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 cargo run
 ```
 
-This example starts a local Autonomi development network, creates a funded Rust client, uploads a payload, downloads it again, and shuts the devnet down.
+This example starts a local Autonomi development network, creates a funded Rust client with local payment approval already in place, uploads a payload, downloads it again, and shuts the devnet down.
 
 ## What happened
 

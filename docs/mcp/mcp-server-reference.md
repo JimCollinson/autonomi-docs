@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 125dce8c33cfdd739ec58f492004922215809a1b
-  verified_date: 2026-04-16
+  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -227,6 +227,6 @@ Unexpected errors include `error`, `message`, and `network`, but may not include
 
 ## Related pages
 
-- [How to Use the MCP Server](../use-the-autonomi-mcp-server.md)
-- [SDK Overview](overview.md)
-- [REST API](rest-api.md)
+- [How to Use the MCP Server](use-the-autonomi-mcp-server.md)
+- [SDK Overview](../sdk/reference/overview.md)
+- [REST API](../sdk/reference/rest-api.md)

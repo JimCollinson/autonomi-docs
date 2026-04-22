@@ -11,7 +11,7 @@ If you are looking for tasks that are specific to one interface, look inside tha
 
 ## What is here
 
-- [Set Up a Local Network](setup-local-network.md) — run a local Autonomi network for development and testing.
+- [Set Up a Local Network](set-up-a-local-network.md) — run a local Autonomi network for development and testing.
 - [Prepare a Wallet for Uploads](prepare-a-wallet-for-uploads.md) — create and fund a wallet so your application can pay for uploads.
 - [Estimate Costs and Handle Upload Payments](estimate-costs-and-handle-upload-payments.md) — understand upload pricing and wire payment handling into your code.
 - [Build Read-Only Features](build-read-only-features.md) — retrieve public data without needing to upload or pay.

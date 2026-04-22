@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
+  verified_date: 2026-04-21
   verification_mode: current-merged-truth
 -->
 
@@ -39,9 +39,9 @@ Choose native Rust with ant-core if you want:
 
 - direct control over the network client in Rust
 - no daemon process between your code and the network
-- access to native Rust types and local devnet helpers
+- access to native Rust types, local devnet helpers, and direct client tuning such as loopback and timeout control
 
-See [Build Directly in Rust](../build-directly-in-rust.md) and [Rust Library Reference](library-reference.md).
+See [Build Directly in Rust](build-directly-in-rust.md) and [Rust Library Reference](library-reference.md).
 
 ## How the two Rust paths differ
 

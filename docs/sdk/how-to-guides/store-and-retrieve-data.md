@@ -10,14 +10,14 @@
 
 In this guide, you use `antd`, the local daemon used by the SDKs, to store public data, private data, files, and directories through language SDKs.
 
-If you want direct shell access instead, see [Use the CLI](../cli/use-the-cli.md). If you want direct programmatic Rust access without the daemon, see [Build Directly in Rust](../rust/build-directly-in-rust.md).
+If you want direct shell access instead, see [Use the CLI](../../cli/use-the-cli.md). If you want direct programmatic Rust access without the daemon, see [Build Directly in Rust](../../rust/build-directly-in-rust.md).
 
-Featured examples on this page use cURL, Python, Node.js / TypeScript, and Rust. Other SDK languages are available in the [Language Bindings](../sdk/reference/language-bindings/overview.md) section.
+Featured examples on this page use cURL, Python, Node.js / TypeScript, and Rust. Other SDK languages are available in the [Language Bindings](../reference/language-bindings/overview.md) section.
 
 ## Prerequisites
 
-- `antd` running on `http://localhost:8082` (see [Start the Local Daemon](../sdk/start-the-local-daemon.md))
-- For the write examples on this page, a write-enabled daemon. On the default network, restart `antd` with wallet configuration first. On a local devnet, `ant dev start` provisions that for you. See [Prepare a Wallet for Uploads](../guides/prepare-a-wallet-for-uploads.md) for the default-network setup.
+- `antd` running on `http://localhost:8082` (see [Start the Local Daemon](../start-the-local-daemon.md))
+- For the write examples on this page, a write-enabled daemon. On the default network, restart `antd` with wallet configuration first. On a local devnet, `ant dev start` provisions that for you. See [Prepare a Wallet for Uploads](../../guides/prepare-a-wallet-for-uploads.md) for the default-network setup.
 - Optional: the runtime or toolchain for the SDK examples you want to run, such as Python, Node.js, or Rust
 
 The read examples work with any running daemon if you already have an address or DataMap. The write examples on this page require the write-enabled setup above.
@@ -392,8 +392,8 @@ For raw data, compare the retrieved bytes to the original payload. For files and
 
 ## Next steps
 
-- [Store Data on the Network](../sdk/store-data-on-the-network.md)
-- [Prepare a Wallet for Uploads](../guides/prepare-a-wallet-for-uploads.md)
-- [REST API](../sdk/reference/rest-api.md)
+- [Store Data on the Network](../store-data-on-the-network.md)
+- [Prepare a Wallet for Uploads](../../guides/prepare-a-wallet-for-uploads.md)
+- [REST API](../reference/rest-api.md)
 - [SDK Overview](../reference/overview.md)
-- [Start the Local Daemon](../sdk/start-the-local-daemon.md)
+- [Start the Local Daemon](../start-the-local-daemon.md)
