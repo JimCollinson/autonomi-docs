@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-05
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-05
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -84,8 +84,8 @@ The private retrieval response is JSON with the content returned as base64 in th
 For the CLI route, public and private file retrieval use `ant file download` with either a public address or a local `.datamap` file:
 
 ```bash
-ant file download <public_address> -o downloaded.bin --bootstrap 1.2.3.4:12000
-ant file download --datamap my_data.bin.datamap -o downloaded.bin --bootstrap 1.2.3.4:12000
+ant --bootstrap 1.2.3.4:12000 file download <public_address> -o downloaded.bin
+ant --bootstrap 1.2.3.4:12000 file download --datamap my_data.bin.datamap -o downloaded.bin
 ```
 
 For native Rust, use the retrieval APIs in `ant-core` after connecting to the network client.

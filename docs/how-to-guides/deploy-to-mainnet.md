@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -33,7 +33,7 @@ For daemon-based deployments, provide wallet and EVM settings through the enviro
 export AUTONOMI_WALLET_KEY="<hex_private_key>"
 export EVM_RPC_URL="https://your-rpc-endpoint"
 export EVM_PAYMENT_TOKEN_ADDRESS="0x..."
-export EVM_DATA_PAYMENTS_ADDRESS="0x..."
+export EVM_PAYMENT_VAULT_ADDRESS="0x..."
 ```
 
 For direct-network CLI deployments, provide:
@@ -77,9 +77,8 @@ curl -X POST http://127.0.0.1:8082/v1/data/public \
 The `ant` CLI expects bootstrap peers and an EVM network setting for mainnet-style writes:
 
 ```bash
-SECRET_KEY=0x... ant file upload photo.jpg \
-  --bootstrap 1.2.3.4:12000 \
-  --evm-network arbitrum-one
+SECRET_KEY=0x... ant --bootstrap 1.2.3.4:12000 --evm-network arbitrum-one \
+  file upload photo.jpg
 ```
 
 If you use the private mode, the CLI saves a local `.datamap` file and uses that for later download.

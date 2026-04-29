@@ -3,22 +3,29 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: evmlib
   source_ref: main
-  source_commit: 82f2fccff243b48de0e04ceb71ccb2aa17d810af
-  verified_date: 2026-04-06
+  source_commit: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-merkle
+  source_ref: master
+  source_commit: 80af80a5df1e26e3b6fb386d041178889c4ed993
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -45,16 +52,15 @@ The daemon does not have an `--external-signer` flag. External-signer mode is th
 ```bash
 EVM_RPC_URL=https://your-rpc-endpoint \
 EVM_PAYMENT_TOKEN_ADDRESS=0x... \
-EVM_DATA_PAYMENTS_ADDRESS=0x... \
-EVM_MERKLE_PAYMENTS_ADDRESS=0x... \
+EVM_PAYMENT_VAULT_ADDRESS=0x... \
 ./target/release/antd
 ```
-
-Include `EVM_MERKLE_PAYMENTS_ADDRESS` when you want Merkle batch payment support in the external-signer flow.
 
 ### 2. Prepare the upload
 
 For in-memory data, call `POST /v1/data/prepare`.
+
+The prepare response includes `payment_type` so your signer knows whether to submit a `wave_batch` payment or a `merkle` payment.
 
 ```bash
 DATA_B64=$(printf 'Hello, Autonomi!' | base64)
@@ -69,6 +75,7 @@ Expected response shape:
 ```json
 {
   "upload_id": "<hex_id>",
+  "payment_type": "wave_batch",
   "payments": [
     {
       "quote_hash": "0x...",
@@ -77,7 +84,7 @@ Expected response shape:
     }
   ],
   "total_amount": "<atto_token_amount>",
-  "data_payments_address": "0x...",
+  "payment_vault_address": "0x...",
   "payment_token_address": "0x...",
   "rpc_url": "https://your-rpc-endpoint"
 }
@@ -89,7 +96,11 @@ For file uploads, the equivalent is `POST /v1/upload/prepare` with a local `path
 
 Use your signer stack to submit the EVM payment transactions described by the prepare response.
 
-`antd` does not sign or broadcast those transactions in this flow. Your signer must return the resulting transaction hashes keyed by the quoted payment entries.
+For `wave_batch`, submit the quoted payments and capture the resulting transaction hashes.
+
+For `merkle`, submit the Merkle payment call and capture the `winner_pool_hash` from the `MerklePaymentMade` event.
+
+`antd` does not sign or broadcast those transactions in this flow. Your signer must return either the resulting transaction hashes or the Merkle winner pool hash, depending on `payment_type`.
 
 ### 4. Finalize the upload
 
@@ -99,6 +110,14 @@ After your external signer has submitted the transactions, call `POST /v1/upload
 curl -X POST http://localhost:8082/v1/upload/finalize \
   -H "Content-Type: application/json" \
   -d '{"upload_id":"<hex_id>","tx_hashes":{"0xquote":"0xtx"},"store_data_map":true}'
+```
+
+For `merkle` uploads, send `winner_pool_hash` instead of `tx_hashes`:
+
+```bash
+curl -X POST http://localhost:8082/v1/upload/finalize \
+  -H "Content-Type: application/json" \
+  -d '{"upload_id":"<hex_id>","winner_pool_hash":"0x...","store_data_map":true}'
 ```
 
 Expected response shape:

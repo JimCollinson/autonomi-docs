@@ -1,5 +1,13 @@
 # CLI Overview
 
+<!-- verification:
+  source_repo: ant-client
+  source_ref: main
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+
 `ant` is the command-line interface for Autonomi. It gives you direct shell access to uploads, downloads, wallet inspection, self-update, chunk operations, and node-management workflows without running the SDK daemon.
 
 ## When to use the CLI
@@ -7,7 +15,7 @@
 Use the CLI when you want:
 
 * Direct CLI access for file, chunk, wallet, or node-management workflows
-* Direct control over bootstrap peers, devnet manifests, and EVM network selection
+* Direct control over bootstrap peers, devnet manifests, IPv4-only mode, and EVM network selection
 * Shell-first automation or operational workflows
 
 If you want SDK ergonomics in other languages, use the SDKs instead. If you want daemon-free programmatic Rust access, see [Developing in Rust](../rust-reference/overview.md).
@@ -29,9 +37,8 @@ It also accepts global flags such as:
 * `--bootstrap`
 * `--devnet-manifest`
 * `--allow-loopback`
-* `--timeout-secs`
-* `--chunk-concurrency`
-* `--log-level`
+* `--ipv4-only`
+* `-v`, `--verbose`
 * `--evm-network`
 
 ## Installation

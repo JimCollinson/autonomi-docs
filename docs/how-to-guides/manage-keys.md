@@ -3,15 +3,22 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-05
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-05
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: evmlib
+  source_ref: main
+  source_commit: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -97,12 +104,9 @@ If you do not want `antd` to hold a wallet key, run it without `AUTONOMI_WALLET_
 ```bash
 EVM_RPC_URL=https://your-rpc-endpoint \
 EVM_PAYMENT_TOKEN_ADDRESS=0x... \
-EVM_DATA_PAYMENTS_ADDRESS=0x... \
-EVM_MERKLE_PAYMENTS_ADDRESS=0x... \
+EVM_PAYMENT_VAULT_ADDRESS=0x... \
 ./target/release/antd
 ```
-
-Include `EVM_MERKLE_PAYMENTS_ADDRESS` when you want Merkle batch payment support in this configuration.
 
 That keeps signing outside the daemon and pushes transaction submission into your wallet or signer integration.
 

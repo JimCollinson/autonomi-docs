@@ -4,7 +4,14 @@
   source_repo: self_encryption
   source_ref: master
   source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
-  verified_date: 2026-04-02
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-protocol
+  source_ref: main
+  source_commit: 87071931a982e8a90494353007a3f4e6ebb3de3c
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -30,10 +37,10 @@ The implementation uses:
 
 Chunk addresses are derived from the encrypted content. That is why the higher-level storage model is content-addressed: if the content changes, the resulting encrypted chunks and their addresses change too.
 
-Important limits from the crate itself:
+Important current limits from the active sources:
 
 - `MIN_ENCRYPTABLE_BYTES` is `3`
-- `MAX_CHUNK_SIZE` is `4_190_208` bytes
+- `MAX_CHUNK_SIZE` is `4_190_208` bytes for network chunk payloads
 
 The crate stores chunk metadata in a `DataMap`, and the `DataMap` can be shrunk recursively when it grows beyond the immediate chunk set. In the higher-level SDK and CLI workflows, that `DataMap` is what turns a set of encrypted chunks back into retrievable content.
 
@@ -59,6 +66,7 @@ The crate does not store anything on the network for you. Persisting the encrypt
 ## Upstream sources
 
 - [self_encryption](https://github.com/WithAutonomi/self_encryption)
+- [ant-protocol](https://github.com/WithAutonomi/ant-protocol)
 
 ## Related pages
 

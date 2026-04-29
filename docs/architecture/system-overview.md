@@ -3,50 +3,57 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 2a6e9f2a2066d80c072a7cc2cb644e35def9add3
-  verified_date: 2026-04-03
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-protocol
+  source_ref: main
+  source_commit: 87071931a982e8a90494353007a3f4e6ebb3de3c
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-core
   source_ref: main
-  source_commit: 75a663b60620096aa5989cf6e3b5040b79bc5ce9
-  verified_date: 2026-04-03
+  source_commit: ae3c607fec0882b80e37837143382e9c9687c316
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-transport
   source_ref: main
-  source_commit: 421cfccec73e31c955e1b65fd73919d81d2044f2
-  verified_date: 2026-04-06
+  source_commit: 9808c2782a5605a7cf728a4e2c756c4bf24eef40
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-pqc
   source_ref: main
-  source_commit: 1619cb2231db942cd65ab954ca0e0304dd6bc220
-  verified_date: 2026-04-06
+  source_commit: 2ab931e2533f1df6aa446636fbcf6e95b5bf5a21
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: self_encryption
   source_ref: master
   source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
-  verified_date: 2026-04-02
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -89,6 +96,8 @@ These interfaces target the same network, but one uses a local daemon and the ot
 
 The `ant-node` crate is a thin wrapper around `saorsa-core::P2PNode`. It adds configuration, chunk storage, payment verification, replication, upgrade handling, and node runtime management on top of the core P2P layer.
 
+`ant-core` and `ant-node` also share wire-message types, payment-proof types, and devnet manifest types through `ant-protocol`.
+
 In the repos used for this page, `ant-node` documents chunk storage as its active network data type.
 
 ## Routing and transport
@@ -111,6 +120,7 @@ On the client side, `self_encryption` turns uploaded content into a `DataMap` pl
 - [ant-sdk](https://github.com/WithAutonomi/ant-sdk)
 - [ant-client](https://github.com/WithAutonomi/ant-client)
 - [ant-node](https://github.com/WithAutonomi/ant-node)
+- [ant-protocol](https://github.com/WithAutonomi/ant-protocol)
 - [self_encryption](https://github.com/WithAutonomi/self_encryption)
 - [saorsa-core](https://github.com/saorsa-labs/saorsa-core)
 - [saorsa-transport](https://github.com/saorsa-labs/saorsa-transport)

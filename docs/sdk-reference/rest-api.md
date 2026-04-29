@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -376,7 +376,7 @@ curl -X POST http://localhost:8082/v1/dirs/download/public \
 
 ### Estimate File Cost
 
-**Endpoint:** `POST /v1/cost/file`
+**Endpoint:** `POST /v1/files/cost`
 
 Estimates upload cost for a local file.
 
@@ -398,7 +398,7 @@ Estimates upload cost for a local file.
 **Example:**
 
 ```bash
-curl -X POST http://localhost:8082/v1/cost/file \
+curl -X POST http://localhost:8082/v1/files/cost \
   -H "Content-Type: application/json" \
   -d '{"path":"/absolute/path/to/document.pdf","is_public":true}'
 ```
@@ -489,6 +489,7 @@ Prepares an in-memory data upload for external signing.
 ```json
 {
   "upload_id": "<hex_id>",
+  "payment_type": "wave_batch",
   "payments": [
     {
       "quote_hash": "0x...",
@@ -497,11 +498,13 @@ Prepares an in-memory data upload for external signing.
     }
   ],
   "total_amount": "<atto_token_amount>",
-  "data_payments_address": "0x...",
+  "payment_vault_address": "0x...",
   "payment_token_address": "0x...",
   "rpc_url": "http://127.0.0.1:8545"
 }
 ```
+
+For Merkle uploads, the response instead includes `payment_type: "merkle"` plus `depth`, `pool_commitments`, and `merkle_payment_timestamp`.
 
 **Example:**
 
@@ -546,7 +549,8 @@ Finalizes a prepared upload after the external signer has submitted payment tran
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `upload_id` | string | Yes | Value returned by a prepare endpoint |
-| `tx_hashes` | object | Yes | Map of `quote_hash` to `tx_hash` |
+| `tx_hashes` | object | No | Map of `quote_hash` to `tx_hash` for `wave_batch` uploads |
+| `winner_pool_hash` | string | No | Winner pool hash for `merkle` uploads |
 | `store_data_map` | boolean | No | If `true`, also stores the DataMap on-network |
 
 **Response:**
@@ -568,6 +572,8 @@ curl -X POST http://localhost:8082/v1/upload/finalize \
   -H "Content-Type: application/json" \
   -d '{"upload_id":"<hex_id>","tx_hashes":{"0xquote":"0xtx"},"store_data_map":true}'
 ```
+
+For Merkle uploads, send `winner_pool_hash` instead of `tx_hashes`.
 
 ## Error codes
 

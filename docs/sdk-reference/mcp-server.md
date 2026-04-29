@@ -3,12 +3,12 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
-Reference for the `antd-mcp` server that exposes the `antd` daemon as MCP tools for AI agents and MCP-compatible clients.
+Reference for the `antd-mcp` server that exposes the `antd` daemon as 15 MCP tools for AI agents and MCP-compatible clients.
 
 ## Server command
 
@@ -147,19 +147,25 @@ Fetches a raw chunk and returns base64-encoded data.
 
 **Tool:** `prepare_upload(path)`
 
-Prepares a file upload for external signing and returns payment details.
+Prepares a file upload for external signing and returns payment details plus a `payment_type` discriminator.
 
 ### Prepare a Data Upload
 
 **Tool:** `prepare_data_upload(data)`
 
-Prepares a data upload for external signing. The input is base64-encoded.
+Prepares a data upload for external signing. The input is base64-encoded, and the response includes a `payment_type` discriminator.
 
 ### Finalize an Upload
 
 **Tool:** `finalize_upload(upload_id, tx_hashes)`
 
-Finalizes an externally-signed upload.
+Finalizes an externally-signed wave-batch upload.
+
+### Finalize a Merkle Upload
+
+**Tool:** `finalize_merkle_upload(upload_id, winner_pool_hash)`
+
+Finalizes an externally-signed Merkle upload after the on-chain payment emits `MerklePaymentMade`.
 
 ## Payment modes
 

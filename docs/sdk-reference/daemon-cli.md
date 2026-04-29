@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 6c4df9b745f3adcb022ac82b6bbc485727297e3e
-  verified_date: 2026-04-02
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -46,8 +46,7 @@ Runs the local REST and gRPC gateway daemon for Autonomi.
 | `AUTONOMI_WALLET_KEY` | Direct-wallet private key for paid uploads |
 | `EVM_RPC_URL` | EVM RPC endpoint |
 | `EVM_PAYMENT_TOKEN_ADDRESS` | Payment token contract |
-| `EVM_DATA_PAYMENTS_ADDRESS` | Data payments contract |
-| `EVM_MERKLE_PAYMENTS_ADDRESS` | Optional Merkle payments contract |
+| `EVM_PAYMENT_VAULT_ADDRESS` | Payment vault contract |
 
 **Examples:**
 

@@ -113,8 +113,8 @@ repos:
 
   ant-merkle:
     class: targeted-foundational
-    org: MaidSafe  # moving to WithAutonomi
-    url: https://github.com/maidsafe/ant-merkle
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-merkle
     watch_mode: targeted
     default_for_drafting: false
     topics:
@@ -122,6 +122,21 @@ repos:
       - gas-optimisation
       - merkle-payment-flows
     on_change: reverify-linked-pages
+
+  ant-protocol:
+    class: targeted-foundational
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-protocol
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - protocol
+      - wire-format
+      - chunk-messages
+      - payment-proof
+      - devnet-manifest
+    on_change: reverify-linked-pages
+    notes: "Shared wire-protocol, payment-proof, and devnet-manifest crate consumed by ant-client and ant-node."
 
   # === SPECIALIST ===
   # Only relevant for certain docs areas. Used only for explicitly related pages.
@@ -139,17 +154,6 @@ repos:
 
   # === WATCHLIST ===
   # Not source-of-truth for new docs. Flag if still referenced.
-
-  ant-evm:
-    class: watchlist
-    org: WithAutonomi
-    url: https://github.com/WithAutonomi/ant-evm
-    watch_mode: issue-only
-    default_for_drafting: false
-    topics:
-      - legacy-payment-references
-    on_change: flag-if-still-referenced
-    notes: "Collapsed into evmlib. Watch until all references disappear from merged code."
 
   # === EXCLUDED ===
   # Ignored by default. Do not read, reference, or verify against.

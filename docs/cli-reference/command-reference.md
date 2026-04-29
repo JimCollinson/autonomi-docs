@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 796d0df75d748419a004aec6f5e288b41d8b496e
-  verified_date: 2026-04-04
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -28,9 +28,8 @@ Root flags must appear before the subcommand.
 | `-b, --bootstrap <IP:PORT>` | socket list | No | Bootstrap peers for data operations |
 | `--devnet-manifest <PATH>` | path | No | Local devnet manifest JSON |
 | `--allow-loopback` | boolean | No | Allow loopback connections for local testing |
-| `--timeout-secs <N>` | integer | No | Network timeout in seconds, default `60` |
-| `--chunk-concurrency <N>` | integer | No | Upload chunk concurrency override |
-| `--log-level <LEVEL>` | string | No | `trace`, `debug`, `info`, `warn`, `error` |
+| `--ipv4-only` | boolean | No | Disable dual-stack and force IPv4-only mode |
+| `-v, --verbose` | count | No | Increase verbosity: `-v` info, `-vv` debug, `-vvv` trace |
 | `--evm-network <NET>` | string | No | `arbitrum-one`, `arbitrum-sepolia`, or `local` |
 
 **Environment:**

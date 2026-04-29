@@ -1,5 +1,13 @@
 # Use the Daemon as a Local Service
 
+<!-- verification:
+  source_repo: ant-sdk
+  source_ref: main
+  source_commit: 71f9e0fbdc6189e8fa0dc12887339ac52769b1ee
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+
 Run the Autonomi Daemon, `antd`, as a long-lived local service when you want one stable Autonomi gateway that multiple applications, scripts, or background processes can share.
 
 Use this setup if you want:
@@ -26,7 +34,7 @@ Create `/etc/antd.env`:
 AUTONOMI_WALLET_KEY=<hex_private_key>
 EVM_RPC_URL=https://your-rpc-endpoint
 EVM_PAYMENT_TOKEN_ADDRESS=0x...
-EVM_DATA_PAYMENTS_ADDRESS=0x...
+EVM_PAYMENT_VAULT_ADDRESS=0x...
 ```
 
 You only need the wallet and EVM settings if this daemon will perform paid writes.

@@ -17,10 +17,37 @@ components:
       - grpc
       - install
     feeds_pages:
+      - index.md
+      - getting-started/introduction.md
       - getting-started/install.md
+      - getting-started/using-the-autonomi-daemon.md
+      - getting-started/hello-world.md
       - sdk-reference/overview.md
       - sdk-reference/rest-api.md
       - sdk-reference/daemon-cli.md
+      - how-to-guides/run-as-daemon.md
+      - how-to-guides/store-and-retrieve-data.md
+      - how-to-guides/handle-payments.md
+      - how-to-guides/manage-keys.md
+      - how-to-guides/build-a-read-only-application.md
+      - how-to-guides/use-external-signers.md
+      - how-to-guides/deploy-to-mainnet.md
+    feeds_skills:
+      - skills/autonomi-developer/SKILL.md
+
+  ant-dev:
+    repo: ant-sdk
+    kind: python-package
+    path: ant-dev/
+    topics:
+      - devnet
+      - local-network
+      - testing
+    feeds_pages:
+      - getting-started/using-the-autonomi-daemon.md
+      - sdk-reference/overview.md
+      - how-to-guides/setup-local-network.md
+      - how-to-guides/test-your-application.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -32,6 +59,20 @@ components:
       - rest-api
     feeds_pages:
       - sdk-reference/rest-api.md
+    feeds_skills:
+      - skills/autonomi-developer/SKILL.md
+
+  antd-mcp:
+    repo: ant-sdk
+    kind: python-package
+    path: antd-mcp/
+    topics:
+      - mcp
+      - agent-tools
+    feeds_pages:
+      - sdk-reference/overview.md
+      - sdk-reference/mcp-server.md
+      - how-to-guides/use-the-mcp-server.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -53,6 +94,8 @@ components:
     topics:
       - rust-binding
     feeds_pages:
+      - rust-reference/overview.md
+      - sdk-reference/language-bindings/overview.md
       - sdk-reference/language-bindings/rust.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
@@ -64,6 +107,7 @@ components:
     topics:
       - python-binding
     feeds_pages:
+      - sdk-reference/language-bindings/overview.md
       - sdk-reference/language-bindings/python.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
@@ -75,7 +119,9 @@ components:
     topics:
       - javascript-binding
     feeds_pages:
+      - sdk-reference/language-bindings/overview.md
       - sdk-reference/language-bindings/javascript.md
+      - sdk-reference/language-bindings/typescript.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -86,6 +132,7 @@ components:
     topics:
       - go-binding
     feeds_pages:
+      - sdk-reference/language-bindings/overview.md
       - sdk-reference/language-bindings/go.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
@@ -201,10 +248,19 @@ components:
       - payments
       - devnet
     feeds_pages:
+      - index.md
+      - getting-started/introduction.md
+      - getting-started/build-directly-in-rust.md
       - core-concepts/data-types.md
-      - how-to-guides/store-and-retrieve-data.md
-      - how-to-guides/handle-payments.md
+      - core-concepts/overview.md
+      - core-concepts/keys-addresses-and-datamaps.md
+      - how-to-guides/build-a-read-only-application.md
+      - how-to-guides/use-external-signers.md
+      - how-to-guides/test-your-application.md
       - cli-reference/ant-core-library.md
+      - rust-reference/overview.md
+      - github.md
+      - glossary.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -216,9 +272,16 @@ components:
       - cli
       - node-management
     feeds_pages:
+      - index.md
+      - getting-started/introduction.md
       - cli-reference/overview.md
       - cli-reference/command-reference.md
       - getting-started/using-ant-client.md
+      - how-to-guides/manage-keys.md
+      - how-to-guides/build-a-read-only-application.md
+      - how-to-guides/deploy-to-mainnet.md
+      - github.md
+      - glossary.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -233,9 +296,14 @@ components:
       - local-network
       - payment-model
     feeds_pages:
+      - architecture/system-overview.md
       - core-concepts/payment-model.md
+      - getting-started/using-the-autonomi-daemon.md
       - how-to-guides/setup-local-network.md
       - how-to-guides/embed-a-node.md
+      - how-to-guides/test-your-application.md
+      - github.md
+      - glossary.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -247,6 +315,7 @@ components:
       - devnet-launcher
     feeds_pages:
       - how-to-guides/setup-local-network.md
+      - how-to-guides/test-your-application.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -262,8 +331,9 @@ components:
       - trust
       - architecture
     feeds_pages:
-      - core-concepts/overview.md
       - architecture/system-overview.md
+      - github.md
+      - glossary.md
 
   saorsa-transport:
     repo: saorsa-transport
@@ -273,7 +343,10 @@ components:
       - transport
       - nat-traversal
     feeds_pages:
+      - core-concepts/post-quantum-cryptography.md
       - architecture/system-overview.md
+      - github.md
+      - glossary.md
 
   saorsa-pqc:
     repo: saorsa-pqc
@@ -284,7 +357,25 @@ components:
       - key-derivation
     feeds_pages:
       - core-concepts/post-quantum-cryptography.md
-      - core-concepts/key-derivation.md
+      - core-concepts/overview.md
+      - architecture/system-overview.md
+      - github.md
+      - glossary.md
+
+  ant-protocol:
+    repo: ant-protocol
+    kind: rust-crate
+    path: src/
+    topics:
+      - protocol
+      - content-addressing
+      - payment-proof
+      - devnet-manifest
+    feeds_pages:
+      - architecture/system-overview.md
+      - core-concepts/self-encryption.md
+      - core-concepts/payment-model.md
+      - github.md
 
   self_encryption:
     repo: self_encryption
@@ -296,6 +387,11 @@ components:
     feeds_pages:
       - core-concepts/self-encryption.md
       - core-concepts/data-types.md
+      - core-concepts/overview.md
+      - core-concepts/keys-addresses-and-datamaps.md
+      - architecture/system-overview.md
+      - github.md
+      - glossary.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -310,6 +406,8 @@ components:
       - core-concepts/payment-model.md
       - how-to-guides/handle-payments.md
       - how-to-guides/manage-keys.md
+      - how-to-guides/use-external-signers.md
+      - how-to-guides/deploy-to-mainnet.md
     feeds_skills:
       - skills/autonomi-developer/SKILL.md
 
@@ -323,6 +421,7 @@ components:
       - merkle-payment-flows
     feeds_pages:
       - how-to-guides/handle-payments.md
+      - how-to-guides/use-external-signers.md
 
   # === Specialist ===
 
@@ -333,5 +432,8 @@ components:
     topics:
       - release-signing
       - key-management
-    feeds_pages: []
-    notes: "Only feeds pages if key management docs are created."
+    feeds_pages:
+      - core-concepts/post-quantum-cryptography.md
+      - github.md
+      - glossary.md
+    notes: "Feeds release-signing and key-management pages, plus repo overview pages that reference the tool."
