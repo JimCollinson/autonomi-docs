@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -64,7 +64,7 @@ The `antd` REST surface groups into these areas:
 | Health | `/health` |
 | Data | `/v1/data/public`, `/v1/data/private`, `/v1/data/cost` |
 | Chunks | `/v1/chunks` |
-| Files and directories | `/v1/files/upload/public`, `/v1/files/download/public`, `/v1/dirs/upload/public`, `/v1/dirs/download/public`, `/v1/cost/file` |
+| Files and directories | `/v1/files/upload/public`, `/v1/files/download/public`, `/v1/dirs/upload/public`, `/v1/dirs/download/public`, `/v1/files/cost` |
 | Wallet | `/v1/wallet/address`, `/v1/wallet/balance`, `/v1/wallet/approve` |
 | External signer flow | `/v1/data/prepare`, `/v1/upload/prepare`, `/v1/upload/finalize` |
 
@@ -82,7 +82,7 @@ Do not assume perfect parity from this page alone. The SDKs expose the same daem
 
 Chunk writes still return `PutResult`-style shapes with `cost` plus an address. REST data writes return an address or `data_map` plus `chunks_stored` and `payment_mode_used`. File and directory uploads return the richer shape with `storage_cost_atto`, `gas_cost_wei`, `chunks_stored`, and the actual `payment_mode_used`.
 
-When you need authoritative pricing separate from the write itself, use the explicit cost endpoints such as `POST /v1/data/cost` and `POST /v1/cost/file`.
+When you need authoritative pricing separate from the write itself, use the explicit cost endpoints such as `POST /v1/data/cost` and `POST /v1/files/cost`.
 
 Use the binding-specific page when you need package names, constructors, or transport details.
 

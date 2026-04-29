@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-21
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -51,6 +51,7 @@ The root command accepts the global flags used across data and node operations. 
 | `-b, --bootstrap <IP:PORT>` | socket list | No | Bootstrap peers for data operations. Can be comma-separated or repeated. |
 | `--devnet-manifest <PATH>` | path | No | Path to a local devnet manifest JSON file |
 | `--allow-loopback` | boolean | No | Allow loopback connections for local devnet or local testing |
+| `--ipv4-only` | boolean | No | Disable dual-stack and force IPv4-only mode |
 | `--quote-timeout-secs <N>` | integer | No | Timeout for lightweight network operations such as DHT lookups |
 | `--store-timeout-secs <N>` | integer | No | Timeout for chunk store and retrieve operations |
 | `--quote-concurrency <N>` | integer | No | Maximum number of chunks quoted or downloaded concurrently |

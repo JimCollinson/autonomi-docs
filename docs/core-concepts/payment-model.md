@@ -3,29 +3,36 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-22
+  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-22
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
-  verified_date: 2026-04-22
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: evmlib
   source_ref: main
-  source_commit: 82f2fccff243b48de0e04ceb71ccb2aa17d810af
-  verified_date: 2026-04-22
+  source_commit: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-protocol
+  source_ref: main
+  source_commit: 87071931a982e8a90494353007a3f4e6ebb3de3c
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -67,7 +74,7 @@ The daemon-side external-signer flow also exposes the RPC URL and payment contra
 The `antd` surface exposes cost estimation explicitly:
 
 - `POST /v1/data/cost`
-- `POST /v1/cost/file`
+- `POST /v1/files/cost`
 
 Those endpoints return the estimated upload cost as a string amount in atto tokens.
 

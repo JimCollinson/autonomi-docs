@@ -3,15 +3,22 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-21
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: self_encryption
+  source_ref: master
+  source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 

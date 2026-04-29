@@ -123,6 +123,21 @@ repos:
       - merkle-payment-flows
     on_change: reverify-linked-pages
 
+  ant-protocol:
+    class: targeted-foundational
+    org: WithAutonomi
+    url: https://github.com/WithAutonomi/ant-protocol
+    watch_mode: targeted
+    default_for_drafting: false
+    topics:
+      - protocol
+      - wire-format
+      - chunk-messages
+      - payment-proof
+      - devnet-manifest
+    on_change: reverify-linked-pages
+    notes: "Shared wire-protocol, payment-proof, and devnet-manifest crate consumed by ant-client and ant-node."
+
   # === SPECIALIST ===
   # Only relevant for certain docs areas. Used only for explicitly related pages.
 
@@ -139,20 +154,6 @@ repos:
 
   # === WATCHLIST ===
   # Not source-of-truth for new docs. Flag if still referenced.
-
-  ant-protocol:
-    class: watchlist
-    org: WithAutonomi
-    url: https://github.com/WithAutonomi/ant-protocol
-    watch_mode: manual
-    default_for_drafting: false
-    topics:
-      - protocol
-      - wire-format
-      - chunk-messages
-      - payment-proof
-    on_change: assess-if-adopted
-    notes: "Extracted from ant-node. Keep on the watchlist until merged consumers adopt it, then promote it to an active source repo."
 
   # === EXCLUDED ===
   # Ignored by default. Do not read, reference, or verify against.

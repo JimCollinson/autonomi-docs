@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -189,7 +189,11 @@ Estimates the storage cost for a data payload without uploading it.
 
 ```json
 {
-  "cost": "<atto_token_amount>"
+  "cost": "<atto_token_amount>",
+  "file_size": <bytes>,
+  "chunk_count": <chunk_count>,
+  "estimated_gas_cost_wei": "<wei_amount>",
+  "payment_mode": "auto"
 }
 ```
 
@@ -380,7 +384,7 @@ curl -X POST http://localhost:8082/v1/dirs/download/public \
 
 ### Estimate File Cost
 
-**Endpoint:** `POST /v1/cost/file`
+**Endpoint:** `POST /v1/files/cost`
 
 Estimates upload cost for a local file.
 
@@ -395,14 +399,18 @@ Estimates upload cost for a local file.
 
 ```json
 {
-  "cost": "<atto_token_amount>"
+  "cost": "<atto_token_amount>",
+  "file_size": <bytes>,
+  "chunk_count": <chunk_count>,
+  "estimated_gas_cost_wei": "<wei_amount>",
+  "payment_mode": "auto"
 }
 ```
 
 **Example:**
 
 ```bash
-curl -X POST http://localhost:8082/v1/cost/file \
+curl -X POST http://localhost:8082/v1/files/cost \
   -H "Content-Type: application/json" \
   -d '{"path":"/absolute/path/to/document.pdf","is_public":true}'
 ```

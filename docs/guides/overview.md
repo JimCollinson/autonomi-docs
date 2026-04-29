@@ -1,5 +1,27 @@
 # Overview
 
+<!-- verification:
+  source_repo: ant-sdk
+  source_ref: main
+  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-client
+  source_ref: main
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-node
+  source_ref: main
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+
 Guides cover tasks that apply across more than one way of building on Autonomi — setting up a local network, preparing a wallet, handling payments, building read-only features, testing, and deploying.
 
 If you are looking for tasks that are specific to one interface, look inside that interface's section instead:

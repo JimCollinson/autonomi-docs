@@ -17,6 +17,7 @@ components:
       - grpc
       - install
     feeds_pages:
+      - index.md
       - sdk/install.md
       - sdk/start-the-local-daemon.md
       - sdk/retrieve-data-from-the-network.md
@@ -28,6 +29,8 @@ components:
       - sdk/reference/README.md
       - sdk/reference/overview.md
       - sdk/reference/daemon-command-reference.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   openapi:
     repo: ant-sdk
@@ -56,6 +59,7 @@ components:
       - local-testing
     feeds_pages:
       - sdk/start-the-local-daemon.md
+      - guides/overview.md
       - guides/set-up-a-local-network.md
       - guides/test-your-application.md
 
@@ -67,9 +71,11 @@ components:
       - mcp
       - ai-tools
     feeds_pages:
+      - index.md
       - mcp/use-mcp-with-ai-tools.md
       - mcp/use-the-autonomi-mcp-server.md
       - mcp/mcp-server-reference.md
+      - sdk/reference/overview.md
 
   antd-rust:
     repo: ant-sdk
@@ -78,6 +84,7 @@ components:
     topics:
       - rust-binding
     feeds_pages:
+      - sdk/reference/language-bindings/overview.md
       - sdk/reference/language-bindings/rust.md
 
   antd-py:
@@ -87,6 +94,7 @@ components:
     topics:
       - python-binding
     feeds_pages:
+      - sdk/reference/language-bindings/overview.md
       - sdk/reference/language-bindings/python.md
 
   antd-js:
@@ -96,6 +104,7 @@ components:
     topics:
       - javascript-binding
     feeds_pages:
+      - sdk/reference/language-bindings/overview.md
       - sdk/reference/language-bindings/javascript.md
       - sdk/reference/language-bindings/typescript.md
 
@@ -106,6 +115,7 @@ components:
     topics:
       - go-binding
     feeds_pages:
+      - sdk/reference/language-bindings/overview.md
       - sdk/reference/language-bindings/go.md
 
   antd-java:
@@ -221,16 +231,20 @@ components:
       - payments
       - devnet
     feeds_pages:
+      - index.md
       - core-concepts/overview.md
       - core-concepts/data-types.md
       - core-concepts/keys-addresses-and-datamaps.md
       - core-concepts/payment-model.md
+      - guides/overview.md
       - guides/build-read-only-features.md
       - guides/deploy-to-mainnet.md
       - guides/prepare-a-wallet-for-uploads.md
       - rust/README.md
       - rust/build-directly-in-rust.md
       - rust/library-reference.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   ant-cli:
     repo: ant-client
@@ -240,11 +254,15 @@ components:
       - cli
       - node-management
     feeds_pages:
+      - index.md
       - cli/use-the-cli.md
       - cli/command-reference.md
+      - guides/overview.md
       - guides/build-read-only-features.md
       - guides/deploy-to-mainnet.md
       - guides/prepare-a-wallet-for-uploads.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   # === ant-node ===
 
@@ -263,6 +281,8 @@ components:
       - guides/test-your-application.md
       - rust/embed-a-node-in-your-application.md
       - architecture/system-overview.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   ant-devnet:
     repo: ant-node
@@ -287,8 +307,9 @@ components:
       - trust
       - architecture
     feeds_pages:
-      - core-concepts/overview.md
       - architecture/system-overview.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   saorsa-transport:
     repo: saorsa-transport
@@ -300,6 +321,8 @@ components:
     feeds_pages:
       - core-concepts/post-quantum-cryptography.md
       - architecture/system-overview.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   saorsa-pqc:
     repo: saorsa-pqc
@@ -311,6 +334,23 @@ components:
     feeds_pages:
       - core-concepts/overview.md
       - core-concepts/post-quantum-cryptography.md
+      - reference/source-repositories.md
+      - reference/glossary.md
+
+  ant-protocol:
+    repo: ant-protocol
+    kind: rust-crate
+    path: src/
+    topics:
+      - protocol
+      - content-addressing
+      - payment-proof
+      - devnet-manifest
+    feeds_pages:
+      - architecture/system-overview.md
+      - core-concepts/payment-model.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   self_encryption:
     repo: self_encryption
@@ -323,6 +363,9 @@ components:
       - core-concepts/overview.md
       - core-concepts/self-encryption.md
       - core-concepts/data-types.md
+      - core-concepts/keys-addresses-and-datamaps.md
+      - reference/source-repositories.md
+      - reference/glossary.md
 
   evmlib:
     repo: evmlib
@@ -335,6 +378,7 @@ components:
       - core-concepts/payment-model.md
       - guides/estimate-costs-and-handle-upload-payments.md
       - sdk/how-to-guides/use-external-signers-for-upload-payments.md
+      - reference/source-repositories.md
 
   ant-merkle:
     repo: ant-merkle
@@ -344,8 +388,9 @@ components:
       - batch-payments
       - gas-optimisation
       - merkle-payment-flows
-    feeds_pages: []
-    notes: "Only feeds pages when Merkle proof internals or contract-level batch details are documented directly."
+    feeds_pages:
+      - reference/source-repositories.md
+    notes: "Feeds reference pages now, and should feed deeper contract-level pages if Merkle proof internals are documented directly."
 
   # === Specialist ===
 
@@ -358,4 +403,6 @@ components:
       - key-management
     feeds_pages:
       - core-concepts/post-quantum-cryptography.md
+      - reference/source-repositories.md
+      - reference/glossary.md
     notes: "Only feeds additional pages if key management or release-signing docs are created."

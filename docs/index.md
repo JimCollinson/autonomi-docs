@@ -1,6 +1,35 @@
 # What is Autonomi?
 
-Autonomi is a decentralized peer-to-peer network for permanent, immutable data storage. Data is encrypted before upload, stored using content-addressing, and paid for once when you write it to the network.
+<!-- verification:
+  source_repo: ant-sdk
+  source_ref: main
+  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-client
+  source_ref: main
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: self_encryption
+  source_ref: master
+  source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: saorsa-transport
+  source_ref: main
+  source_commit: 9808c2782a5605a7cf728a4e2c756c4bf24eef40
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+
+Autonomi is a decentralized peer-to-peer network for permanent, immutable data storage. Data is encrypted before upload, stored using content addressing, and paid for once when you write it to the network.
 
 ## What makes Autonomi different
 

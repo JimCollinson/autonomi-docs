@@ -3,57 +3,64 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-22
+  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-22
+  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
-  verified_date: 2026-04-22
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-29
+  verification_mode: current-merged-truth
+-->
+<!-- verification:
+  source_repo: ant-protocol
+  source_ref: main
+  source_commit: 87071931a982e8a90494353007a3f4e6ebb3de3c
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-core
   source_ref: main
-  source_commit: 50734d0416dce646da74f4477c9d4f46fa0cb969
-  verified_date: 2026-04-22
+  source_commit: ae3c607fec0882b80e37837143382e9c9687c316
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-transport
   source_ref: main
-  source_commit: c34424efba78546ca08a4bf69382a7fc04aa2789
-  verified_date: 2026-04-22
+  source_commit: 9808c2782a5605a7cf728a4e2c756c4bf24eef40
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-pqc
   source_ref: main
-  source_commit: 1619cb2231db942cd65ab954ca0e0304dd6bc220
-  verified_date: 2026-04-22
+  source_commit: 2ab931e2533f1df6aa446636fbcf6e95b5bf5a21
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: self_encryption
   source_ref: master
   source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
-  verified_date: 2026-04-22
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-keygen
   source_ref: main
   source_commit: 3a2953f384a3b16391968de451b703843b98ed86
-  verified_date: 2026-04-22
+  verified_date: 2026-04-29
   verification_mode: current-merged-truth
 -->
 
@@ -66,6 +73,8 @@ Canonical terms used throughout this docs set.
 **ant-core** — Headless Rust library used by `ant` for direct network operations and local devnet helpers.
 
 **ant-keygen** — ML-DSA-65 release-signing utility.
+
+**ant-protocol** — Shared wire protocol crate used by `ant-core` and `ant-node` for chunk messages, payment proofs, and devnet manifests.
 
 **ant-sdk** — Daemon-based developer interface built around `antd`, REST/gRPC APIs, and language SDKs.
 
