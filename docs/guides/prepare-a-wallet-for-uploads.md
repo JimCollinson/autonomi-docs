@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-21
+  source_commit: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -59,12 +59,19 @@ If you do not want the daemon to hold the wallet key, use the external-signer fl
 
 ### 2. Configure a wallet for antd
 
-The daemon consumes a hex private key through `AUTONOMI_WALLET_KEY`.
+For direct-wallet uploads on Arbitrum Sepolia or Arbitrum One, start `antd` with both the wallet key and the EVM payment settings.
+
+From the `ant-sdk/antd` build directory, run:
 
 ```bash
 export AUTONOMI_WALLET_KEY="<hex_private_key>"
+export EVM_RPC_URL="https://your-rpc-endpoint"
+export EVM_PAYMENT_TOKEN_ADDRESS="0x..."
+export EVM_PAYMENT_VAULT_ADDRESS="0x..."
 ./target/release/antd
 ```
+
+If `antd` is already on your `PATH`, use `antd` instead.
 
 ### 3. Configure a wallet for ant
 
@@ -96,12 +103,16 @@ SECRET_KEY=0x... ant --evm-network arbitrum-one wallet balance
 
 If you do not want `antd` to hold a wallet key, run it without `AUTONOMI_WALLET_KEY` and use the external-signer flow instead.
 
+From the `ant-sdk/antd` build directory, run:
+
 ```bash
 EVM_RPC_URL=https://your-rpc-endpoint \
 EVM_PAYMENT_TOKEN_ADDRESS=0x... \
 EVM_PAYMENT_VAULT_ADDRESS=0x... \
 ./target/release/antd
 ```
+
+If `antd` is already on your `PATH`, use `antd` instead.
 
 Use `EVM_PAYMENT_VAULT_ADDRESS` for both wave-batch and Merkle external-signer uploads in this configuration.
 

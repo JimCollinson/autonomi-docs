@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-17
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -26,6 +26,8 @@ The MCP server talks to `antd`, so start there first:
 ./target/release/antd
 ```
 
+Run that command from the `ant-sdk/antd` build directory. If `antd` is already on your `PATH`, use `antd` instead.
+
 If you have not built `antd` yet, follow [Build with the SDKs](../sdk/install.md) and [Start the Local Daemon](../sdk/start-the-local-daemon.md) first.
 
 ### 2. Install the MCP server
@@ -45,11 +47,16 @@ For Claude Desktop, add `antd-mcp` to `claude_desktop_config.json`:
 {
   "mcpServers": {
     "antd-autonomi": {
-      "command": "antd-mcp"
+      "command": "antd-mcp",
+      "env": {
+        "ANTD_BASE_URL": "http://127.0.0.1:8082"
+      }
     }
   }
 }
 ```
+
+Adjust `ANTD_BASE_URL` if your daemon runs on a different host or port.
 
 ### 4. Continue with the full MCP setup
 

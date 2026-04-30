@@ -8,7 +8,7 @@ description: |
   in Rust with `ant-core`, or expose Autonomi through an MCP-compatible client.
   Do not use for Autonomi 1.0, the MaidSafe-era network, `ant-quic`, or
   general EVM work that is not part of building on Autonomi.
-version: 0.1.1-draft
+version: 0.1.2-draft
 license: MIT
 repository: https://github.com/WithAutonomi/autonomi-developer-docs
 homepage: https://docs.autonomi.com/developers
@@ -32,7 +32,7 @@ keywords:
 verified_date: 2026-04-30
 verification_mode: current-merged-truth
 verified_commits:
-  ant-sdk: 1cbfb3e92cb4309f29e92b5609837812027f0a67
+  ant-sdk: d7652ec3da82dfbe2107778e5223dc413d95815b
   ant-client: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
   ant-node: 23aee15cae33a17257ba833b2b98ed8a7a12e684
   ant-protocol: 65651f3a3243af8299a3e8d63385cba846ef88a4
@@ -136,7 +136,7 @@ Current daemon defaults:
 
 - REST: `http://localhost:8082`
 - gRPC: `localhost:50051`
-- non-default ports can be discovered through the `daemon.port` file written by `antd`
+- several SDKs expose helpers that read the `daemon.port` file written by `antd`
 
 Current shared daemon surfaces you can rely on at this commit:
 
@@ -255,12 +255,16 @@ pip install "antd[rest]"
 pip install -e antd-mcp/
 ```
 
+Run the editable install from an `ant-sdk` checkout root.
+
 - stdio mode: `antd-mcp`
 - SSE mode: `antd-mcp --sse`
-- daemon discovery order:
+- daemon discovery still attempts this order:
   - `ANTD_BASE_URL`
   - `daemon.port`
   - `http://127.0.0.1:8082`
+
+`ANTD_BASE_URL` is the reliable MCP setup path because `antd` writes `ant/sdk/daemon.port` while `antd-mcp` still reads `ant/daemon.port`.
 
 Do not memorize MCP tool names or schemas in this skill. Fetch the MCP server reference when the task is MCP-specific.
 

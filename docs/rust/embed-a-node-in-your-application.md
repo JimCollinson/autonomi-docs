@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
-  verified_date: 2026-04-21
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -24,7 +24,7 @@ Use the published `ant-node` crate from crates.io:
 
 ```toml
 [dependencies]
-ant-node = "0.10.1"
+ant-node = "0.11.0"
 tokio = { version = "1", features = ["full"] }
 ```
 

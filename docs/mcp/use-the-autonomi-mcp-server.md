@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-17
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -30,11 +30,13 @@ pip install -e antd-mcp/
 
 The `antd-mcp` package installs a command named `antd-mcp`.
 
-### 2. Let it discover the daemon automatically
+### 2. Prefer an explicit daemon URL
 
-By default, the server looks for the `daemon.port` file written by `antd` on startup. If discovery succeeds, it connects to the REST endpoint listed there.
+The server still attempts `daemon.port` discovery before falling back to the default REST URL.
 
-If no environment variable or port file is available, it falls back to:
+`antd` writes `ant/sdk/daemon.port`, while `antd-mcp` still reads `ant/daemon.port`. Treat `ANTD_BASE_URL` as the reliable setup path unless you have already confirmed port-file discovery works in your environment.
+
+If no environment variable or readable port file is available, it falls back to:
 
 ```text
 http://127.0.0.1:8082
@@ -54,9 +56,9 @@ For web-based clients that want SSE transport:
 antd-mcp --sse
 ```
 
-### 4. Override the daemon URL when needed
+### 4. Set the daemon URL explicitly
 
-If the daemon is not discoverable through `daemon.port`, set `ANTD_BASE_URL` explicitly:
+Set `ANTD_BASE_URL` explicitly for a reliable connection:
 
 ```bash
 ANTD_BASE_URL="http://your-host:8082" antd-mcp
@@ -70,13 +72,16 @@ Add this to `claude_desktop_config.json`:
 {
   "mcpServers": {
     "antd-autonomi": {
-      "command": "antd-mcp"
+      "command": "antd-mcp",
+      "env": {
+        "ANTD_BASE_URL": "http://127.0.0.1:8082"
+      }
     }
   }
 }
 ```
 
-If you need to override discovery, add an `env` block with `ANTD_BASE_URL`.
+Adjust `ANTD_BASE_URL` if your daemon runs on a different host or port.
 
 ## Verify it worked
 
@@ -84,7 +89,7 @@ Your MCP client is configured correctly when it can see the `antd-autonomi` serv
 
 ## Common errors
 
-**The server cannot find the daemon**: Confirm that `antd` is running and that `daemon.port` exists, or set `ANTD_BASE_URL` explicitly.
+**The server cannot find the daemon**: Confirm that `antd` is running, then set `ANTD_BASE_URL` explicitly.
 
 **Import or package errors**: Make sure both `antd[rest]` and `antd-mcp` were installed into the same Python environment.
 

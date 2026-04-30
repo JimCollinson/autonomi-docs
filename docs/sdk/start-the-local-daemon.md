@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-17
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
-  verified_date: 2026-04-21
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -113,15 +113,19 @@ This mode is for the two-phase prepare and finalize upload flow described in [Us
 
 ### 5. Start a local devnet when you need a full local stack
 
-If you want local services and test funds provisioned for you, use the helper from the repo root:
+If you want local services and test funds provisioned for you, run the helper from the `ant-sdk` repo root:
 
 ```bash
-cd ..
+cd /path/to/ant-sdk
 pip install -e ant-dev/
-ant dev start
+ant dev start --ant-node-dir ../ant-node
 ```
 
-`ant dev start` expects the `ant-node` repo to be cloned as a sibling of `ant-sdk`.
+The `ant` command installed by `ant-dev` is separate from the direct-network `ant` CLI in `ant-client`. Use a virtualenv, `pipx`, or a separate `PATH` setup if you need both workflows on the same machine.
+
+If you just built `antd` in `ant-sdk/antd`, `cd ..` first to get back to the repo root.
+
+If the two repos are already laid out as siblings and discovery works in your environment, you can omit `--ant-node-dir`.
 
 It starts `ant-devnet`, waits for the generated devnet manifest, and then launches `antd` with the bootstrap peers, wallet key, and local EVM payment settings from that manifest.
 

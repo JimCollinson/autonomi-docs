@@ -3,36 +3,36 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
-  verified_date: 2026-04-29
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
-  verified_date: 2026-04-29
+  source_commit: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
   source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
-  verified_date: 2026-04-29
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: evmlib
   source_ref: main
   source_commit: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
-  verified_date: 2026-04-29
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-protocol
   source_ref: main
-  source_commit: 87071931a982e8a90494353007a3f4e6ebb3de3c
-  verified_date: 2026-04-29
+  source_commit: 65651f3a3243af8299a3e8d63385cba846ef88a4
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -76,7 +76,7 @@ The `antd` surface exposes cost estimation explicitly:
 - `POST /v1/data/cost`
 - `POST /v1/files/cost`
 
-Those endpoints return the estimated upload cost as a string amount in atto tokens.
+Those endpoints return a structured estimate with cost, file size, chunk count, estimated gas, and the payment mode that would be used.
 
 ### Payment modes
 
@@ -96,7 +96,7 @@ Node-side storage pricing currently follows `BASELINE + K × (n / D)^2`, where `
 
 ### What happens on retrieval
 
-Downloads do not require a separate payment step. Payments are tied to storing data, chunks, files, directories, or node-management operations that require wallet context.
+Downloads do not require a separate payment step. Payments are tied to storage writes such as storing data, chunks, files, or directories.
 
 ## Practical example
 

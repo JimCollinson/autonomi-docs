@@ -3,22 +3,22 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: eb29e99937b1aedba02db04e1ae59bd923b424a3
-  verified_date: 2026-04-16
+  source_commit: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: evmlib
   source_ref: main
-  source_commit: 82f2fccff243b48de0e04ceb71ccb2aa17d810af
-  verified_date: 2026-04-06
+  source_commit: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -42,12 +42,16 @@ This is the right approach when:
 
 The daemon does not have an `--external-signer` flag. External-signer mode is the absence of `AUTONOMI_WALLET_KEY` plus the use of the prepare/finalize endpoints.
 
+From the `ant-sdk/antd` build directory, run:
+
 ```bash
 EVM_RPC_URL=https://your-rpc-endpoint \
 EVM_PAYMENT_TOKEN_ADDRESS=0x... \
 EVM_PAYMENT_VAULT_ADDRESS=0x... \
 ./target/release/antd
 ```
+
+If `antd` is already on your `PATH`, use `antd` instead.
 
 Use `EVM_PAYMENT_VAULT_ADDRESS` for both wave-batch and Merkle uploads in the external-signer flow.
 
@@ -166,7 +170,7 @@ The daemon SDKs follow the same prepare/finalize split. Merkle-capable bindings 
 
 Use the REST API when you need the full finalize response surface, such as the raw `data_map` value or explicit `store_data_map` control on wave-batch finalize requests.
 
-If you are building in Rust with ant-core instead of the daemon, the library exposes native external-payment helpers such as `data_prepare_upload`, `file_prepare_upload`, `prepare_merkle_batch_external`, and `finalize_merkle_batch`.
+If you are building in Rust with ant-core instead of the daemon, the library exposes native external-payment helpers such as `data_prepare_upload`, `file_prepare_upload`, `prepare_merkle_batch_external`, and `finalize_merkle_batch`. Progress-aware variants such as `file_prepare_upload_with_progress`, `finalize_upload_with_progress`, and `finalize_upload_merkle_with_progress` are also available when you need UI feedback during long-running uploads.
 
 ## Verify it worked
 

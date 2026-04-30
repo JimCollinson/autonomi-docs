@@ -3,12 +3,12 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 97587c248ce6410edc1c6ee28846216ef82145eb
-  verified_date: 2026-04-29
+  source_commit: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
-Reference for the `ant` CLI command tree and its current flags. The command tree below mirrors the current `ant --help` output, and the option tables are verified against the current command help while the sections stay grouped by command family for easier scanning.
+Reference for the `ant` CLI command tree and its current flags. The command tree below follows the current direct-network CLI surface, and the option tables stay grouped by command family for easier scanning. A few hidden or advanced flags are included where they matter for troubleshooting.
 
 ## Command tree
 
@@ -30,7 +30,8 @@ ant
 │   └── balance
 ├── file
 │   ├── upload
-│   └── download
+│   ├── download
+│   └── cost
 ├── chunk
 │   ├── put
 │   └── get
@@ -52,10 +53,10 @@ The root command accepts the global flags used across data and node operations. 
 | `--devnet-manifest <PATH>` | path | No | Path to a local devnet manifest JSON file |
 | `--allow-loopback` | boolean | No | Allow loopback connections for local devnet or local testing |
 | `--ipv4-only` | boolean | No | Disable dual-stack and force IPv4-only mode |
-| `--quote-timeout-secs <N>` | integer | No | Timeout for lightweight network operations such as DHT lookups |
-| `--store-timeout-secs <N>` | integer | No | Timeout for chunk store and retrieve operations |
-| `--quote-concurrency <N>` | integer | No | Maximum number of chunks quoted or downloaded concurrently |
-| `--store-concurrency <N>` | integer | No | Maximum number of chunks stored concurrently during uploads. `--chunk-concurrency` is accepted as an alias. |
+| `--quote-timeout-secs <N>` | integer | No | Hidden advanced flag for lightweight network-operation timeouts such as DHT lookups |
+| `--store-timeout-secs <N>` | integer | No | Hidden advanced flag for chunk store and retrieve timeouts |
+| `--quote-concurrency <N>` | integer | No | Hidden advanced flag that caps the quote channel only. It does not affect store or download concurrency. |
+| `--store-concurrency <N>` | integer | No | Hidden advanced flag for upload chunk concurrency. `--chunk-concurrency` is accepted as an alias. |
 | `-v, --verbose...` | count | No | Increase log verbosity: `-v`, `-vv`, or `-vvv` |
 | `--evm-network <NET>` | string | No | EVM network for payments: `arbitrum-one`, `arbitrum-sepolia`, or `local` |
 | `-h, --help` | boolean | No | Print help |
@@ -87,8 +88,9 @@ Uploads a file with self-encryption and EVM payment.
 | `--public` | boolean | No | Store the DataMap on-network so anyone with the address can download the file |
 | `--merkle` | boolean | No | Force Merkle batch payment |
 | `--no-merkle` | boolean | No | Force single per-chunk payments |
-| `--store-timeout <N>` | integer | No | Override the chunk store timeout for this upload |
-| `--store-concurrency <N>` | integer | No | Override upload chunk concurrency for this upload |
+| `--store-timeout <N>` | integer | No | Hidden advanced flag that overrides the chunk store timeout for this upload |
+| `--store-concurrency <N>` | integer | No | Hidden advanced flag that overrides upload chunk concurrency for this upload |
+| `--overwrite` | boolean | No | Replace an existing `<filename>.datamap` instead of writing a suffixed datamap filename |
 
 **Example:**
 
@@ -106,7 +108,7 @@ Downloads a public file by address or a private file using a local DataMap file.
 |------|------|----------|-------------|
 | `ADDRESS` | string | Conditionally | Public DataMap address. Required unless `--datamap` is provided. |
 | `--datamap <PATH>` | path | No | Local `.datamap` file for private download |
-| `-o, --output <PATH>` | path | Yes | Output file path |
+| `-o, --output <PATH>` | path | Conditionally | Required for address-based downloads. Optional for `--datamap` downloads that can infer the original filename. |
 
 **Example:**
 
@@ -115,6 +117,30 @@ ant file download 711c7e20006ff3e0ac6c1f3063286a0c1a3e4c409642e8c526173fa60bb707
 ```
 
 The output path is your local filename. In this example, the command downloads a public JPEG of Lucky the dog and saves it as `lucky.jpg`.
+
+Private datamap example:
+
+```bash
+ant file download --datamap photo.jpg.datamap
+```
+
+### `ant file cost <PATH>`
+
+Estimates the upload cost for a file without uploading it.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `PATH` | path | Yes | File to estimate |
+| `--merkle` | boolean | No | Force Merkle batch payment mode for the estimate |
+| `--no-merkle` | boolean | No | Force single payment mode for the estimate |
+
+**Example:**
+
+```bash
+ant file cost photo.jpg --merkle
+```
 
 ## Chunk commands
 

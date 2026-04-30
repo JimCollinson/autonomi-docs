@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: evmlib
   source_ref: main
-  source_commit: 82f2fccff243b48de0e04ceb71ccb2aa17d810af
-  verified_date: 2026-04-21
+  source_commit: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -154,7 +154,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 3. Estimate storage cost
 
-The daemon exposes cost-estimation endpoints and returns the estimated upload cost as a string amount in atto tokens.
+The daemon exposes cost-estimation endpoints and returns a structured estimate that includes cost, file size, chunk count, estimated gas, and the payment mode that would be used.
 
 Use this step before uploads when you want to show a user the likely storage cost or validate that the wallet has enough balance.
 

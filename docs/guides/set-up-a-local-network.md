@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
-  verified_date: 2026-04-21
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -46,6 +46,8 @@ From the `ant-sdk` repo root:
 cd ant-sdk
 pip install -e ant-dev/
 ```
+
+The `ant` command installed by `ant-dev` is separate from the direct-network `ant` CLI in `ant-client`. Use a virtualenv, `pipx`, or a separate `PATH` setup if you need both workflows on the same machine.
 
 This installs the `ant` command provided by the current `ant-dev` package.
 

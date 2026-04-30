@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-21
+  source_commit: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -54,12 +54,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ## Store and retrieve data
 
 ```rust
-use ant_core::data::{Client, ClientConfig};
+use ant_core::data::{Client, ClientConfig, EvmNetwork, Wallet};
 use bytes::Bytes;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::connect(&["1.2.3.4:12000".parse()?], ClientConfig::default()).await?;
+    let wallet = Wallet::new_from_private_key(EvmNetwork::ArbitrumOne, "0xprivate_key...")?;
+    let client = client.with_wallet(wallet);
+    client.approve_token_spend().await?;
 
     let result = client.data_upload(Bytes::from("hello autonomi")).await?;
     let content = client.data_download(&result.data_map).await?;
@@ -72,20 +75,39 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 To make uploaded data publicly retrievable by address, store and later fetch the DataMap:
 
 ```rust
-let public_address = client.data_map_store(&result.data_map).await?;
-let public_data_map = client.data_map_fetch(&public_address).await?;
-let downloaded = client.data_download(&public_data_map).await?;
+use ant_core::data::{Client, ClientConfig, EvmNetwork, Wallet};
+use bytes::Bytes;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::connect(&["1.2.3.4:12000".parse()?], ClientConfig::default()).await?;
+    let wallet = Wallet::new_from_private_key(EvmNetwork::ArbitrumOne, "0xprivate_key...")?;
+    let client = client.with_wallet(wallet);
+    client.approve_token_spend().await?;
+
+    let result = client.data_upload(Bytes::from("hello autonomi")).await?;
+
+    let public_address = client.data_map_store(&result.data_map).await?;
+    let public_data_map = client.data_map_fetch(&public_address).await?;
+    let downloaded = client.data_download(&public_data_map).await?;
+
+    assert_eq!(downloaded, Bytes::from("hello autonomi"));
+    Ok(())
+}
 ```
 
 ## File operations
 
 ```rust
-use ant_core::data::{Client, ClientConfig, PaymentMode};
+use ant_core::data::{Client, ClientConfig, EvmNetwork, PaymentMode, Wallet};
 use std::path::Path;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::connect(&["1.2.3.4:12000".parse()?], ClientConfig::default()).await?;
+    let wallet = Wallet::new_from_private_key(EvmNetwork::ArbitrumOne, "0xprivate_key...")?;
+    let client = client.with_wallet(wallet);
+    client.approve_token_spend().await?;
 
     let result = client.file_upload_with_mode(Path::new("photo.jpg"), PaymentMode::Merkle).await?;
     let address = client.data_map_store(&result.data_map).await?;
@@ -101,7 +123,7 @@ The native Rust library exposes both wave-batch and Merkle-batch external paymen
 
 For wave-batch uploads, `data_prepare_upload`, `file_prepare_upload`, and `finalize_upload` prepare the upload, collect quotes, and later store the chunks after an external signer returns transaction hashes.
 
-For Merkle batches, `prepare_merkle_batch_external` and `finalize_merkle_batch` expose the low-level batch helpers, while `finalize_upload_merkle` completes a prepared upload from the winning pool hash.
+For Merkle batches, `prepare_merkle_batch_external` and `finalize_merkle_batch` expose the low-level batch helpers, while `finalize_upload_merkle` completes a prepared upload from the winning pool hash. Progress-aware variants such as `file_prepare_upload_with_progress`, `finalize_upload_with_progress`, and `finalize_upload_merkle_with_progress` are also available when you need UI feedback during long-running uploads.
 
 ## Key types
 
@@ -168,6 +190,13 @@ async fn main() {
 ## Local development
 
 The library also exports `LocalDevnet` for local development flows:
+
+Enable the `ant-core` `devnet` feature before you use this section:
+
+```toml
+[dependencies]
+ant-core = { path = "../ant-client/ant-core", features = ["devnet"] }
+```
 
 ```rust
 use ant_core::data::LocalDevnet;

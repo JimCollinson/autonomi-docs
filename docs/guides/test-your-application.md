@@ -3,22 +3,22 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-17
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-21
+  source_commit: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 5a5d7d4fed766cd56d0f97f337fcd5ff049bea6a
-  verified_date: 2026-04-21
+  source_commit: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -30,6 +30,8 @@ This guide focuses on the shared testing progression that applies across SDK, CL
 
 - A test framework for your language
 - `ant-dev` installed from an `ant-sdk` checkout, or a direct-network local devnet if you are testing `ant-core`
+
+If you also use the direct-network `ant` CLI from `ant-client`, isolate `ant-dev` in a virtualenv, `pipx`, or a separate `PATH` so the two `ant` commands do not shadow each other.
 
 ## Steps
 

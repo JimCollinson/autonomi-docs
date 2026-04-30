@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -33,6 +33,8 @@ pip install "antd[rest]"
 pip install -e antd-mcp/
 ```
 
+Run the editable install from an `ant-sdk` checkout root.
+
 The package metadata currently declares:
 
 - Python `>=3.10`
@@ -55,7 +57,9 @@ At startup, the server resolves the daemon base URL in this order:
 2. `daemon.port` discovery
 3. `http://127.0.0.1:8082`
 
-The discovery helper reads the same platform-specific `daemon.port` file written by `antd` and uses the REST port found there.
+The discovery helper still checks a `daemon.port` file before falling back to the default URL.
+
+`antd` writes `ant/sdk/daemon.port`, while `antd-mcp` still reads `ant/daemon.port`. Treat `ANTD_BASE_URL` as the reliable configuration path unless you have already confirmed port-file discovery works in your environment.
 
 ## Claude Desktop configuration
 
@@ -63,11 +67,16 @@ The discovery helper reads the same platform-specific `daemon.port` file written
 {
   "mcpServers": {
     "antd-autonomi": {
-      "command": "antd-mcp"
+      "command": "antd-mcp",
+      "env": {
+        "ANTD_BASE_URL": "http://127.0.0.1:8082"
+      }
     }
   }
 }
 ```
+
+Adjust `ANTD_BASE_URL` if your daemon runs on a different host or port.
 
 ## Data tools
 
@@ -100,6 +109,8 @@ Downloads a public file or directory to a local path.
 **Tool:** `get_cost(text=None, file_path=None)`
 
 Estimates storage cost for text or a local file path.
+
+Provide exactly one of `text` or `file_path`.
 
 ### Check Health
 
@@ -195,7 +206,7 @@ Examples:
 }
 ```
 
-Example `upload_file` or `upload_dir` response:
+Example `upload_file(..., is_directory=true)` response:
 
 ```json
 {
@@ -208,7 +219,15 @@ Example `upload_file` or `upload_dir` response:
 }
 ```
 
-`put_data` responses omit `storage_cost_atto` and `gas_cost_wei`.
+Example `store_data` response:
+
+```json
+{
+  "address": "abc123...",
+  "cost": "1000000",
+  "network": "local"
+}
+```
 
 Structured `AntdError` responses include:
 
