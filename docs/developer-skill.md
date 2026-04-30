@@ -24,18 +24,18 @@ Run these commands inside Claude Code to add the Autonomi marketplace and instal
 
 ```text
 /plugin marketplace add WithAutonomi/autonomi-developer-docs
-/plugin install autonomi-developer@autonomi
+/plugin install developer@withautonomi
 /reload-plugins
 ```
 
-The skill is now available across all your Claude Code sessions. Claude uses it automatically when you work on Autonomi tasks.
+The skill is now available across all your Claude Code sessions. Claude uses it automatically when you work on Autonomi tasks. To invoke it explicitly, type `/developer:start`.
 
 ### In other AI tools
 
 Any tool that loads Claude-style skill files can read it directly from the canonical URL:
 
 ```text
-https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/autonomi-developer/SKILL.md
+https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/start/SKILL.md
 ```
 
 Follow your tool's instructions for installing a Markdown skill file.
@@ -46,7 +46,7 @@ To install the skill by hand into Claude Code, drop the file into your Claude Co
 
 ```bash
 mkdir -p ~/.claude/skills/autonomi-developer
-curl -fsSL https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/autonomi-developer/SKILL.md \
+curl -fsSL https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/start/SKILL.md \
   -o ~/.claude/skills/autonomi-developer/SKILL.md
 ```
 

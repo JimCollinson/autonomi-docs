@@ -1,6 +1,6 @@
-# Maintaining the `autonomi-developer` skill
+# Maintaining the Autonomi Developer Skill
 
-This skill lives in `skills/autonomi-developer/` and follows the same source-of-truth model as the rest of the docs repo.
+This skill lives in `skills/start/` (slash-invoked as `/developer:start` after install via the `withautonomi` marketplace) and follows the same source-of-truth model as the rest of the docs repo.
 
 ## Files that move together
 

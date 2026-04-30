@@ -1,8 +1,11 @@
-# Changelog - autonomi-developer skill
+# Changelog - Autonomi Developer Skill
 
 All notable changes to this skill are recorded here.
 
 ## [Unreleased]
+
+### Changed
+- Moved the skill from `skills/autonomi-developer/` to `skills/start/` so the namespaced slash form is `/developer:start` instead of `/autonomi-developer:autonomi-developer`. Plugin identifier is now `developer` and the marketplace identifier is `withautonomi`. Internal `name:` and `skill:` fields and canonical URLs updated to match.
 
 ## [0.1.1-draft] - 2026-04-30
 

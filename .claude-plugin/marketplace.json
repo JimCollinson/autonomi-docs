@@ -1,12 +1,12 @@
 {
-  "name": "autonomi",
+  "name": "withautonomi",
   "description": "Plugins and skills for building on the Autonomi Network.",
   "owner": {
     "name": "Autonomi"
   },
   "plugins": [
     {
-      "name": "autonomi-developer",
+      "name": "developer",
       "source": "./",
       "description": "Build, integrate, and deploy applications on the Autonomi Network with verified guidance for the SDK, CLI, Direct Rust, and MCP paths.",
       "homepage": "https://docs.autonomi.com/developers/developer-skill",

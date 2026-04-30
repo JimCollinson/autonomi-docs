@@ -32,7 +32,7 @@ components:
       - reference/source-repositories.md
       - reference/glossary.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   openapi:
     repo: ant-sdk
@@ -43,7 +43,7 @@ components:
     feeds_pages:
       - sdk/reference/rest-api.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   proto:
     repo: ant-sdk
@@ -54,7 +54,7 @@ components:
     feeds_pages:
       - sdk/reference/grpc-services.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   ant-dev:
     repo: ant-sdk
@@ -69,7 +69,7 @@ components:
       - guides/set-up-a-local-network.md
       - guides/test-your-application.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-mcp:
     repo: ant-sdk
@@ -85,7 +85,7 @@ components:
       - mcp/mcp-server-reference.md
       - sdk/reference/overview.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-rust:
     repo: ant-sdk
@@ -97,7 +97,7 @@ components:
       - sdk/reference/language-bindings/overview.md
       - sdk/reference/language-bindings/rust.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-py:
     repo: ant-sdk
@@ -109,7 +109,7 @@ components:
       - sdk/reference/language-bindings/overview.md
       - sdk/reference/language-bindings/python.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-js:
     repo: ant-sdk
@@ -122,7 +122,7 @@ components:
       - sdk/reference/language-bindings/javascript.md
       - sdk/reference/language-bindings/typescript.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-go:
     repo: ant-sdk
@@ -134,7 +134,7 @@ components:
       - sdk/reference/language-bindings/overview.md
       - sdk/reference/language-bindings/go.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-java:
     repo: ant-sdk
@@ -145,7 +145,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/java.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-csharp:
     repo: ant-sdk
@@ -156,7 +156,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/csharp.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-kotlin:
     repo: ant-sdk
@@ -167,7 +167,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/kotlin.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-swift:
     repo: ant-sdk
@@ -178,7 +178,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/swift.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-ruby:
     repo: ant-sdk
@@ -189,7 +189,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/ruby.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-php:
     repo: ant-sdk
@@ -200,7 +200,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/php.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-cpp:
     repo: ant-sdk
@@ -211,7 +211,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/cpp.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-dart:
     repo: ant-sdk
@@ -222,7 +222,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/dart.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-zig:
     repo: ant-sdk
@@ -233,7 +233,7 @@ components:
     feeds_pages:
       - sdk/reference/language-bindings/zig.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   antd-elixir:
     repo: ant-sdk
@@ -282,7 +282,7 @@ components:
       - reference/source-repositories.md
       - reference/glossary.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   ant-cli:
     repo: ant-client
@@ -302,7 +302,7 @@ components:
       - reference/source-repositories.md
       - reference/glossary.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   # === ant-node ===
 
@@ -324,7 +324,7 @@ components:
       - reference/source-repositories.md
       - reference/glossary.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   ant-devnet:
     repo: ant-node
@@ -337,7 +337,7 @@ components:
       - guides/set-up-a-local-network.md
       - guides/test-your-application.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   # === Foundational single-crate repos ===
 
@@ -396,7 +396,7 @@ components:
       - reference/source-repositories.md
       - reference/glossary.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   self_encryption:
     repo: self_encryption
@@ -413,7 +413,7 @@ components:
       - reference/source-repositories.md
       - reference/glossary.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   evmlib:
     repo: evmlib
@@ -428,7 +428,7 @@ components:
       - sdk/how-to-guides/use-external-signers-for-upload-payments.md
       - reference/source-repositories.md
     feeds_skills:
-      - skills/autonomi-developer/SKILL.md
+      - skills/start/SKILL.md
 
   ant-merkle:
     repo: ant-merkle

@@ -1,5 +1,5 @@
 ---
-name: autonomi-developer
+name: start
 description: |
   Build applications, automations, and AI workflows on the Autonomi Network.
   Use this skill when the user wants to store or retrieve data, add Autonomi
@@ -39,7 +39,7 @@ verified_commits:
   self_encryption: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
   evmlib: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
 
-version_manifest_url: https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/autonomi-developer/version.json
+version_manifest_url: https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/start/version.json
 canonical_docs_url: https://docs.autonomi.com/developers
 ---
 
@@ -71,7 +71,7 @@ Do not use this skill for:
 1. Check whether a newer verified version of this skill exists:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/autonomi-developer/version.json
+curl -fsSL https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/start/version.json
 ```
 
 If the published `version` is newer, tell the user this copy may be stale and offer to reload it. If the fetch fails, continue silently. For an unpublished draft, that usually means the skill is not on `main` yet.

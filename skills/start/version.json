@@ -1,9 +1,9 @@
 {
-  "skill": "autonomi-developer",
+  "skill": "start",
   "version": "0.1.1-draft",
   "published_date": "2026-04-30",
   "status": "draft",
-  "canonical_skill_url": "https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/autonomi-developer/SKILL.md",
+  "canonical_skill_url": "https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/start/SKILL.md",
   "canonical_docs_url": "https://docs.autonomi.com/developers",
   "repository": "https://github.com/WithAutonomi/autonomi-developer-docs",
   "verification_mode": "current-merged-truth",
