@@ -10,6 +10,8 @@
 
 The Autonomi Developer Skill is a verified knowledge package for AI coding tools such as Claude Code. It is a companion to these docs, not a replacement, and gives your AI coding tool the operational expertise it needs to help you build, integrate, and deploy applications on the Autonomi Network.
 
+**Preview release.** The skill is currently in a draft state. Install names and identifiers may shift before the first non-draft version.
+
 ## What it gives your AI
 
 - **Autonomi development expertise**, including how to choose the right path for your project across the SDK, CLI, Direct Rust, and MCP.
