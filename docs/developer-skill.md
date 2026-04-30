@@ -20,11 +20,12 @@ The Autonomi Developer Skill is a verified knowledge package for AI coding tools
 
 ### In Claude Code
 
-Add the Autonomi marketplace, then install the skill:
+Run these commands inside Claude Code to add the Autonomi marketplace and install the skill:
 
-```bash
+```text
 /plugin marketplace add WithAutonomi/autonomi-developer-docs
 /plugin install autonomi-developer@autonomi
+/reload-plugins
 ```
 
 The skill is now available across all your Claude Code sessions. Claude uses it automatically when you work on Autonomi tasks.
@@ -33,7 +34,7 @@ The skill is now available across all your Claude Code sessions. Claude uses it 
 
 Any tool that loads Claude-style skill files can read it directly from the canonical URL:
 
-```
+```text
 https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/autonomi-developer/SKILL.md
 ```
 
