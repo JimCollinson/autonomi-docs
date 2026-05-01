@@ -20,7 +20,7 @@ The pattern is:
 2. the language client talks to `antd`
 3. `antd` talks to the Autonomi network through `ant-core`
 
-## Current defaults
+## Defaults
 
 The daemon defaults are:
 
@@ -29,11 +29,11 @@ The daemon defaults are:
 
 Bindings usually default to those same endpoints when you do not supply an override.
 
-## Current transport split
+## Transport Split
 
 - JavaScript and TypeScript are documented as REST-based
 - Python, Go, and Rust document both REST and gRPC support
-- other bindings vary by package and current docs coverage
+- other bindings vary by package and docs coverage
 
 Check the individual page before assuming a transport is available in your language.
 
@@ -50,7 +50,7 @@ Examples from the current packages:
 
 Some bindings use discovery only through explicit helper APIs rather than by default constructors.
 
-## Current naming differences
+## Naming Differences
 
 The bindings use different entry points:
 

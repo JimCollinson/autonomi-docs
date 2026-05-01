@@ -55,11 +55,11 @@ On startup, `antd` writes a `daemon.port` file with the resolved REST and gRPC p
 
 Some SDKs expose a helper that reads this file instead of hardcoding `8082`. Check the language-specific page when you need to know whether discovery is automatic or exposed through an explicit helper.
 
-## Current shared surfaces
+## Shared Surfaces
 
 The `antd` REST surface groups into these areas:
 
-| Group | Current routes |
+| Group | Routes |
 |------|------|
 | Health | `/health` |
 | Data | `/v1/data/public`, `/v1/data/private`, `/v1/data/cost` |

@@ -100,7 +100,7 @@ curl http://localhost:8082/v1/data/public/<addr>
 
 **Endpoint:** `GET /v1/data/public/{addr}/stream`
 
-This endpoint is exposed, but the handler is still a stub and returns an empty SSE stream.
+This endpoint is exposed, but the handler is a stub and returns an empty SSE stream.
 
 **Parameters:**
 
