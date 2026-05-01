@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -85,7 +85,7 @@ antd --quote-timeout-secs 15 --store-timeout-secs 90 --quote-concurrency 32 --st
 - The CLI does not include an `--external-signer` flag.
 - External-signer mode is handled through environment configuration and the prepare/finalize upload endpoints.
 - Use `EVM_PAYMENT_VAULT_ADDRESS` for current paid-write and external-signer setups.
-- On startup, `antd` writes a `daemon.port` file so SDKs can discover the active ports.
+- On startup, `antd` writes a `daemon.port` file under the SDK data directory so SDKs can discover the active ports.
 
 ## Error codes
 

@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 0b104d1e8e5a8dab08a24eeb8c81b25702548c96
-  verified_date: 2026-04-21
+  source_commit: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -59,6 +59,9 @@ If you build `ant` from source instead, provide your own bootstrap config or pas
 
 ```bash
 ant --help
+
+# or, if you built from source and have not installed it on PATH:
+./target/release/ant --help
 ```
 
 For the `ant` CLI, root flags such as `--bootstrap`, `--devnet-manifest`, `--allow-loopback`, and `--evm-network` come before the subcommand.

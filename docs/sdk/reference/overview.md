@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 1cbfb3e92cb4309f29e92b5609837812027f0a67
-  verified_date: 2026-04-29
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -49,17 +49,17 @@ On startup, `antd` writes a `daemon.port` file with the resolved REST and gRPC p
 
 | Platform | `daemon.port` location |
 |------|------|
-| Windows | `%APPDATA%\ant\daemon.port` |
-| Linux | `~/.local/share/ant/daemon.port` or `$XDG_DATA_HOME/ant/daemon.port` |
-| macOS | `~/Library/Application Support/ant/daemon.port` |
+| Windows | `%APPDATA%\ant\sdk\daemon.port` |
+| Linux | `~/.local/share/ant/sdk/daemon.port` or `$XDG_DATA_HOME/ant/sdk/daemon.port` |
+| macOS | `~/Library/Application Support/ant/sdk/daemon.port` |
 
-Current SDKs can use that file to discover non-default ports instead of hardcoding `8082`.
+Some SDKs expose a helper that reads this file instead of hardcoding `8082`. Check the language-specific page when you need to know whether discovery is automatic or exposed through an explicit helper.
 
-## Current shared surfaces
+## Shared Surfaces
 
 The `antd` REST surface groups into these areas:
 
-| Group | Current routes |
+| Group | Routes |
 |------|------|
 | Health | `/health` |
 | Data | `/v1/data/public`, `/v1/data/private`, `/v1/data/cost` |

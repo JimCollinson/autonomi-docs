@@ -3,12 +3,12 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
-The language bindings in `ant-sdk` are clients for the `antd` daemon. They share the same daemon surface, but they do not currently expose identical constructors, transports, or helper APIs.
+The language bindings in `ant-sdk` are clients for the `antd` daemon. They share the same daemon surface, but they do not expose identical constructors, transports, or helper APIs.
 
 ## Architecture
 
@@ -20,7 +20,7 @@ The pattern is:
 2. the language client talks to `antd`
 3. `antd` talks to the Autonomi network through `ant-core`
 
-## Current defaults
+## Defaults
 
 The daemon defaults are:
 
@@ -29,14 +29,11 @@ The daemon defaults are:
 
 Bindings usually default to those same endpoints when you do not supply an override.
 
-## Current transport split
+## Transport Split
 
-At this commit:
-
-- JavaScript and TypeScript use REST
-- Python supports REST and gRPC
-- Go supports REST and gRPC
-- Rust supports REST and gRPC
+- JavaScript and TypeScript are documented as REST-based
+- Python, Go, and Rust document both REST and gRPC support
+- other bindings vary by package and docs coverage
 
 Check the individual page before assuming a transport is available in your language.
 
@@ -53,7 +50,7 @@ Examples from the current packages:
 
 Some bindings use discovery only through explicit helper APIs rather than by default constructors.
 
-## Current naming differences
+## Naming Differences
 
 The bindings use different entry points:
 

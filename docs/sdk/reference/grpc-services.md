@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: bf541ccd4ae1fd3e174fb7b5bb21deef38d999ce
-  verified_date: 2026-04-21
+  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
+  verified_date: 2026-04-30
   verification_mode: current-merged-truth
 -->
 
@@ -45,7 +45,7 @@ Stores public data.
 
 **Signature:** `StreamPublic(StreamPublicDataRequest) -> stream DataChunk`
 
-Streams public data chunks.
+This RPC is exposed, but the handler returns `UNIMPLEMENTED`.
 
 ### Get Private
 
@@ -121,9 +121,9 @@ Estimates file upload cost.
 
 **Signature:** `Subscribe(SubscribeRequest) -> stream ClientEventProto`
 
-Streams client events from the daemon.
+This RPC is exposed, but the stream stays open without emitting events.
 
-`ClientEventProto` currently includes:
+`ClientEventProto` includes:
 
 | Name | Type | Description |
 |------|------|-------------|
