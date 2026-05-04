@@ -4,6 +4,20 @@ All notable changes to this skill are recorded here.
 
 ## [Unreleased]
 
+## [0.1.3-draft] - 2026-05-02
+
+### Changed
+- Re-verified the skill against current upstream source heads. No prose changes.
+- Refreshed the pinned `ant-client` commit to track an internal payment-quote BLAKE3 peer-ID binding fix in `ant-core/src/data/client/quote.rs` (and a new typed `Error::BadQuoteBinding` variant). The fallback `Err(error) => ...` arm in the Direct Rust error-handling example still covers it.
+
+### Verified Against
+- ant-sdk: d7652ec3da82dfbe2107778e5223dc413d95815b
+- ant-client: 71ad53b047f7fc6b55e73ce6008d0a834feebbd6
+- ant-node: 23aee15cae33a17257ba833b2b98ed8a7a12e684
+- ant-protocol: 65651f3a3243af8299a3e8d63385cba846ef88a4
+- self_encryption: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
+- evmlib: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+
 ## [0.1.2-draft] - 2026-04-30
 
 ### Changed

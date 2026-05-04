@@ -8,7 +8,7 @@ description: |
   in Rust with `ant-core`, or expose Autonomi through an MCP-compatible client.
   Do not use for Autonomi 1.0, the MaidSafe-era network, `ant-quic`, or
   general EVM work that is not part of building on Autonomi.
-version: 0.1.2-draft
+version: 0.1.3-draft
 license: MIT
 repository: https://github.com/WithAutonomi/autonomi-developer-docs
 homepage: https://docs.autonomi.com/developers
@@ -29,11 +29,11 @@ keywords:
   - read-only
 
 # Verification block. Re-verify before changing stable claims or examples.
-verified_date: 2026-04-30
+verified_date: 2026-05-02
 verification_mode: current-merged-truth
 verified_commits:
   ant-sdk: d7652ec3da82dfbe2107778e5223dc413d95815b
-  ant-client: 8b2c9c606a1223f105fed9aa2b56310b6a6763da
+  ant-client: 71ad53b047f7fc6b55e73ce6008d0a834feebbd6
   ant-node: 23aee15cae33a17257ba833b2b98ed8a7a12e684
   ant-protocol: 65651f3a3243af8299a3e8d63385cba846ef88a4
   self_encryption: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
