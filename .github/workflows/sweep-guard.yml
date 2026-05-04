@@ -1,0 +1,336 @@
+name: sweep-guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  guard:
+    name: sweep-guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scope gate
+        id: scope
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          if [[ "$HEAD_REF" == claude/sweep-* ]]; then
+            echo "in_scope=true" >> "$GITHUB_OUTPUT"
+            echo "In scope: head ref is $HEAD_REF" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "in_scope=false" >> "$GITHUB_OUTPUT"
+            echo "Out of scope (head ref is not claude/sweep-): $HEAD_REF" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Checkout PR head
+        if: steps.scope.outputs.in_scope == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        if: steps.scope.outputs.in_scope == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install scanner dependencies
+        if: steps.scope.outputs.in_scope == 'true'
+        run: pip install -r scripts/requirements.txt
+
+      - name: Validate metadata-only envelope
+        if: steps.scope.outputs.in_scope == 'true'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          import yaml
+
+          BASE = os.environ["BASE_SHA"]
+          HEAD = os.environ["HEAD_SHA"]
+          HEAD_REF = os.environ["HEAD_REF"]
+          SUMMARY_PATH = os.environ.get("GITHUB_STEP_SUMMARY")
+          BRANCH_DATE_RE = re.compile(r"^claude/sweep-(\d{4}-\d{2}-\d{2})$")
+          DOCS_PREFIX = "docs/"
+          SWEEPS_PREFIX = "planning/sweeps/"
+          SWEEP_FILE_RE = re.compile(r"^planning/sweeps/(\d{4}-\d{2}-\d{2})\.md$")
+          VERIFICATION_BLOCK_RE = re.compile(r"<!--\s*verification:(.*?)-->", re.DOTALL)
+          ALLOWED_DOC_KEYS = ("source_commit:", "verified_date:")
+          VERSION_JSON_PATH = "skills/start/version.json"
+          SKILL_MD_PATH = "skills/start/SKILL.md"
+          CHANGELOG_PATH = "skills/start/CHANGELOG.md"
+          ALLOWED_VERSION_JSON_KEYS = {"verified_commits"}
+          ALLOWED_SKILL_FRONTMATTER_KEYS = {"verified_commits", "verified_date"}
+
+          violations: list[str] = []
+
+          def fail(loc: str, msg: str) -> None:
+              violations.append(f"{loc}: {msg}")
+
+          def run(cmd: list[str]) -> str:
+              return subprocess.check_output(cmd, text=True)
+
+          def show(ref: str, path: str) -> str | None:
+              try:
+                  return subprocess.check_output(
+                      ["git", "show", f"{ref}:{path}"],
+                      text=True,
+                      stderr=subprocess.DEVNULL,
+                  )
+              except subprocess.CalledProcessError:
+                  return None
+
+          name_status = run(
+              ["git", "diff", "--name-status", "-z", f"{BASE}..{HEAD}"]
+          )
+          # -z output is NUL-separated. For renames the entry is
+          # "R<score>\0<old>\0<new>". For everything else "<status>\0<path>".
+          tokens = [t for t in name_status.split("\0") if t]
+          changes: list[tuple[str, str]] = []
+          i = 0
+          while i < len(tokens):
+              status = tokens[i]
+              if status.startswith(("R", "C")):
+                  if i + 2 >= len(tokens):
+                      fail("git diff", "unexpected -z output truncation")
+                      break
+                  changes.append((status[0], tokens[i + 1]))
+                  changes.append((status[0], tokens[i + 2]))
+                  i += 3
+              else:
+                  if i + 1 >= len(tokens):
+                      fail("git diff", "unexpected -z output truncation")
+                      break
+                  changes.append((status, tokens[i + 1]))
+                  i += 2
+
+          # Branch date suffix dictates the expected sweep file.
+          branch_match = BRANCH_DATE_RE.match(HEAD_REF)
+          expected_sweep_path = (
+              f"planning/sweeps/{branch_match.group(1)}.md" if branch_match else None
+          )
+          if not branch_match:
+              fail(
+                  HEAD_REF,
+                  "branch name does not match claude/sweep-YYYY-MM-DD; "
+                  "the guard cannot verify the new sweep summary file",
+              )
+
+          # Guard: every changed file must fit one allowlist slot.
+          seen_paths: set[str] = set()
+          sweep_file_seen = False
+
+          def block_intervals(text: str) -> list[tuple[int, int]]:
+              # Return a list of [start_line, end_line] (1-indexed, inclusive)
+              # for every <!-- verification: --> block in the file.
+              intervals: list[tuple[int, int]] = []
+              for match in VERIFICATION_BLOCK_RE.finditer(text):
+                  start_line = text.count("\n", 0, match.start()) + 1
+                  end_line = text.count("\n", 0, match.end()) + 1
+                  intervals.append((start_line, end_line))
+              return intervals
+
+          def line_in_any(intervals: list[tuple[int, int]], line: int) -> bool:
+              return any(s <= line <= e for s, e in intervals)
+
+          def validate_docs_md(path: str) -> None:
+              base_text = show(BASE, path) or ""
+              head_text = show(HEAD, path) or ""
+              base_lines = base_text.splitlines()
+              head_lines = head_text.splitlines()
+              base_intervals = block_intervals(base_text)
+              head_intervals = block_intervals(head_text)
+              # Use unified diff to identify which lines moved. We
+              # walk a line-level diff via difflib so we can map back
+              # to base/head line numbers.
+              import difflib
+
+              matcher = difflib.SequenceMatcher(
+                  a=base_lines, b=head_lines, autojunk=False
+              )
+              for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+                  if tag == "equal":
+                      continue
+                  # Removed lines (base side)
+                  for offset, base_line in enumerate(base_lines[i1:i2]):
+                      base_line_num = i1 + offset + 1
+                      if not line_in_any(base_intervals, base_line_num):
+                          fail(
+                              f"{path}:{base_line_num}",
+                              "removed line lies outside any "
+                              "<!-- verification: --> block",
+                          )
+                          continue
+                      stripped = base_line.lstrip()
+                      if not stripped.startswith(ALLOWED_DOC_KEYS):
+                          fail(
+                              f"{path}:{base_line_num}",
+                              "removed line is not a source_commit: or "
+                              "verified_date: line",
+                          )
+                  # Added lines (head side)
+                  for offset, head_line in enumerate(head_lines[j1:j2]):
+                      head_line_num = j1 + offset + 1
+                      if not line_in_any(head_intervals, head_line_num):
+                          fail(
+                              f"{path}:{head_line_num}",
+                              "added line lies outside any "
+                              "<!-- verification: --> block",
+                          )
+                          continue
+                      stripped = head_line.lstrip()
+                      if not stripped.startswith(ALLOWED_DOC_KEYS):
+                          fail(
+                              f"{path}:{head_line_num}",
+                              "added line is not a source_commit: or "
+                              "verified_date: line",
+                          )
+
+          def validate_version_json() -> None:
+              base_text = show(BASE, VERSION_JSON_PATH)
+              head_text = show(HEAD, VERSION_JSON_PATH)
+              if base_text is None or head_text is None:
+                  fail(
+                      VERSION_JSON_PATH,
+                      "version.json must exist on both base and head",
+                  )
+                  return
+              try:
+                  base_obj = json.loads(base_text)
+                  head_obj = json.loads(head_text)
+              except json.JSONDecodeError as exc:
+                  fail(VERSION_JSON_PATH, f"JSON parse error: {exc}")
+                  return
+              all_keys = set(base_obj) | set(head_obj)
+              for key in sorted(all_keys):
+                  if base_obj.get(key) != head_obj.get(key):
+                      if key not in ALLOWED_VERSION_JSON_KEYS:
+                          fail(
+                              VERSION_JSON_PATH,
+                              f"forbidden field changed: {key} "
+                              "(only verified_commits may differ in a sweep)",
+                          )
+
+          def parse_frontmatter(text: str) -> tuple[dict, str]:
+              if not text.startswith("---"):
+                  return {}, text
+              end = text.find("\n---", 3)
+              if end < 0:
+                  return {}, text
+              raw = text[3:end]
+              try:
+                  loaded = yaml.safe_load(raw) or {}
+              except yaml.YAMLError as exc:
+                  fail(SKILL_MD_PATH, f"frontmatter YAML parse error: {exc}")
+                  loaded = {}
+              body = text[end + 4 :]
+              return loaded, body
+
+          def validate_skill_md() -> None:
+              base_text = show(BASE, SKILL_MD_PATH)
+              head_text = show(HEAD, SKILL_MD_PATH)
+              if base_text is None or head_text is None:
+                  fail(
+                      SKILL_MD_PATH,
+                      "SKILL.md must exist on both base and head",
+                  )
+                  return
+              base_fm, base_body = parse_frontmatter(base_text)
+              head_fm, head_body = parse_frontmatter(head_text)
+              if base_body != head_body:
+                  fail(
+                      SKILL_MD_PATH,
+                      "rendered prose body changed; sweep envelope is "
+                      "frontmatter-only",
+                  )
+              all_keys = set(base_fm) | set(head_fm)
+              for key in sorted(all_keys):
+                  if base_fm.get(key) != head_fm.get(key):
+                      if key not in ALLOWED_SKILL_FRONTMATTER_KEYS:
+                          fail(
+                              SKILL_MD_PATH,
+                              f"forbidden frontmatter key changed: {key} "
+                              "(only verified_commits and verified_date may differ)",
+                          )
+
+          for status, path in changes:
+              if path in seen_paths:
+                  continue
+              seen_paths.add(path)
+              if path.startswith(DOCS_PREFIX) and path.endswith(".md"):
+                  if status not in ("M",):
+                      fail(path, f"unexpected diff status {status} for docs file")
+                      continue
+                  validate_docs_md(path)
+              elif path == VERSION_JSON_PATH:
+                  if status != "M":
+                      fail(path, f"unexpected diff status {status}")
+                      continue
+                  validate_version_json()
+              elif path == SKILL_MD_PATH:
+                  if status != "M":
+                      fail(path, f"unexpected diff status {status}")
+                      continue
+                  validate_skill_md()
+              elif path == CHANGELOG_PATH:
+                  fail(
+                      path,
+                      "CHANGELOG.md must be byte-identical to base on a sweep PR",
+                  )
+              elif path.startswith(SWEEPS_PREFIX):
+                  match = SWEEP_FILE_RE.match(path)
+                  if not match:
+                      fail(path, "non-sweep file inside planning/sweeps/")
+                      continue
+                  if status != "A":
+                      fail(
+                          path,
+                          f"sweep summary must be added (A), got status {status}",
+                      )
+                      continue
+                  if expected_sweep_path and path != expected_sweep_path:
+                      fail(
+                          path,
+                          f"sweep file date does not match branch; "
+                          f"expected {expected_sweep_path}",
+                      )
+                      continue
+                  sweep_file_seen = True
+              else:
+                  fail(path, "file outside the metadata-only allowlist")
+
+          if branch_match and not sweep_file_seen:
+              fail(
+                  HEAD_REF,
+                  "no planning/sweeps/<branch-date>.md added on this PR",
+              )
+
+          if violations:
+              if SUMMARY_PATH:
+                  with open(SUMMARY_PATH, "a", encoding="utf-8") as out:
+                      out.write("## sweep-guard failures\n\n")
+                      for v in violations:
+                          out.write(f"- `{v}`\n")
+              for v in violations:
+                  print(v, file=sys.stderr)
+              sys.exit(1)
+
+          if SUMMARY_PATH:
+              with open(SUMMARY_PATH, "a", encoding="utf-8") as out:
+                  out.write("sweep-guard: clean envelope.\n")
+          PY

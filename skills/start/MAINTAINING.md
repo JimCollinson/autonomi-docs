@@ -4,11 +4,18 @@ This skill lives in `skills/start/` (slash-invoked as `/developer:start` after i
 
 ## Files that move together
 
-Every release or re-verification pass updates these files together:
+A **release** (any `version` bump) updates these files together:
 
 - `SKILL.md`
 - `version.json`
 - `CHANGELOG.md`
+
+A **stamp refresh** (no version bump, pure verification heartbeat) is a different gesture and does not touch CHANGELOG, `version`, or `published_date`. The only fields that move:
+
+- in `version.json`, the `verified_commits` map (the file has no `verified_date` field),
+- in `SKILL.md`'s YAML frontmatter, the `verified_commits` map and the `verified_date:` line.
+
+Stamp refreshes typically come in via the daily upstream-sweep routine. See `planning/routines/upstream-sweep.md`.
 
 ## Current scope
 
@@ -140,7 +147,7 @@ Use Semantic Versioning with these rules:
 
 - major: breaking changes to skill loading or manifest shape
 - minor: new paths, new verified examples, or new operational capabilities
-- patch: wording fixes, pointer fixes, or re-verification-only updates
+- patch: wording fixes, pointer fixes, or substantive re-verification — for example a SHA refresh that reflects an upstream change to a public surface the skill describes (a new flow, a renamed command, a removed step). Pure stamp refreshes that do not touch any described surface are not patches; they are stamp refreshes (see `## Files that move together`).
 
 Keep the `-draft` suffix until the skill has gone through at least one deliberate re-verification pass after landing in the repo.
 
