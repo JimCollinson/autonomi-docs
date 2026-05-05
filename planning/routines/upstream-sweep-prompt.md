@@ -6,12 +6,23 @@ This is the prompt the Claude Desktop Remote routine executes once per day. The 
 
 Perform the daily upstream-drift sweep per `planning/routines/upstream-sweep.md`. Read that policy doc and `planning/verification-workflow.md` first; they govern this run.
 
+## Model requirement
+
+This prompt requires **Opus 4.7 or higher**. The audit/write/verify loop in step 4 assumes the model can:
+
+- inspect upstream diffs and source at pinned SHAs,
+- compare those source changes against affected docs pages and `skills/start/SKILL.md`,
+- write actual prose into a draft PR (not suggestions in the PR body),
+- run practical verification on the prepared branch (linters, syntax checks, re-runs of the scanner) before opening the PR.
+
+Do not run this prompt under a smaller model.
+
 ## Inputs available
 
 - The `Bash` tool, with the docs repo cloned at the working directory.
 - The `gh` CLI for all GitHub operations (PR list/create, issue list/create, comment).
 - `GITHUB_TOKEN` in the environment, with read access to in-scope upstream repos and write access to `withautonomi/autonomi-developer-docs`.
-- `python3` plus `scripts/requirements.txt` (PyYAML).
+- `python3` plus the PyYAML pin from `scripts/requirements.txt`.
 
 Use `gh` consistently for GitHub work. Do not call the GitHub MCP server.
 
@@ -21,60 +32,67 @@ Apply verbatim:
 
 - `CLAUDE.md` — voice, terminology lockfile, page templates, refusal rules.
 - `planning/verification-workflow.md` — source audit -> draft -> verify procedure.
-- `planning/routines/upstream-sweep.md` — sweep policy (branch convention, collision handling, allowlist, fail-closed semantics, PR body format, audit gating).
+- `planning/routines/upstream-sweep.md` — sweep policy (branch convention, collision handling, named envelopes, fail-closed semantics, Opus audit/write/verify loop, page batching rule, PR body format, audit-diff fetch rule).
+- `repo-registry.yml` — `url:` and `topics:` per repo; `topics:` focuses source-artifact selection in step 4.
+- `component-registry.yml` — component-to-page map; same role.
 
 ## Steps
 
 ### 0. Bootstrap the rolling status thread
 
-Ensure the `upstream-sweep-status` label exists, then ensure exactly one open issue carries it. Both steps are idempotent.
+POSIX shell only. No `mapfile`, no Bash arrays, no bash-only parameter expansions, no `gh issue create --json/--jq` (`gh issue create` does not support those flags). Capture-then-decide is the key invariant: any `gh` failure (auth, network, API) must abort the bootstrap immediately rather than be silently coerced into "label missing" or "no open issue".
 
-```bash
-# (a) label
-if [ -z "$(gh label list --json name --jq '.[] | select(.name=="upstream-sweep-status") | .name')" ]; then
+```sh
+set -eu
+
+# (a) label — capture gh output before deciding so auth/API failure is fatal,
+# not silently coerced into "label missing".
+labels=$(gh label list --json name --jq '.[].name')
+if ! printf '%s\n' "$labels" | grep -qx upstream-sweep-status; then
   gh label create upstream-sweep-status \
     --description "Rolling status thread for the daily upstream-sweep routine"
 fi
 
-# (b) issue
-mapfile -t open_issues < <(
-  gh issue list --state open --label upstream-sweep-status \
-    --json number --jq 'sort_by(.number) | .[].number'
-)
-case "${#open_issues[@]}" in
-  0) STATUS_ISSUE=$(gh issue create \
-       --title "Upstream sweep status" \
-       --label upstream-sweep-status \
-       --body "Rolling status thread for the daily upstream-sweep routine." \
-       --json number --jq '.number') ;;
-  1) STATUS_ISSUE="${open_issues[0]}" ;;
-  *) STATUS_ISSUE="${open_issues[0]}"
-     # Warn once: more than one open status issue, asking a human to close the duplicates.
-     gh issue comment "$STATUS_ISSUE" --body \
-       "Multiple open issues carry the upstream-sweep-status label: ${open_issues[*]}. Continuing against #${STATUS_ISSUE} (lowest number). Please close the duplicates." ;;
-esac
+# (b) issue — same capture-then-decide pattern. gh issue create has no
+# --json/--jq, so parse the URL it writes to stdout.
+first_issue=$(gh issue list --state open --label upstream-sweep-status \
+  --json number --jq 'sort_by(.number) | .[0].number // empty')
+if [ -z "$first_issue" ]; then
+  url=$(gh issue create --title "Upstream sweep status" \
+    --label upstream-sweep-status \
+    --body "Rolling status thread for the daily upstream-sweep routine.")
+  STATUS_ISSUE="${url##*/}"
+else
+  STATUS_ISSUE="$first_issue"
+  count=$(gh issue list --state open --label upstream-sweep-status \
+    --json number --jq 'length')
+  if [ "$count" -gt 1 ]; then
+    others=$(gh issue list --state open --label upstream-sweep-status \
+      --json number --jq '[.[].number | tostring] | join(", ")')
+    gh issue comment "$STATUS_ISSUE" --body \
+      "Multiple open issues carry the upstream-sweep-status label: $others. Continuing against #$STATUS_ISSUE (lowest number). Please close the duplicates."
+  fi
+fi
 ```
 
-`gh issue create --label X` fails if the label is missing, so the label step must precede issue creation.
-
-Capture `$STATUS_ISSUE` for every status post in later steps.
+`gh issue create --label X` fails when the label is missing, so the label step must precede issue creation. Capture `$STATUS_ISSUE` for every status post in later steps.
 
 ### 1. Open-PR collision check
 
-```bash
+```sh
 OPEN_CLAUDE_PRS=$(
   gh pr list --state open --json number,headRefName \
     --jq '.[] | select(.headRefName | startswith("claude/sweep-") or startswith("claude/prose-")) | .number'
 )
 ```
 
-If `OPEN_CLAUDE_PRS` is non-empty, post a collision comment to `$STATUS_ISSUE` listing the open PR numbers, and exit without opening anything. Drift will be re-detected on the next run.
+If `OPEN_CLAUDE_PRS` is non-empty, post a collision comment to `$STATUS_ISSUE` listing the open PR numbers, and exit without opening anything. Drift is re-detected on the next run.
 
 GitHub's `--search` syntax does not reliably match branch prefixes; the JSON list with a client-side prefix filter is the trustworthy form.
 
 ### 2. Run the deterministic scanner
 
-```bash
+```sh
 python3 scripts/sweep_poll.py > sweep_report.json
 ```
 
@@ -86,74 +104,164 @@ If `target_manifest_skipped` is non-empty, include those entries in the run summ
 
 If `records` is empty or every record has `drifted: false`, post a no-drift summary table to `$STATUS_ISSUE` (one row per record: location / recorded / HEAD / drifted?) and exit.
 
-### 4. Per-page audit against the pinned upstream SHA
+### 4. Opus audit/write/verify loop
 
-Group the drifted records by `(repo, head_sha)`. For each unique `(repo, head_sha)`:
+For each drifted record, run the loop below. Treat the deterministic scanner's drift list as a candidate set, not a directive: SHAs are bumped only after this loop confirms the audit succeeds.
 
-```bash
+#### 4.1 Fetch both SHAs
+
+Audit must compare the upstream tree at `head_sha` against the diff from `recorded_sha` to `head_sha`. Both SHAs are required.
+
+```sh
 TMP=$(mktemp -d)
 cd "$TMP"
-git init
+git init -q
 git remote add origin "<upstream-url-from-repo-registry.yml>"
+git fetch --depth 1 origin "<recorded_sha>"
 git fetch --depth 1 origin "<head_sha>"
 git checkout --detach "<head_sha>"
 ```
 
-If the SHA fetch fails (reachable-SHA fetches disabled, SHA garbage-collected, network failure), fail closed: post the error to `$STATUS_ISSUE` and exit. Audit must never run against a moving `main`.
+If either `git fetch` fails (reachable-SHA fetches disabled by the repo, SHA garbage-collected, network failure), fall back to the GitHub compare API:
 
-Audit each affected docs page against the pinned tree per `planning/verification-workflow.md`:
+```sh
+gh api "repos/<owner>/<repo>/compare/<recorded_sha>...<head_sha>" > compare.json
+```
 
-- For `scope: "docs"` records, the affected page is at the recorded `location` path.
-- For `scope: "skill_version_json"` and `scope: "skill_md"` records, the affected page is the relevant skill file.
+Inspect `compare.json` for `commits[]`, `files[]`, and the `status` field.
 
-Classify per-page outcome into one of three batches:
+If both the local fetch and the compare API fail for a record, **fail closed for that record's page**: open a `manual review needed` issue per step 5 and skip the page from both PRs. Never compare against a moving branch name like `main`.
 
-- **sweep batch** — audit confirms the page's claims still hold at `head_sha`; only the metadata stamp needs to move.
-- **prose batch** — audit identifies prose impact; the page needs human-reviewed prose edits alongside its SHA stamp refresh.
-- **issue batch** — audit cannot make a confident judgment (ambiguous evidence, removed surface, deleted file, etc.). The page does not enter any PR.
+#### 4.2 Compute the upstream diff
 
-Clean up tmp dirs after this step.
+```sh
+git log --oneline "<recorded_sha>..<head_sha>"
+git diff --stat "<recorded_sha>..<head_sha>"
+git diff "<recorded_sha>..<head_sha>" -- <focused-paths>
+```
 
-### 5. Open PRs and issues per topology
+Or read `compare.json` `commits[]` and `files[]` when running via the compare-API fallback.
 
-At most one sweep PR and one prose draft PR per run, and zero or more `manual review needed` issues.
+#### 4.3 Inspect upstream source artifacts at `head_sha`
 
-**Sweep PR** (if the sweep batch is non-empty):
+Focus on the artifacts the affected docs page or skill cites. Use `repo-registry.yml`'s `topics:` and `component-registry.yml`'s component map to pick artifacts deterministically.
+
+Common artifacts to read:
+
+- OpenAPI specs (`antd/openapi.yaml`),
+- gRPC `.proto` files (`antd/proto/`),
+- CLI source and `--help` output for command-name and flag changes,
+- public Rust modules cited by the Direct Rust pages,
+- README and docs in the upstream repo when the page references them.
+
+#### 4.4 Compare against the affected docs pages and `SKILL.md`
+
+For `scope: "docs"` records, read the page at the recorded `location` path. For `scope: "skill_version_json"` and `scope: "skill_md"` records, read `skills/start/SKILL.md`.
+
+Identify any rendered claim, code sample, command, endpoint, type, field, or live-reference URL that no longer matches the pinned source.
+
+#### 4.5 Classify the record
+
+Pick exactly one:
+
+- **metadata-only** — internal refactor, test-only changes, dependency bumps, code style. No developer-facing impact. Stamp refresh suffices.
+- **prose** — a documented surface changed (new flow, renamed command, removed step, changed payload shape, new error variant that surfaces to users, a moved live-reference URL). Prose changes are required.
+- **ambiguous** — evidence is unclear, the page or skill cites something the routine cannot reliably re-derive, or the audit hits a known edge case (deleted file the page referenced, removed surface still mentioned in prose). Defer to a manual-review issue rather than guess.
+
+#### 4.6 Apply the page batching rule (after all records are classified)
+
+- If **any** record on a page is classified `prose`, the **whole page** goes to the prose PR. All metadata-only records on that page ride along on the same prose PR.
+- If **any** record on a page is classified `ambiguous`, the **whole page** is held back into a manual-review issue. The page does not enter any PR.
+- Only pages where **all** records are classified `metadata-only` go to the sweep PR.
+
+The two PRs never touch the same page.
+
+#### 4.7 Write prose changes directly into the prose PR
+
+When the page is in the prose batch, write the actual prose edits into the draft `claude/prose-*` PR. Apply `CLAUDE.md`'s voice, terminology lockfile, page templates, and refusal rules. Do not stop at "suggestions in the PR body" — the PR diff must contain the prose edit.
+
+#### 4.8 Skill-aware prose
+
+If the audit finds skill impact, include both the human-facing docs change and the `SKILL.md` change in the same prose PR. If the `SKILL.md` body changes, also include the linked patch release set in the same PR:
+
+- `skills/start/version.json: version` bumped to a new patch version (`MAJOR.MINOR.(PATCH+1)`),
+- `skills/start/version.json: published_date` updated,
+- `skills/start/SKILL.md` frontmatter `version:` matching the new `version.json: version`,
+- `skills/start/SKILL.md` frontmatter `verified_date:` updated,
+- `skills/start/CHANGELOG.md` adding one new entry whose header matches the new `version`.
+
+If the `SKILL.md` body does not change, none of those release fields may change. `prose-guard` enforces both directions.
+
+#### 4.9 Practical verification before opening the PR
+
+Run the checks below on the prepared branch where the toolchain is available. If a check cannot be run (tool missing, environment limit), state that explicitly in the PR body. Never silently skip.
+
+- repo lint/format checks (`markdownlint`, link checkers — gracefully skip if not configured),
+- re-run `python3 scripts/sweep_poll.py` on the prepared branch and confirm `status: "ok"` with no malformed-block errors,
+- parse `SKILL.md` frontmatter and `version.json` to confirm the linked-release rule holds when the body changed,
+- for changed code samples: language-appropriate syntax check (`python -m py_compile` for Python, `python -m json.tool` for JSON, `node --check` for JavaScript, OpenAPI re-parse as YAML, cURL command shape sanity), each gracefully skipped when the toolchain is unavailable,
+- for endpoint/type claims: targeted re-grep against the pinned upstream checkout to confirm the cited endpoint or type still exists.
+
+Clean up tmp dirs after the loop completes.
+
+### 5. Open PRs and issues per the page batching rule
+
+At most one sweep PR and one prose draft PR per run, plus zero or more `manual review needed` issues.
+
+**Sweep PR** (only if at least one page has all records classified `metadata-only`):
 
 - Branch: `claude/sweep-<YYYY-MM-DD>` from `main`.
-- Diff envelope (verbatim allowlist from `planning/routines/upstream-sweep.md`):
+- Diff envelope (verbatim from `planning/routines/upstream-sweep.md` `## Sweep PR envelope`):
   - update `source_commit:` and `verified_date:` lines inside `<!-- verification: -->` blocks of the affected docs pages,
-  - update entries in the `verified_commits` map of `skills/start/version.json` for the corresponding repos,
-  - update entries in the `verified_commits` map of `skills/start/SKILL.md`'s YAML frontmatter and refresh its `verified_date:` line,
+  - update entries in the `verified_commits` map of `skills/start/version.json` for the corresponding repos (key set unchanged),
+  - update entries in the `verified_commits` map of `skills/start/SKILL.md` frontmatter and refresh the `verified_date:` line (key set unchanged),
   - add one new `planning/sweeps/<YYYY-MM-DD>.md` summary file.
-- Forbidden in this PR: any change to `version`, `published_date`, `skills/start/CHANGELOG.md`, the YAML-frontmatter `version:` line, or rendered prose in `docs/`.
-- PR body uses the format in `planning/routines/upstream-sweep.md` `## PR body format`.
+- Forbidden: any change to `version`, `published_date`, `skills/start/CHANGELOG.md`, the YAML-frontmatter `version:` line, any rendered prose in `docs/`, or any file under `scripts/`, `.github/`, `repo-registry.yml`, or `component-registry.yml`.
+- PR body: see `## PR body format` below.
 
-**Prose PR** (if the prose batch is non-empty):
+**Prose PR** (only if at least one page has any record classified `prose`):
 
 - Branch: `claude/prose-<YYYY-MM-DD>-<slug>` from `main`. Open as **draft**.
-- Includes the prose changes plus the corresponding `source_commit:` / `verified_date:` refreshes for those same pages. The two PRs never touch the same page.
-- The same `version` / `published_date` / CHANGELOG / frontmatter-`version` forbidding still applies; version bumps are not the routine's job.
-- PR body lists which pages have prose changes versus which pages on this PR are metadata-only-on-this-PR so the reviewer knows where to focus.
+- Includes the prose edits plus the corresponding `source_commit:` / `verified_date:` refreshes for those same pages.
+- If the audit found skill impact, include the `SKILL.md` body edit and the linked patch release set per step 4.8.
+- The two PRs never touch the same page.
+- PR body: see `## PR body format` below; include a "Why prose changed" section.
 
-**Issues** (one per page in the issue batch):
+**Issues** (one per page in the manual-review-issue batch):
 
 - Title: `Upstream sweep: manual review needed for <page>`.
-- Body: the page path, the recorded SHA, the upstream HEAD SHA, the audit failure mode (ambiguous evidence, removed surface, deleted file, etc.), and a snippet of the relevant upstream diff.
+- Body: the page path, the recorded SHA, the upstream HEAD SHA, the audit failure mode (ambiguous evidence, removed surface, deleted file, SHA-fetch failure, etc.), and a snippet of the relevant upstream diff.
 
 ### 6. Run summary
 
 Post a single comment to `$STATUS_ISSUE` summarising the run:
 
-- counts of records scanned, drifted, swept, prose-flagged, issue-flagged, and target-manifest-skipped,
+- counts of records scanned, drifted, swept, prose-flagged, manual-review-flagged, and target-manifest-skipped,
 - links to the sweep PR, prose PR, and any new issues,
 - one-line "no drift" or "skipping; prior PRs open" if those short-circuits fired.
+
+Link to the prose PR's body for audit detail rather than duplicating it in this comment.
+
+## PR body format
+
+Both sweep and prose PR bodies must include:
+
+- **Upstream**: repo name and SHA range checked, e.g. `ant-sdk: 1cbfb3e → d7652ec`.
+- **Source artifacts inspected**: short list, e.g. `antd/openapi.yaml`, `docs/sdk/reference/rest-api.md` upstream.
+- **Developer-facing change**: one or two sentences describing what changed for users of the documented surface, or "internal refactor; no developer-facing impact".
+- **Files changed in this PR**: bulleted list of docs pages and skill files.
+- **Why prose changed** (prose PR only): one or two sentences per page explaining the rendered-text edit and which upstream artifact it tracks.
+- **Verification run**: bulleted list of which practical checks ran and their result, or "skipped — <reason>" per check.
+- **Uncertainties**: one or two sentences calling out any judgment calls or partial evidence the human reviewer should re-check, or "none".
+
+The body is intentionally concise — no full audit transcript — but every claim is traceable to the pinned `head_sha`. The reviewer should be able to skim the body in under a minute and know exactly what to spot-check.
 
 ## Behaviour rules
 
 - Use only `gh` for GitHub operations. Do not invoke the GitHub MCP server.
-- Do not bump the skill's `version`, `published_date`, or `CHANGELOG.md`. Stamp refreshes are not releases (per `skills/start/MAINTAINING.md`).
+- Bump the skill's `version`, `published_date`, frontmatter `version:`, and `CHANGELOG.md` only when the prose PR's `SKILL.md` body change requires the linked patch release per step 4.8. On `claude/sweep-*` PRs these fields never move.
 - Do not modify `target-manifest` verification blocks. They are pinned for launch hardening.
 - If a step fails, post the error to `$STATUS_ISSUE` and exit. Do not open partial PRs.
+- For per-record fail-closed (e.g., both SHA fetch and compare API failing for one record), open a `manual review needed` issue for that page and continue with the rest of the run.
 - Apply the terminology lockfile in `CLAUDE.md` to any prose written in the prose PR or in issue bodies.
 - Cite the pinned `head_sha` in audit notes so a reviewer can reproduce the exact tree the audit consulted.

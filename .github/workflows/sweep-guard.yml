@@ -41,7 +41,14 @@ jobs:
 
       - name: Install scanner dependencies
         if: steps.scope.outputs.in_scope == 'true'
-        run: pip install -r scripts/requirements.txt
+        # The pin is duplicated in scripts/requirements.txt for the scanner's
+        # local + routine use, but the workflow must NOT install from that file:
+        # it is PR-controlled, so a malicious sweep PR could swap it for a
+        # hostile package and execute arbitrary code in the runner via setup.py.
+        # Workflow YAMLs require repo-admin permissions to modify (same gate as
+        # branch protection rules), so this literal pin lives at a trust
+        # boundary the guard does not need to validate.
+        run: pip install 'PyYAML>=6,<7'
 
       - name: Validate metadata-only envelope
         if: steps.scope.outputs.in_scope == 'true'
@@ -225,6 +232,23 @@ jobs:
                               f"forbidden field changed: {key} "
                               "(only verified_commits may differ in a sweep)",
                           )
+              base_commits = base_obj.get("verified_commits") or {}
+              head_commits = head_obj.get("verified_commits") or {}
+              if isinstance(base_commits, dict) and isinstance(head_commits, dict):
+                  if set(base_commits.keys()) != set(head_commits.keys()):
+                      added = sorted(set(head_commits) - set(base_commits))
+                      removed = sorted(set(base_commits) - set(head_commits))
+                      detail = []
+                      if added:
+                          detail.append(f"added: {', '.join(added)}")
+                      if removed:
+                          detail.append(f"removed: {', '.join(removed)}")
+                      fail(
+                          VERSION_JSON_PATH,
+                          "verified_commits key set changed; sweeps may only "
+                          "refresh values, not add or remove repos "
+                          f"({'; '.join(detail)})",
+                      )
 
           def parse_frontmatter(text: str) -> tuple[dict, str]:
               if not text.startswith("---"):
@@ -267,11 +291,41 @@ jobs:
                               f"forbidden frontmatter key changed: {key} "
                               "(only verified_commits and verified_date may differ)",
                           )
+              base_commits = base_fm.get("verified_commits") or {}
+              head_commits = head_fm.get("verified_commits") or {}
+              if isinstance(base_commits, dict) and isinstance(head_commits, dict):
+                  if set(base_commits.keys()) != set(head_commits.keys()):
+                      added = sorted(set(head_commits) - set(base_commits))
+                      removed = sorted(set(base_commits) - set(head_commits))
+                      detail = []
+                      if added:
+                          detail.append(f"added: {', '.join(added)}")
+                      if removed:
+                          detail.append(f"removed: {', '.join(removed)}")
+                      fail(
+                          SKILL_MD_PATH,
+                          "verified_commits key set changed; sweeps may only "
+                          "refresh values, not add or remove repos "
+                          f"({'; '.join(detail)})",
+                      )
+
+          FORBIDDEN_PATH_PREFIXES = ("scripts/", ".github/")
+          FORBIDDEN_EXACT_PATHS = {"repo-registry.yml", "component-registry.yml"}
 
           for status, path in changes:
               if path in seen_paths:
                   continue
               seen_paths.add(path)
+              if any(path.startswith(p) for p in FORBIDDEN_PATH_PREFIXES) or (
+                  path in FORBIDDEN_EXACT_PATHS
+              ):
+                  fail(
+                      path,
+                      "infrastructure file outside the sweep envelope; "
+                      "the routine never modifies scripts/, .github/, "
+                      "repo-registry.yml, or component-registry.yml",
+                  )
+                  continue
               if path.startswith(DOCS_PREFIX) and path.endswith(".md"):
                   if status not in ("M",):
                       fail(path, f"unexpected diff status {status} for docs file")

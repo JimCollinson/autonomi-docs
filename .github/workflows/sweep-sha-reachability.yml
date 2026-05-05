@@ -41,7 +41,12 @@ jobs:
 
       - name: Install scanner dependencies
         if: steps.scope.outputs.in_scope == 'true'
-        run: pip install -r scripts/requirements.txt
+        # Pinned literally rather than installed from scripts/requirements.txt:
+        # the requirements file is PR-controlled and could be swapped for a
+        # hostile package on a malicious sweep PR. Workflow YAMLs require
+        # repo-admin permissions to modify, so this pin lives at a trust
+        # boundary the guard does not need to validate.
+        run: pip install 'PyYAML>=6,<7'
 
       - name: Validate SHA reachability
         if: steps.scope.outputs.in_scope == 'true'

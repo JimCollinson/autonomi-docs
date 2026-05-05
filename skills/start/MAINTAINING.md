@@ -17,6 +17,8 @@ A **stamp refresh** (no version bump, pure verification heartbeat) is a differen
 
 Stamp refreshes typically come in via the daily upstream-sweep routine. See `planning/routines/upstream-sweep.md`.
 
+A skill patch release driven by an upstream-sweep prose PR uses the same envelope as a manual patch release. The prose PR contains the full release set in a single coherent change: `SKILL.md` body and frontmatter, `version.json` (`version` and `published_date`), `CHANGELOG.md` (one new entry whose header matches the new `version`), and the matching `verified_commits` and `verified_date:` refreshes. The `prose-guard` required check enforces this both ways — if the body changes, all release fields must move; if the body is unchanged, none of them may.
+
 ## Current scope
 
 This skill is intentionally practical. It covers:
