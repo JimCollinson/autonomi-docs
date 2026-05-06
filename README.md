@@ -208,3 +208,6 @@ Key writing expectations include:
 See `repo-registry.yml` for the authoritative in-scope repo list.
 
 See `component-registry.yml` for which components and repos inform each page.
+
+<!-- synthetic out-of-scope test edit; will be removed after review -->
+
