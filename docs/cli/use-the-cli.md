@@ -4,7 +4,7 @@
   source_repo: ant-client
   source_ref: main
   source_commit: 71ad53b047f7fc6b55e73ce6008d0a834feebbd6
-  verified_date: 2026-05-02
+  verified_date: 2026-05-06
   verification_mode: current-merged-truth
 -->
 
