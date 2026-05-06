@@ -4,7 +4,7 @@
   source_repo: ant-client
   source_ref: main
   source_commit: 71ad53b047f7fc6b55e73ce6008d0a834feebbd6
-  verified_date: 2026-05-02
+  verified_date: 2026-05-06
   verification_mode: current-merged-truth
 -->
 
@@ -13,7 +13,7 @@ Install `ant`, confirm it works, retrieve public data from the network, and then
 The CLI can be a good fit when you want:
 
 - direct shell access to file, chunk, wallet, or node-management workflows
-- shell-first automation or operational workflows
+- shell-first automation or operational workflows for the public network or for local devnets
 - direct control over bootstrap peers, local devnet manifests, and EVM network selection
 
 ## Prerequisites
