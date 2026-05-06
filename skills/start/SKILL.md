@@ -45,7 +45,7 @@ canonical_docs_url: https://docs.autonomi.com/developers
 
 # Autonomi Developer
 
-This skill makes you effective at building on the Autonomi Network without making the user read the full docs set first. Treat it as an operational guide: pick the correct Autonomi path, fetch one live reference when exact interface details matter, and do not invent Autonomi-specific APIs.
+This skill makes you effective at building on the Autonomi Network without making the user read the full docs set first. Treat it as an operational guide: pick the correct Autonomi interface, fetch one live reference when exact interface details matter, and do not invent Autonomi-specific APIs.
 
 ## Scope
 
