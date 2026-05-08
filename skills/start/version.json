@@ -6,7 +6,7 @@
   "canonical_skill_url": "https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/start/SKILL.md",
   "canonical_docs_url": "https://docs.autonomi.com/developers",
   "repository": "https://github.com/WithAutonomi/autonomi-developer-docs",
-  "verification_mode": "current-merged-truth",
+  "verification_mode": "target-manifest",
   "verified_commits": {
     "ant-sdk": "d7652ec3da82dfbe2107778e5223dc413d95815b",
     "ant-client": "71ad53b047f7fc6b55e73ce6008d0a834feebbd6",
