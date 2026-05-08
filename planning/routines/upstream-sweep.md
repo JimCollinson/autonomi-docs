@@ -21,14 +21,14 @@ The routine is the hosted-scheduled equivalent of Tier 1 + Tier 2 from `planning
 2. Run the open-PR collision check. If a prior `claude/sweep-*` or `claude/prose-*` PR is still open, post a collision notice to the rolling issue and exit without opening anything.
 3. Run `scripts/sweep_poll.py`. If the JSON status is `error`, post the diagnostics to the rolling issue and exit.
 4. If `records` is empty or every record has `drifted: false`, post a no-drift summary to the rolling issue and exit.
-5. For each drifted record, run the `## Opus audit/write/verify loop` (fetch both SHAs, compute the upstream diff, inspect source artifacts, compare against docs and skill, classify the record, apply the page batching rule, write prose where required, run practical verification).
-6. Open at most two PRs (one sweep, one prose draft) plus zero or more `manual review needed` issues per the topology in `## Page batching rule` and `## PR body format`. Post a run summary with PR/issue links to the rolling issue.
+5. For each drifted record, run the `## Opus audit/write/verify loop` (fetch both SHAs, compute the upstream diff, inspect source artifacts, compare against docs and skill, classify the record, apply the page batching rule, write prose where required, run the deferred-record self-check, run practical verification).
+6. Open at most two PRs (one sweep, one prose draft) plus zero or more `upstream-sweep-manual-review`-labelled issues per the topology in `## Page batching rule`, `## Manual-review issue format`, `## Manual-review issue de-duplication`, and `## PR body format`. Manual-review issues are opened **before** PRs so PR bodies can reference issue numbers; a `Tracked in <PR URL>.` comment is posted on each issue once the corresponding PR exists. Post a run summary with PR/issue links to the rolling issue.
 
 ## Branch convention
 
 All routine-opened branches use the `claude/` namespace.
 
-- Metadata-only stamp refreshes: `claude/sweep-<YYYY-MM-DD>`.
+- Metadata-only stamp refreshes: `claude/sweep-<YYYY-MM-DD>` or `claude/sweep-<YYYY-MM-DD>-<slug>` (the slug is optional for production runs and required for synthetic test PRs that exercise individual envelope rules).
 - Prose-impact PRs: `claude/prose-<YYYY-MM-DD>-<slug>`. Opened as **draft** PRs so the human reviewer promotes them to ready-for-review only after the prose has been read.
 
 ## Rolling status issue
@@ -50,11 +50,11 @@ Every status post (collision skip, error diagnostics, no-drift summaries, run su
 Before opening any new PR, list open PRs and filter `headRefName` by prefix client-side:
 
 ```bash
-gh pr list --state open --json number,headRefName \
+gh pr list --state open --limit 1000 --json number,headRefName \
   --jq '.[] | select(.headRefName | startswith("claude/sweep-") or startswith("claude/prose-"))'
 ```
 
-GitHub's `--search` syntax does not reliably match branch prefixes, so the JSON list with a client-side prefix filter is the trustworthy form.
+`--limit 1000` defeats `gh`'s default 30-row cap so a busy repo cannot hide a still-open prior sweep/prose PR behind pagination — without it the routine would see "no results" and open a colliding PR. GitHub's `--search` syntax does not reliably match branch prefixes, so the JSON list with a client-side prefix filter is the trustworthy form.
 
 If any results come back regardless of date, the routine skips the run, posts a "skipping; prior PR(s) #X #Y still open" comment to the rolling status issue, and exits. Drift is re-detected on the next run after the prior PR(s) merge or close. This forces a clean serial cadence and prevents PR accumulation.
 
@@ -90,13 +90,46 @@ The routine cleans up tmp dirs after each run.
 
 ## Page batching rule
 
-After every record on every drifted page is classified by the audit loop:
+After every record on every drifted page is classified by the audit loop, apply the five-case rule per page:
 
-- If **any** record on a page is classified `prose` (developer-facing surface changed), the **whole page** goes to the prose PR. All metadata-only records on that page ride along on the same prose PR; the page never appears on the sweep PR.
-- If **any** record on a page is classified `ambiguous`, the **whole page** is held back into a manual-review issue. The page does not enter any PR. Other records on the same page are also withheld; they will be reconsidered on the next run.
-- Only pages where **all** records are classified `metadata-only` (no developer-facing impact, no ambiguity) go to the sweep PR.
+1. **No ambiguous + any prose** → prose PR. All audited non-ambiguous records on that page (prose-impacting **and** metadata-only) are stamped in the same PR. The page never appears on the sweep PR.
+2. **No ambiguous + all metadata-only** → sweep PR.
+3. **Ambiguous + no prose** → manual-review issue, no PR for that page. Metadata-only records on the same page are deferred alongside the ambiguity rather than spun off into a sweep PR.
+4. **Ambiguous overlapping prose, or unproven independence** → manual-review issue, no PR for that page. Two records overlap when they share any of: claim, page section, code sample, command, endpoint, source artifact, or `<!-- verification: -->` block.
+5. **Ambiguous + prose with proven independence** → prose PR for the prose-affected records and any metadata-only records on the same page that are also independent of every deferred ambiguity (same overlap dimensions). Ambiguous records and any metadata-only records that share an overlap dimension with a deferred ambiguity stay unstamped: every byte inside the deferred record's `<!-- verification: ... -->` block (including `source_repo:`, `source_ref:`, `source_commit:`, `verified_date:`, `verification_mode:`, comments, and any other field) stays byte-identical to base. One manual-review issue per deferred record tracks the unresolved evidence.
 
-The two PRs never touch the same page. The sweep PR reviewer never sees prose-affected or ambiguous pages; the prose PR reviewer never sees pages whose only changes are metadata bumps for unaffected pages.
+The two PRs never touch the same page. A prose PR may touch a page with deferred ambiguous records but must not edit any byte inside those records' verification blocks. The deferred-record self-check at PR-open time confirms the entire block is byte-identical to base; the routine fails closed on mismatch and does not open the prose PR.
+
+## Manual-review issue format
+
+Every manual-review issue carries the `upstream-sweep-manual-review` label, distinct from `upstream-sweep-status`.
+
+- Title for cases 3 and 4: `manual review needed for <page>`.
+- Title for case 5 (deferred record from a prose PR with proven independent ambiguity): `manual review needed for deferred record in <page>`.
+- Body includes:
+  - exact record location (`file:line` and the verification block content),
+  - upstream SHA range (`recorded_sha..head_sha`),
+  - the ambiguity reason,
+  - the independence rationale (case 5 only),
+  - a deterministic `Fingerprint:` line on its own line, surrounded by blank lines, of the form:
+    - docs records: `Fingerprint: <repo_path>:<line>|<source_repo>|<recorded_sha>..<head_sha>`,
+    - skill `version.json` records: `Fingerprint: skill_version_json|<repo_key>|<recorded_sha>..<head_sha>`,
+    - skill `SKILL.md` records: `Fingerprint: skill_md|<repo_key>|<recorded_sha>..<head_sha>`.
+
+The fingerprint includes the SHA range so a record whose `head_sha` advanced since the previous run is treated as a new event with a new issue, while a record that has not moved reuses the existing issue.
+
+## Manual-review issue de-duplication
+
+Deferred records are not stamped, so the next run will rediscover them and would otherwise re-open a duplicate issue every day. Before creating a new manual-review issue, the routine lists open manual-review issues and matches the fingerprint client-side as an exact-line match:
+
+```bash
+gh issue list --state open --label upstream-sweep-manual-review \
+  --limit 1000 --json number,title,body
+```
+
+`gh issue search` is not used: GitHub issue search tokenization does not reliably match a pipe-heavy fingerprint embedded in the body. The match is performed by walking each candidate issue's `body` field and looking for a line that, after stripping leading and trailing whitespace, equals the fingerprint string verbatim — not a substring match.
+
+On a fingerprint match, the routine reuses the existing issue: it skips `gh issue create`, captures the existing issue's number for the prose PR body, and posts a `Tracked in <PR URL>. (Run date <today>.)` comment on the issue once the PR exists. The original issue body is not edited, so reused issues accumulate a chronological trail of every run that re-encountered them. With no fingerprint match, a new issue is created with the fingerprint embedded in the body.
 
 ## Sweep PR envelope (claude/sweep-*)
 
@@ -168,7 +201,9 @@ For each drifted record:
 6. **Apply the page batching rule** once every record is classified.
 7. **Write prose changes directly into the draft `claude/prose-*` PR** when the page is in the prose batch. Apply `CLAUDE.md`'s voice, terminology lockfile, page templates, and refusal rules. The PR diff must contain the prose edit, not merely a suggestion in the PR body.
 8. **Skill-aware prose**: if the audit finds skill impact, include both the docs change and the `SKILL.md` change in the same prose PR. If `SKILL.md` body changes, the same PR must include the linked patch release set per `## Prose PR envelope`.
-9. **Practical verification before opening a prose PR**, where available: lint/format checks; re-run `scripts/sweep_poll.py` and confirm `status: "ok"`; parse `SKILL.md` frontmatter and `version.json` to confirm the linked-release rule holds when the body changed; language-appropriate syntax checks for changed code samples; targeted re-grep against the pinned upstream checkout for endpoint/type claims. If a check cannot be run, state that explicitly in the PR body — never silently skip.
+9. **Deferred-record self-check** (case 5 only — prose PR opened with proven-independent ambiguous records held back). For every deferred record, the routine confirms the entire `<!-- verification: ... -->` block on the prose-PR branch is byte-identical to base. Every byte from the opening `<!-- verification:` to the closing `-->` is checked, including `source_repo:`, `source_ref:`, `source_commit:`, `verified_date:`, `verification_mode:`, comments, and any other line. Checking only `source_commit:` and `verified_date:` is too narrow: the loop can edit `source_ref:`, change `verification_mode:`, or rewrite a comment inside the block without realising it crossed the deferred-record boundary. The routine also confirms the prose PR body contains a `Deferred ambiguous records:` section that links each open `upstream-sweep-manual-review` issue by number for those records. The guards cannot enforce this — they have no way to know which records were classified ambiguous — so the routine is the only thing that catches an accidental edit. **Fail closed on mismatch: do not open the prose PR.**
+
+10. **Practical verification before opening a prose PR**, where available: lint/format checks; re-run `scripts/sweep_poll.py` and confirm `status: "ok"`; parse `SKILL.md` frontmatter and `version.json` to confirm the linked-release rule holds when the body changed; language-appropriate syntax checks for changed code samples; targeted re-grep against the pinned upstream checkout for endpoint/type claims. If a check cannot be run, state that explicitly in the PR body — never silently skip.
 
 ## PR body format
 

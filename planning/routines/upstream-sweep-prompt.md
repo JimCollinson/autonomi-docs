@@ -81,14 +81,14 @@ fi
 
 ```sh
 OPEN_CLAUDE_PRS=$(
-  gh pr list --state open --json number,headRefName \
+  gh pr list --state open --limit 1000 --json number,headRefName \
     --jq '.[] | select(.headRefName | startswith("claude/sweep-") or startswith("claude/prose-")) | .number'
 )
 ```
 
 If `OPEN_CLAUDE_PRS` is non-empty, post a collision comment to `$STATUS_ISSUE` listing the open PR numbers, and exit without opening anything. Drift is re-detected on the next run.
 
-GitHub's `--search` syntax does not reliably match branch prefixes; the JSON list with a client-side prefix filter is the trustworthy form.
+`--limit 1000` defeats `gh`'s default 30-row cap so a busy repo cannot hide a still-open prior sweep/prose PR behind pagination. GitHub's `--search` syntax does not reliably match branch prefixes; the JSON list with a client-side prefix filter is the trustworthy form.
 
 ### 2. Run the deterministic scanner
 
@@ -170,11 +170,15 @@ Pick exactly one:
 
 #### 4.6 Apply the page batching rule (after all records are classified)
 
-- If **any** record on a page is classified `prose`, the **whole page** goes to the prose PR. All metadata-only records on that page ride along on the same prose PR.
-- If **any** record on a page is classified `ambiguous`, the **whole page** is held back into a manual-review issue. The page does not enter any PR.
-- Only pages where **all** records are classified `metadata-only` go to the sweep PR.
+Apply the five-case rule per page:
 
-The two PRs never touch the same page.
+1. **No ambiguous + any prose** → prose PR. All audited non-ambiguous records on the page (prose-impacting **and** metadata-only) are stamped in the same PR.
+2. **No ambiguous + all metadata-only** → sweep PR.
+3. **Ambiguous + no prose** → manual-review issue, no PR for the page. Metadata-only records on the same page are deferred alongside the ambiguity.
+4. **Ambiguous overlapping prose, or unproven independence** → manual-review issue, no PR for the page. Two records overlap when they share any of: claim, page section, code sample, command, endpoint, source artifact, or `<!-- verification: -->` block.
+5. **Ambiguous + prose with proven independence** → prose PR for the prose-affected records and any metadata-only records on the same page that are independent of every deferred ambiguity (same overlap dimensions). Ambiguous records and any metadata-only records that overlap a deferred ambiguity stay unstamped: the entire `<!-- verification: ... -->` block is left byte-identical to base. One manual-review issue per deferred record.
+
+The two PRs never touch the same page. A prose PR may touch a page with deferred ambiguous records, but must not edit any byte inside those records' verification blocks.
 
 #### 4.7 Write prose changes directly into the prose PR
 
@@ -192,7 +196,15 @@ If the audit finds skill impact, include both the human-facing docs change and t
 
 If the `SKILL.md` body does not change, none of those release fields may change. `prose-guard` enforces both directions.
 
-#### 4.9 Practical verification before opening the PR
+#### 4.9 Deferred-record self-check (case 5 only)
+
+When the page batching rule emits a prose PR with proven-independent ambiguous records held back, confirm — for **every** deferred record on every prose-PR page — that the entire `<!-- verification: ... -->` block on the prose-PR branch is **byte-identical to base**. Every byte from the opening `<!-- verification:` to the closing `-->` is checked: `source_repo:`, `source_ref:`, `source_commit:`, `verified_date:`, `verification_mode:`, comments, and any other line. Checking only `source_commit:` and `verified_date:` is too narrow; the audit/write step can edit `source_ref:`, change `verification_mode:`, or rewrite a comment inside the block without realising it crossed the deferred-record boundary.
+
+Confirm the prose PR body contains a `Deferred ambiguous records:` section that links each open `upstream-sweep-manual-review` issue by number for those records.
+
+The guards cannot enforce this — they have no way to know which records were classified ambiguous — so this self-check is the only thing that catches an accidental edit. **Fail closed on mismatch: do not open the prose PR. Open a manual-review issue describing the slip and continue with the rest of the run.**
+
+#### 4.10 Practical verification before opening the PR
 
 Run the checks below on the prepared branch where the toolchain is available. If a check cannot be run (tool missing, environment limit), state that explicitly in the PR body. Never silently skip.
 
@@ -204,11 +216,27 @@ Run the checks below on the prepared branch where the toolchain is available. If
 
 Clean up tmp dirs after the loop completes.
 
-### 5. Open PRs and issues per the page batching rule
+### 5. Open issues, then PRs, then post backlinks
 
-At most one sweep PR and one prose draft PR per run, plus zero or more `manual review needed` issues.
+The opening order is fixed to break the body↔issue mutual-reference cycle.
 
-**Sweep PR** (only if at least one page has all records classified `metadata-only`):
+**5.1 Manual-review issues first**, before any PR is opened. For each deferred record (case 5) and each whole-page deferral (cases 3 and 4), compute the fingerprint defined in `planning/routines/upstream-sweep.md` `## Manual-review issue format`. Then list open manual-review issues:
+
+```sh
+gh issue list --state open --label upstream-sweep-manual-review \
+  --limit 1000 --json number,title,body
+```
+
+Walk each candidate issue's `body` field client-side and look for a line that, after stripping leading and trailing whitespace, equals the fingerprint string verbatim. Do **not** use `gh issue list --search` — GitHub issue search tokenization does not reliably match a pipe-heavy fingerprint embedded in the body. `--limit 1000` defeats `gh`'s default 30-row cap.
+
+- On a fingerprint match: reuse the existing issue. Skip `gh issue create` and capture the existing number for the PR body. Do not edit the issue body — reused issues will accumulate a chronological comment trail in step 5.3.
+- No fingerprint match: `gh issue create --label upstream-sweep-manual-review` with the body specified in `## Manual-review issue format`. The body **must** contain the fingerprint on its own line, surrounded by blank lines, so the next run's client-side match is unambiguous. Capture the new issue's number from the URL `gh issue create` writes to stdout (`number=${url##*/}`).
+
+Do **not** include a PR backlink in any issue body at this stage — the PR URL does not exist yet.
+
+**5.2 Open the draft PR(s)** next. The PR body's `Deferred ambiguous records:` section embeds the manual-review issue numbers captured in 5.1 (a mix of newly-created and reused). Capture each PR URL from `gh pr create` stdout. Sweep PRs are opened ready-for-review; prose PRs are opened as draft.
+
+**Sweep PR** (only if at least one page has all records classified `metadata-only`, case 2):
 
 - Branch: `claude/sweep-<YYYY-MM-DD>` from `main`.
 - Diff envelope (verbatim from `planning/routines/upstream-sweep.md` `## Sweep PR envelope`):
@@ -216,21 +244,28 @@ At most one sweep PR and one prose draft PR per run, plus zero or more `manual r
   - update entries in the `verified_commits` map of `skills/start/version.json` for the corresponding repos (key set unchanged),
   - update entries in the `verified_commits` map of `skills/start/SKILL.md` frontmatter and refresh the `verified_date:` line (key set unchanged),
   - add one new `planning/sweeps/<YYYY-MM-DD>.md` summary file.
-- Forbidden: any change to `version`, `published_date`, `skills/start/CHANGELOG.md`, the YAML-frontmatter `version:` line, any rendered prose in `docs/`, or any file under `scripts/`, `.github/`, `repo-registry.yml`, or `component-registry.yml`.
+- Forbidden: any change to `version`, `published_date`, `skills/start/CHANGELOG.md`, the YAML-frontmatter `version:` line, any rendered prose in `docs/`, any file under `scripts/`, `.github/`, `repo-registry.yml`, or `component-registry.yml`, and any byte inside a `verification_mode: target-manifest` block (sweep PRs must never edit target-manifest pins).
 - PR body: see `## PR body format` below.
 
-**Prose PR** (only if at least one page has any record classified `prose`):
+**Prose PR** (cases 1 and 5):
 
 - Branch: `claude/prose-<YYYY-MM-DD>-<slug>` from `main`. Open as **draft**.
 - Includes the prose edits plus the corresponding `source_commit:` / `verified_date:` refreshes for those same pages.
+- For case 5, every deferred record's `<!-- verification: ... -->` block is byte-identical to base (deferred-record self-check from step 4.9).
 - If the audit found skill impact, include the `SKILL.md` body edit and the linked patch release set per step 4.8.
 - The two PRs never touch the same page.
-- PR body: see `## PR body format` below; include a "Why prose changed" section.
+- PR body: see `## PR body format` below; include a "Why prose changed" section, and (for case 5) a "Deferred ambiguous records" section with the issue numbers captured in 5.1.
 
-**Issues** (one per page in the manual-review-issue batch):
+**5.3 Post backlinks last**. For each manual-review issue captured in 5.1 (newly-created **and** reused), comment with the matching prose-PR URL:
 
-- Title: `Upstream sweep: manual review needed for <page>`.
-- Body: the page path, the recorded SHA, the upstream HEAD SHA, the audit failure mode (ambiguous evidence, removed surface, deleted file, SHA-fetch failure, etc.), and a snippet of the relevant upstream diff.
+```sh
+gh issue comment "$ISSUE_NUMBER" \
+  --body "Tracked in $PR_URL. (Run date $(date -u +%Y-%m-%d).)"
+```
+
+Use a comment, not a body edit, so the original issue body remains an authoritative record of what was deferred and why, and reused issues accumulate a chronological trail of every run that re-encountered them.
+
+If any of 5.1 / 5.2 / 5.3 errors, post the partial state to `$STATUS_ISSUE` and exit the routine without retrying.
 
 ### 6. Run summary
 

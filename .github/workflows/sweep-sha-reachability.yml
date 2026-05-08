@@ -83,10 +83,17 @@ jobs:
           KEY_VALUE_RE = re.compile(r"^\s*([a-z_]+)\s*:\s*(\S.*?)\s*$")
 
           violations: list[str] = []
+          skipped_target_manifest: list[str] = []
           default_branch_cache: dict[str, str] = {}
 
           def fail(loc: str, msg: str) -> None:
               violations.append(f"{loc}: {msg}")
+
+          def skip_tm(loc: str) -> None:
+              # Ancestry against a moving HEAD is not meaningful for
+              # target-manifest pins; record an informational summary line
+              # rather than failing or silently dropping the record.
+              skipped_target_manifest.append(f"{loc}: skipped (target-manifest pin)")
 
           def show(ref: str, path: str) -> str | None:
               try:
@@ -277,6 +284,7 @@ jobs:
                       # SHA reachability against a moving HEAD is not
                       # meaningful for target-manifest pins. They were
                       # validated by hand at pin time.
+                      skip_tm(loc)
                       continue
                   validate_sha(
                       loc,
@@ -294,7 +302,7 @@ jobs:
                   fail(VERSION_JSON_PATH, f"JSON parse error: {exc}")
                   obj = {}
               if obj.get("verification_mode") == "target-manifest":
-                  pass
+                  skip_tm(f"{VERSION_JSON_PATH}:verified_commits")
               else:
                   commits = obj.get("verified_commits") or {}
                   for repo_key, sha in sorted(commits.items()):
@@ -321,7 +329,7 @@ jobs:
                           fail(SKILL_MD_PATH, f"frontmatter YAML parse error: {exc}")
                           fm = {}
                       if fm.get("verification_mode") == "target-manifest":
-                          pass
+                          skip_tm(f"{SKILL_MD_PATH}:verified_commits")
                       else:
                           commits = fm.get("verified_commits") or {}
                           for repo_key, sha in sorted(commits.items()):
@@ -339,6 +347,10 @@ jobs:
                       out.write("## sweep-sha-reachability failures\n\n")
                       for v in violations:
                           out.write(f"- `{v}`\n")
+                      if skipped_target_manifest:
+                          out.write("\n## skipped (target-manifest)\n\n")
+                          for note in skipped_target_manifest:
+                              out.write(f"- `{note}`\n")
               for v in violations:
                   print(v, file=sys.stderr)
               sys.exit(1)
@@ -346,4 +358,8 @@ jobs:
           if SUMMARY_PATH:
               with open(SUMMARY_PATH, "a", encoding="utf-8") as out:
                   out.write("sweep-sha-reachability: all SHAs reachable.\n")
+                  if skipped_target_manifest:
+                      out.write("\n## skipped (target-manifest)\n\n")
+                      for note in skipped_target_manifest:
+                          out.write(f"- `{note}`\n")
           PY

@@ -72,11 +72,14 @@ jobs:
           HEAD = os.environ["HEAD_SHA"]
           HEAD_REF = os.environ["HEAD_REF"]
           SUMMARY_PATH = os.environ.get("GITHUB_STEP_SUMMARY")
-          BRANCH_DATE_RE = re.compile(r"^claude/sweep-(\d{4}-\d{2}-\d{2})$")
+          BRANCH_DATE_RE = re.compile(
+              r"^claude/sweep-(\d{4}-\d{2}-\d{2})(?:-[a-z0-9][a-z0-9-]*)?$"
+          )
           DOCS_PREFIX = "docs/"
           SWEEPS_PREFIX = "planning/sweeps/"
           SWEEP_FILE_RE = re.compile(r"^planning/sweeps/(\d{4}-\d{2}-\d{2})\.md$")
           VERIFICATION_BLOCK_RE = re.compile(r"<!--\s*verification:(.*?)-->", re.DOTALL)
+          BLOCK_KEY_VALUE_RE = re.compile(r"^\s*([a-z_]+)\s*:\s*(\S.*?)\s*$")
           ALLOWED_DOC_KEYS = ("source_commit:", "verified_date:")
           VERSION_JSON_PATH = "skills/start/version.json"
           SKILL_MD_PATH = "skills/start/SKILL.md"
@@ -134,7 +137,7 @@ jobs:
           if not branch_match:
               fail(
                   HEAD_REF,
-                  "branch name does not match claude/sweep-YYYY-MM-DD; "
+                  "branch name does not match claude/sweep-YYYY-MM-DD[-slug]; "
                   "the guard cannot verify the new sweep summary file",
               )
 
@@ -155,9 +158,45 @@ jobs:
           def line_in_any(intervals: list[tuple[int, int]], line: int) -> bool:
               return any(s <= line <= e for s, e in intervals)
 
+          def block_body_is_target_manifest(body: str) -> bool:
+              for raw in body.splitlines():
+                  match = BLOCK_KEY_VALUE_RE.match(raw.strip())
+                  if match and match.group(1) == "verification_mode":
+                      return match.group(2) == "target-manifest"
+              return False
+
+          def target_manifest_block_bodies(text: str) -> list[str]:
+              # Literal byte content between "<!-- verification:" and "-->";
+              # multiset comparison on this raw form catches any byte-level
+              # edit, including comments and future fields.
+              out: list[str] = []
+              for match in VERIFICATION_BLOCK_RE.finditer(text):
+                  body = match.group(1)
+                  if block_body_is_target_manifest(body):
+                      out.append(body)
+              return out
+
           def validate_docs_md(path: str) -> None:
               base_text = show(BASE, path) or ""
               head_text = show(HEAD, path) or ""
+              # Target-manifest protection: a sweep PR must never touch a
+              # target-manifest block. Multiset of literal block bodies on
+              # each side must match. The line-prefix check below would
+              # already permit source_commit:/verified_date: edits inside a
+              # target-manifest block; this is the rule that closes that
+              # gap.
+              base_tm = sorted(target_manifest_block_bodies(base_text))
+              head_tm = sorted(target_manifest_block_bodies(head_text))
+              if base_tm != head_tm:
+                  fail(
+                      path,
+                      "target-manifest verification block changed; "
+                      "sweep PRs must not touch target-manifest blocks",
+                  )
+                  # Continue with the line-prefix scan so that any
+                  # additional envelope violations on the same file also
+                  # surface in the same run, but the target-manifest
+                  # failure is enough to red the PR on its own.
               base_lines = base_text.splitlines()
               head_lines = head_text.splitlines()
               base_intervals = block_intervals(base_text)
@@ -223,6 +262,27 @@ jobs:
               except json.JSONDecodeError as exc:
                   fail(VERSION_JSON_PATH, f"JSON parse error: {exc}")
                   return
+              # Target-manifest protection: if either side has top-level
+              # verification_mode: target-manifest, both verification_mode
+              # and verified_commits must be structurally equal between
+              # base and head. Structural (parsed-object) equality avoids
+              # false positives from cosmetic JSON re-serialisation but
+              # still catches every meaningful change. A silent
+              # target-manifest -> current-merged-truth flip is also
+              # caught because the modes themselves differ.
+              base_mode = base_obj.get("verification_mode")
+              head_mode = head_obj.get("verification_mode")
+              if "target-manifest" in (base_mode, head_mode):
+                  if (
+                      base_mode != head_mode
+                      or base_obj.get("verified_commits")
+                      != head_obj.get("verified_commits")
+                  ):
+                      fail(
+                          VERSION_JSON_PATH,
+                          "target-manifest verification block changed; "
+                          "sweep PRs must not touch target-manifest blocks",
+                      )
               all_keys = set(base_obj) | set(head_obj)
               for key in sorted(all_keys):
                   if base_obj.get(key) != head_obj.get(key):
@@ -232,23 +292,45 @@ jobs:
                               f"forbidden field changed: {key} "
                               "(only verified_commits may differ in a sweep)",
                           )
-              base_commits = base_obj.get("verified_commits") or {}
-              head_commits = head_obj.get("verified_commits") or {}
-              if isinstance(base_commits, dict) and isinstance(head_commits, dict):
-                  if set(base_commits.keys()) != set(head_commits.keys()):
-                      added = sorted(set(head_commits) - set(base_commits))
-                      removed = sorted(set(base_commits) - set(head_commits))
-                      detail = []
-                      if added:
-                          detail.append(f"added: {', '.join(added)}")
-                      if removed:
-                          detail.append(f"removed: {', '.join(removed)}")
-                      fail(
-                          VERSION_JSON_PATH,
-                          "verified_commits key set changed; sweeps may only "
-                          "refresh values, not add or remove repos "
-                          f"({'; '.join(detail)})",
-                      )
+              # Raw-value type check on verified_commits: do not coerce
+              # null/list/string to {} before checking. The routine emits
+              # a map only.
+              if "verified_commits" not in base_obj:
+                  fail(VERSION_JSON_PATH, "verified_commits missing on base")
+                  return
+              if "verified_commits" not in head_obj:
+                  fail(VERSION_JSON_PATH, "verified_commits missing on head")
+                  return
+              base_commits = base_obj["verified_commits"]
+              head_commits = head_obj["verified_commits"]
+              if not isinstance(base_commits, dict):
+                  fail(
+                      VERSION_JSON_PATH,
+                      "verified_commits is not a map/object on base; "
+                      "the routine emits a map only",
+                  )
+                  return
+              if not isinstance(head_commits, dict):
+                  fail(
+                      VERSION_JSON_PATH,
+                      "verified_commits is not a map/object on head; "
+                      "the routine emits a map only",
+                  )
+                  return
+              if set(base_commits.keys()) != set(head_commits.keys()):
+                  added = sorted(set(head_commits) - set(base_commits))
+                  removed = sorted(set(base_commits) - set(head_commits))
+                  detail = []
+                  if added:
+                      detail.append(f"added: {', '.join(added)}")
+                  if removed:
+                      detail.append(f"removed: {', '.join(removed)}")
+                  fail(
+                      VERSION_JSON_PATH,
+                      "verified_commits key set changed; sweeps may only "
+                      "refresh values, not add or remove repos "
+                      f"({'; '.join(detail)})",
+                  )
 
           def parse_frontmatter(text: str) -> tuple[dict, str]:
               if not text.startswith("---"):
@@ -282,6 +364,20 @@ jobs:
                       "rendered prose body changed; sweep envelope is "
                       "frontmatter-only",
                   )
+              # Target-manifest protection: same rule as version.json.
+              base_mode = base_fm.get("verification_mode")
+              head_mode = head_fm.get("verification_mode")
+              if "target-manifest" in (base_mode, head_mode):
+                  if (
+                      base_mode != head_mode
+                      or base_fm.get("verified_commits")
+                      != head_fm.get("verified_commits")
+                  ):
+                      fail(
+                          SKILL_MD_PATH,
+                          "target-manifest verification block changed; "
+                          "sweep PRs must not touch target-manifest blocks",
+                      )
               all_keys = set(base_fm) | set(head_fm)
               for key in sorted(all_keys):
                   if base_fm.get(key) != head_fm.get(key):
@@ -291,23 +387,43 @@ jobs:
                               f"forbidden frontmatter key changed: {key} "
                               "(only verified_commits and verified_date may differ)",
                           )
-              base_commits = base_fm.get("verified_commits") or {}
-              head_commits = head_fm.get("verified_commits") or {}
-              if isinstance(base_commits, dict) and isinstance(head_commits, dict):
-                  if set(base_commits.keys()) != set(head_commits.keys()):
-                      added = sorted(set(head_commits) - set(base_commits))
-                      removed = sorted(set(base_commits) - set(head_commits))
-                      detail = []
-                      if added:
-                          detail.append(f"added: {', '.join(added)}")
-                      if removed:
-                          detail.append(f"removed: {', '.join(removed)}")
-                      fail(
-                          SKILL_MD_PATH,
-                          "verified_commits key set changed; sweeps may only "
-                          "refresh values, not add or remove repos "
-                          f"({'; '.join(detail)})",
-                      )
+              # Raw-value type check on verified_commits.
+              if "verified_commits" not in base_fm:
+                  fail(SKILL_MD_PATH, "verified_commits missing on base")
+                  return
+              if "verified_commits" not in head_fm:
+                  fail(SKILL_MD_PATH, "verified_commits missing on head")
+                  return
+              base_commits = base_fm["verified_commits"]
+              head_commits = head_fm["verified_commits"]
+              if not isinstance(base_commits, dict):
+                  fail(
+                      SKILL_MD_PATH,
+                      "verified_commits is not a map/object on base; "
+                      "the routine emits a map only",
+                  )
+                  return
+              if not isinstance(head_commits, dict):
+                  fail(
+                      SKILL_MD_PATH,
+                      "verified_commits is not a map/object on head; "
+                      "the routine emits a map only",
+                  )
+                  return
+              if set(base_commits.keys()) != set(head_commits.keys()):
+                  added = sorted(set(head_commits) - set(base_commits))
+                  removed = sorted(set(base_commits) - set(head_commits))
+                  detail = []
+                  if added:
+                      detail.append(f"added: {', '.join(added)}")
+                  if removed:
+                      detail.append(f"removed: {', '.join(removed)}")
+                  fail(
+                      SKILL_MD_PATH,
+                      "verified_commits key set changed; sweeps may only "
+                      "refresh values, not add or remove repos "
+                      f"({'; '.join(detail)})",
+                  )
 
           FORBIDDEN_PATH_PREFIXES = ("scripts/", ".github/")
           FORBIDDEN_EXACT_PATHS = {"repo-registry.yml", "component-registry.yml"}
