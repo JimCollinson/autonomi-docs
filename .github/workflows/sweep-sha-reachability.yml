@@ -304,7 +304,13 @@ jobs:
               if obj.get("verification_mode") == "target-manifest":
                   skip_tm(f"{VERSION_JSON_PATH}:verified_commits")
               else:
-                  commits = obj.get("verified_commits") or {}
+                  commits = obj.get("verified_commits")
+                  if not isinstance(commits, dict):
+                      fail(
+                          f"{VERSION_JSON_PATH}:verified_commits",
+                          "missing or not a map/object",
+                      )
+                      commits = {}
                   for repo_key, sha in sorted(commits.items()):
                       ref = resolve_default_branch(repo_key)
                       if ref is None:
@@ -331,7 +337,13 @@ jobs:
                       if fm.get("verification_mode") == "target-manifest":
                           skip_tm(f"{SKILL_MD_PATH}:verified_commits")
                       else:
-                          commits = fm.get("verified_commits") or {}
+                          commits = fm.get("verified_commits")
+                          if not isinstance(commits, dict):
+                              fail(
+                                  f"{SKILL_MD_PATH}:verified_commits",
+                                  "missing or not a map/object",
+                              )
+                              commits = {}
                           for repo_key, sha in sorted(commits.items()):
                               ref = resolve_default_branch(repo_key)
                               if ref is None:

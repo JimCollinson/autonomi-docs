@@ -37,7 +37,7 @@ The routine maintains a single open GitHub issue labelled `upstream-sweep-status
 
 Bootstrap, run by every execution before any other GitHub work, in POSIX shell only (no `mapfile`, no Bash arrays, no `gh issue create --json/--jq`). Capture-then-decide is the key invariant: any `gh` failure (auth, network, API) must abort the bootstrap immediately rather than be silently coerced into "label missing" or "no open issue". See `planning/routines/upstream-sweep-prompt.md` Step 0 for the exact script.
 
-1. Ensure the `upstream-sweep-status` label exists. Idempotent: list the label, create it if missing. `gh issue create --label X` fails when the label is missing, so this step must precede any issue creation.
+1. Ensure the `upstream-sweep-status` and `upstream-sweep-manual-review` labels both exist. Idempotent: list labels with `--limit 1000`, create either label if missing. Both labels are bootstrapped here because step 5 opens manual-review issues with `--label upstream-sweep-manual-review`, and `gh issue create --label X` fails when the label is missing, so this step must precede any issue creation.
 2. Ensure an open issue with that label exists. Idempotent: list open issues with the label sorted by issue number ascending.
    - Zero results: create the issue. `gh issue create` has no `--json/--jq` flags, so parse the URL it writes to stdout and take the trailing path component as the issue number.
    - Exactly one result: use it.

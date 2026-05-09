@@ -125,6 +125,11 @@ jobs:
           name_status = run(
               ["git", "diff", "--name-status", "-z", f"{BASE}..{HEAD}"]
           )
+          # -z output is NUL-separated. For renames the entry is
+          # "R<score>\0<old>\0<new>". For everything else "<status>\0<path>".
+          # Both the old and new paths are recorded so the envelope check
+          # sees forbidden old paths even when a rename lands them under an
+          # allowed new prefix.
           tokens = [t for t in name_status.split("\0") if t]
           changes: list[tuple[str, str]] = []
           i = 0
@@ -134,6 +139,7 @@ jobs:
                   if i + 2 >= len(tokens):
                       fail("git diff", "unexpected -z output truncation")
                       break
+                  changes.append((status[0], tokens[i + 1]))
                   changes.append((status[0], tokens[i + 2]))
                   i += 3
               else:
@@ -300,6 +306,8 @@ jobs:
                   base_vjson_mode != head_vjson_mode
                   or base_version_obj.get("verified_commits")
                   != head_version_obj.get("verified_commits")
+                  or base_version_obj.get("verified_date")
+                  != head_version_obj.get("verified_date")
               ):
                   fail(
                       VERSION_JSON_PATH,
@@ -315,6 +323,8 @@ jobs:
                   base_fm_mode != head_fm_mode
                   or base_fm.get("verified_commits")
                   != head_fm.get("verified_commits")
+                  or base_fm.get("verified_date")
+                  != head_fm.get("verified_date")
               ):
                   fail(
                       SKILL_MD_PATH,

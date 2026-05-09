@@ -296,7 +296,15 @@ def walk_version_json(
                 ),
             }
         )
-    commits = data.get("verified_commits") or {}
+    if "verified_commits" not in data:
+        raise FailClosed(
+            {
+                "kind": "version_json_shape_error",
+                "path": str(VERSION_JSON_PATH.relative_to(REPO_ROOT)),
+                "message": "version.json: verified_commits is missing",
+            }
+        )
+    commits = data["verified_commits"]
     if not isinstance(commits, dict):
         raise FailClosed(
             {
@@ -402,7 +410,17 @@ def walk_skill_md(
                 ),
             }
         )
-    commits = fm.get("verified_commits") or {}
+    if "verified_commits" not in fm:
+        raise FailClosed(
+            {
+                "kind": "skill_md_shape_error",
+                "path": str(SKILL_MD_PATH.relative_to(REPO_ROOT)),
+                "message": (
+                    "SKILL.md frontmatter: verified_commits is missing"
+                ),
+            }
+        )
+    commits = fm["verified_commits"]
     if not isinstance(commits, dict):
         raise FailClosed(
             {

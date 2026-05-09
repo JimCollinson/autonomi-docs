@@ -277,6 +277,8 @@ jobs:
                       base_mode != head_mode
                       or base_obj.get("verified_commits")
                       != head_obj.get("verified_commits")
+                      or base_obj.get("verified_date")
+                      != head_obj.get("verified_date")
                   ):
                       fail(
                           VERSION_JSON_PATH,
@@ -372,6 +374,8 @@ jobs:
                       base_mode != head_mode
                       or base_fm.get("verified_commits")
                       != head_fm.get("verified_commits")
+                      or base_fm.get("verified_date")
+                      != head_fm.get("verified_date")
                   ):
                       fail(
                           SKILL_MD_PATH,

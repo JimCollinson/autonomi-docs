@@ -45,18 +45,23 @@ POSIX shell only. No `mapfile`, no Bash arrays, no bash-only parameter expansion
 ```sh
 set -eu
 
-# (a) label — capture gh output before deciding so auth/API failure is fatal,
-# not silently coerced into "label missing".
-labels=$(gh label list --json name --jq '.[].name')
+# (a) labels — capture gh output before deciding so auth/API failure is fatal,
+# not silently coerced into "label missing". Both labels are bootstrapped here
+# so step 5 can use --label upstream-sweep-manual-review without a 404.
+labels=$(gh label list --limit 1000 --json name --jq '.[].name')
 if ! printf '%s\n' "$labels" | grep -qx upstream-sweep-status; then
   gh label create upstream-sweep-status \
     --description "Rolling status thread for the daily upstream-sweep routine"
+fi
+if ! printf '%s\n' "$labels" | grep -qx upstream-sweep-manual-review; then
+  gh label create upstream-sweep-manual-review \
+    --description "Ambiguous upstream-sweep records that need a human decision"
 fi
 
 # (b) issue — same capture-then-decide pattern. gh issue create has no
 # --json/--jq, so parse the URL it writes to stdout.
 first_issue=$(gh issue list --state open --label upstream-sweep-status \
-  --json number --jq 'sort_by(.number) | .[0].number // empty')
+  --limit 1000 --json number --jq 'sort_by(.number) | .[0].number // empty')
 if [ -z "$first_issue" ]; then
   url=$(gh issue create --title "Upstream sweep status" \
     --label upstream-sweep-status \
@@ -65,17 +70,17 @@ if [ -z "$first_issue" ]; then
 else
   STATUS_ISSUE="$first_issue"
   count=$(gh issue list --state open --label upstream-sweep-status \
-    --json number --jq 'length')
+    --limit 1000 --json number --jq 'length')
   if [ "$count" -gt 1 ]; then
     others=$(gh issue list --state open --label upstream-sweep-status \
-      --json number --jq '[.[].number | tostring] | join(", ")')
+      --limit 1000 --json number --jq '[.[].number | tostring] | join(", ")')
     gh issue comment "$STATUS_ISSUE" --body \
       "Multiple open issues carry the upstream-sweep-status label: $others. Continuing against #$STATUS_ISSUE (lowest number). Please close the duplicates."
   fi
 fi
 ```
 
-`gh issue create --label X` fails when the label is missing, so the label step must precede issue creation. Capture `$STATUS_ISSUE` for every status post in later steps.
+`gh issue create --label X` fails when the label is missing, so the label step must precede issue creation. Both `upstream-sweep-status` and `upstream-sweep-manual-review` are bootstrapped here because step 5 opens manual-review issues with the second label and would otherwise 404. Capture `$STATUS_ISSUE` for every status post in later steps.
 
 ### 1. Open-PR collision check
 
