@@ -316,6 +316,17 @@ def walk_version_json(
     rel = str(VERSION_JSON_PATH.relative_to(REPO_ROOT))
     for repo_key, recorded in sorted(commits.items()):
         location = f"{rel}:verified_commits.{repo_key}"
+        if not isinstance(recorded, str) or not recorded:
+            raise FailClosed(
+                {
+                    "kind": "version_json_shape_error",
+                    "path": rel,
+                    "message": (
+                        f"version.json: verified_commits.{repo_key} "
+                        "is not a non-empty string"
+                    ),
+                }
+            )
         if mode == "target-manifest":
             target_manifest_skipped.append(
                 {
@@ -343,9 +354,15 @@ def walk_version_json(
         pair_set.add((repo_key, ref))
 
 
-def parse_skill_md_frontmatter() -> dict[str, Any]:
+def parse_skill_md_frontmatter() -> dict[str, Any] | None:
+    """Return frontmatter as a dict, or None if SKILL.md does not exist.
+
+    A present-but-empty or shape-invalid SKILL.md raises FailClosed; only a
+    truly absent file is reported via the None sentinel so callers can
+    distinguish that from an empty mapping.
+    """
     if not SKILL_MD_PATH.exists():
-        return {}
+        return None
     text = SKILL_MD_PATH.read_text(encoding="utf-8")
     if not text.startswith("---"):
         raise FailClosed(
@@ -366,7 +383,7 @@ def parse_skill_md_frontmatter() -> dict[str, Any]:
         )
     raw = text[3:closing]
     try:
-        loaded = yaml.safe_load(raw) or {}
+        loaded = yaml.safe_load(raw)
     except yaml.YAMLError as exc:
         raise FailClosed(
             {
@@ -375,6 +392,17 @@ def parse_skill_md_frontmatter() -> dict[str, Any]:
                 "message": f"YAML parse error in SKILL.md frontmatter: {exc}",
             }
         ) from exc
+    if loaded is None:
+        raise FailClosed(
+            {
+                "kind": "skill_md_frontmatter_empty",
+                "path": str(SKILL_MD_PATH.relative_to(REPO_ROOT)),
+                "message": (
+                    "SKILL.md frontmatter is empty; verification metadata "
+                    "is required"
+                ),
+            }
+        )
     if not isinstance(loaded, dict):
         raise FailClosed(
             {
@@ -395,7 +423,7 @@ def walk_skill_md(
     token: str,
 ) -> None:
     fm = parse_skill_md_frontmatter()
-    if not fm:
+    if fm is None:
         return
     mode = fm.get("verification_mode")
     if mode not in ALLOWED_MODES:
@@ -434,6 +462,17 @@ def walk_skill_md(
     rel = str(SKILL_MD_PATH.relative_to(REPO_ROOT))
     for repo_key, recorded in sorted(commits.items()):
         location = f"{rel}:verified_commits.{repo_key}"
+        if not isinstance(recorded, str) or not recorded:
+            raise FailClosed(
+                {
+                    "kind": "skill_md_shape_error",
+                    "path": rel,
+                    "message": (
+                        f"SKILL.md frontmatter: verified_commits.{repo_key} "
+                        "is not a non-empty string"
+                    ),
+                }
+            )
         if mode == "target-manifest":
             target_manifest_skipped.append(
                 {

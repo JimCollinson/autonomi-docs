@@ -119,13 +119,14 @@ Audit must compare the upstream tree at `head_sha` against the diff from `record
 
 ```sh
 TMP=$(mktemp -d)
-cd "$TMP"
-git init -q
-git remote add origin "<upstream-url-from-repo-registry.yml>"
-git fetch --depth 1 origin "<recorded_sha>"
-git fetch --depth 1 origin "<head_sha>"
-git checkout --detach "<head_sha>"
+git -C "$TMP" init -q
+git -C "$TMP" remote add origin "<upstream-url-from-repo-registry.yml>"
+git -C "$TMP" fetch --depth 1 origin "<recorded_sha>"
+git -C "$TMP" fetch --depth 1 origin "<head_sha>"
+git -C "$TMP" checkout --detach "<head_sha>"
 ```
+
+The `git -C "$TMP"` form runs each command inside the upstream checkout without changing the current directory of the routine. Every other step in this prompt (`gh` calls, scanner re-runs, file edits in `docs/` and `skills/`, `git add` / `git commit` on the prepared docs branch) assumes the cwd is still the docs repo, so do not `cd` into `$TMP` here. If a follow-up command genuinely needs the upstream tree as cwd, scope it to a subshell: `( cd "$TMP" && <command> )`.
 
 If either `git fetch` fails (reachable-SHA fetches disabled by the repo, SHA garbage-collected, network failure), fall back to the GitHub compare API:
 

@@ -172,6 +172,13 @@ jobs:
           def validate_sha(
               loc: str, repo_key: str, ref: str, sha: str
           ) -> None:
+              if not isinstance(sha, str) or not sha:
+                  fail(
+                      loc,
+                      "recorded SHA is not a non-empty string: "
+                      f"{sha!r}",
+                  )
+                  return
               entry = REGISTRY.get(repo_key)
               if not entry:
                   fail(loc, f"repo not in repo-registry.yml: {repo_key}")
