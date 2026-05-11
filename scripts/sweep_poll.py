@@ -537,33 +537,14 @@ def resolve_head_shas(
     pair_set: set[tuple[str, str]],
     registry: dict[str, dict[str, Any]],
     token: str | None,
-    skipped_repos: list[dict[str, Any]],
 ) -> dict[tuple[str, str], str]:
     head_shas: dict[tuple[str, str], str] = {}
     for repo_key, ref in sorted(pair_set):
         owner, repo = parse_owner_repo(registry[repo_key]["url"])
         encoded_ref = urllib.parse.quote(ref, safe="")
-        try:
-            commit = github_request(
-                f"/repos/{owner}/{repo}/commits/{encoded_ref}", token
-            )
-        except FailClosed as exc:
-            diag = exc.diagnostic
-            if (
-                diag.get("kind") == "github_api_http_error"
-                and diag.get("status") in (403, 404)
-            ):
-                skipped_repos.append(
-                    {
-                        "repo": repo_key,
-                        "ref": ref,
-                        "status": diag["status"],
-                        "url": diag.get("url"),
-                        "message": diag.get("message"),
-                    }
-                )
-                continue
-            raise
+        commit = github_request(
+            f"/repos/{owner}/{repo}/commits/{encoded_ref}", token
+        )
         sha = commit.get("sha")
         if not isinstance(sha, str) or not sha:
             raise FailClosed(
@@ -586,11 +567,7 @@ def attach_drift(
     head_shas: dict[tuple[str, str], str],
 ) -> None:
     for record in records:
-        key = (record["repo"], record["ref"])
-        if key not in head_shas:
-            # Skipped in resolve_head_shas; head_sha and drifted stay None.
-            continue
-        head = head_shas[key]
+        head = head_shas[(record["repo"], record["ref"])]
         record["head_sha"] = head
         record["drifted"] = record["recorded_sha"] != head
 
@@ -610,8 +587,6 @@ def main() -> int:
                 ),
             }
         )
-
-    skipped_repos: list[dict[str, Any]] = []
 
     try:
         registry = load_registry()
@@ -638,7 +613,7 @@ def main() -> int:
             token,
         )
 
-        head_shas = resolve_head_shas(pair_set, registry, token, skipped_repos)
+        head_shas = resolve_head_shas(pair_set, registry, token)
         attach_drift(records, head_shas)
 
     except FailClosed as exc:
@@ -649,7 +624,6 @@ def main() -> int:
                     "generated_at": datetime.now(timezone.utc).isoformat(),
                     "records": [],
                     "target_manifest_skipped": [],
-                    "skipped_repos": skipped_repos,
                     "notices": notices,
                     "errors": [exc.diagnostic],
                 },
@@ -663,7 +637,6 @@ def main() -> int:
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "records": records,
         "target_manifest_skipped": target_manifest_skipped,
-        "skipped_repos": skipped_repos,
         "notices": notices,
         "errors": [],
     }
