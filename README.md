@@ -208,3 +208,5 @@ Key writing expectations include:
 See `repo-registry.yml` for the authoritative in-scope repo list.
 
 See `component-registry.yml` for which components and repos inform each page.
+
+Synthetic test edit — post-merge guard verification. Will be reverted.
