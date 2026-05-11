@@ -1,6 +1,6 @@
 # Upstream sweep — routine prompt
 
-This is the prompt the Claude Desktop Remote routine executes once per day. The behaviour lives in version control so it is reviewable, diffable, and rollback-able. The Claude Desktop routine config references this file by URL or paste-in. Schedule, model selection, and the `GITHUB_TOKEN` secret value live in Claude Desktop, not in this repo.
+This is the prompt the Claude Desktop Remote routine executes once per day. The behaviour lives in version control so it is reviewable, diffable, and rollback-able. The Claude Desktop routine config references this file by URL or paste-in. Schedule, model selection, and any `GITHUB_TOKEN` secret value live in Claude Desktop, not in this repo.
 
 ## Goal
 
@@ -21,7 +21,7 @@ Do not run this prompt under a smaller model.
 
 - The `Bash` tool, with the docs repo cloned at the working directory.
 - The `gh` CLI for all GitHub operations (PR list/create, issue list/create, comment).
-- `GITHUB_TOKEN` in the environment, with read access to in-scope upstream repos and write access to `withautonomi/autonomi-developer-docs`.
+- `GITHUB_TOKEN` in the environment, optional. When set, the scanner uses it for the higher 5000 req/hour rate limit, and the `gh` CLI also picks it up for issue, label, and PR writes against `withautonomi/autonomi-developer-docs` — a configured `GITHUB_TOKEN` must therefore carry the docs-repo write scopes (`contents: write`, `pull-requests: write`, `issues: write`) or those steps will fail. When unset, the scanner derives a token from `gh auth token` if available, then falls back to anonymous reads (60 req/hour) for public upstream repos; `gh` uses its stored auth context (typically a GitHub App installation token) for writes.
 - `python3` plus the PyYAML pin from `scripts/requirements.txt`.
 
 Use `gh` consistently for GitHub work. Do not call the GitHub MCP server.
@@ -98,10 +98,22 @@ If `OPEN_CLAUDE_PRS` is non-empty, post a collision comment to `$STATUS_ISSUE` l
 ### 2. Run the deterministic scanner
 
 ```sh
+# Preflight: derive GITHUB_TOKEN from gh auth token when the routine env did
+# not provide one. The scanner accepts an absent token and falls back to
+# anonymous reads, but anonymous shares a 60 req/hour quota with the sandbox
+# IP — auth via gh raises that to 5000/hour without surfacing the token here.
+if [ -z "${GITHUB_TOKEN:-}" ]; then
+  if gh_token=$(gh auth token 2>/dev/null) && [ -n "$gh_token" ]; then
+    export GITHUB_TOKEN="$gh_token"
+  fi
+fi
+
 python3 scripts/sweep_poll.py > sweep_report.json
 ```
 
 Read `sweep_report.json`. If `status` is `"error"`, post the JSON diagnostics to `$STATUS_ISSUE` and exit. The scanner's fail-closed semantics are documented in `planning/routines/upstream-sweep.md` and in `scripts/sweep_poll.py`.
+
+If `notices` is non-empty, surface those entries in the run summary at step 6 alongside drift counts. The `unauthenticated_mode` notice in particular tells a reviewer that the run used anonymous GitHub reads (60 req/hour) rather than authenticated.
 
 If `target_manifest_skipped` is non-empty, include those entries in the run summary at step 6 as "pinned by target-manifest, not bumped" so a human can confirm those pins remain intentional. Never modify `target-manifest` records.
 

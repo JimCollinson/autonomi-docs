@@ -57,21 +57,54 @@ class FailClosed(Exception):
         self.diagnostic = diagnostic
 
 
-def github_request(path: str, token: str) -> dict[str, Any]:
+def _github_get(url: str, token: str | None) -> dict[str, Any]:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "autonomi-developer-docs-sweep-poll",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    req = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def github_request(path: str, token: str | None = None) -> dict[str, Any]:
+    # An authenticated 403 means the org refuses the token, not that the repo
+    # is unreachable. Retry once without auth so public repos in orgs that
+    # restrict fine-grained PATs still resolve.
     url = f"https://api.github.com{path}"
-    req = urllib.request.Request(
-        url,
-        headers={
-            "Accept": "application/vnd.github+json",
-            "Authorization": f"Bearer {token}",
-            "User-Agent": "autonomi-developer-docs-sweep-poll",
-            "X-GitHub-Api-Version": "2022-11-28",
-        },
-    )
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+        return _github_get(url, token)
     except urllib.error.HTTPError as exc:
+        if exc.code == 403 and token:
+            try:
+                return _github_get(url, None)
+            except urllib.error.HTTPError as anon_exc:
+                raise FailClosed(
+                    {
+                        "kind": "github_api_http_error",
+                        "url": url,
+                        "status": anon_exc.code,
+                        "auth_status": exc.code,
+                        "message": (
+                            f"GitHub API returned {exc.code} authenticated "
+                            f"and {anon_exc.code} anonymous for {path}"
+                        ),
+                    }
+                ) from anon_exc
+            except urllib.error.URLError as anon_exc:
+                raise FailClosed(
+                    {
+                        "kind": "github_api_network_error",
+                        "url": url,
+                        "message": (
+                            f"GitHub API network error on anonymous retry "
+                            f"for {path}: {anon_exc.reason}"
+                        ),
+                    }
+                ) from anon_exc
         raise FailClosed(
             {
                 "kind": "github_api_http_error",
@@ -229,7 +262,7 @@ def walk_docs(
 def resolve_skill_default_branch(
     repo_key: str,
     registry: dict[str, dict[str, Any]],
-    token: str,
+    token: str | None,
     cache: dict[str, str],
 ) -> str:
     if repo_key in cache:
@@ -268,7 +301,7 @@ def walk_version_json(
     target_manifest_skipped: list[dict[str, Any]],
     pair_set: set[tuple[str, str]],
     default_branch_cache: dict[str, str],
-    token: str,
+    token: str | None,
 ) -> None:
     if not VERSION_JSON_PATH.exists():
         return
@@ -420,7 +453,7 @@ def walk_skill_md(
     target_manifest_skipped: list[dict[str, Any]],
     pair_set: set[tuple[str, str]],
     default_branch_cache: dict[str, str],
-    token: str,
+    token: str | None,
 ) -> None:
     fm = parse_skill_md_frontmatter()
     if fm is None:
@@ -503,7 +536,7 @@ def walk_skill_md(
 def resolve_head_shas(
     pair_set: set[tuple[str, str]],
     registry: dict[str, dict[str, Any]],
-    token: str,
+    token: str | None,
 ) -> dict[tuple[str, str], str]:
     head_shas: dict[tuple[str, str], str] = {}
     for repo_key, ref in sorted(pair_set):
@@ -540,25 +573,20 @@ def attach_drift(
 
 
 def main() -> int:
-    token = os.environ.get("GITHUB_TOKEN", "").strip()
-    if not token:
-        diagnostic = {
-            "kind": "missing_github_token",
-            "message": "GITHUB_TOKEN environment variable is not set",
-        }
-        print(
-            json.dumps(
-                {
-                    "status": "error",
-                    "generated_at": datetime.now(timezone.utc).isoformat(),
-                    "records": [],
-                    "target_manifest_skipped": [],
-                    "errors": [diagnostic],
-                },
-                indent=2,
-            )
+    token_raw = os.environ.get("GITHUB_TOKEN", "").strip()
+    token: str | None = token_raw or None
+    notices: list[dict[str, Any]] = []
+    if token is None:
+        notices.append(
+            {
+                "kind": "unauthenticated_mode",
+                "severity": "info",
+                "message": (
+                    "GITHUB_TOKEN not set; using anonymous GitHub API "
+                    "requests (60 req/hour limit)."
+                ),
+            }
         )
-        return 2
 
     try:
         registry = load_registry()
@@ -596,6 +624,7 @@ def main() -> int:
                     "generated_at": datetime.now(timezone.utc).isoformat(),
                     "records": [],
                     "target_manifest_skipped": [],
+                    "notices": notices,
                     "errors": [exc.diagnostic],
                 },
                 indent=2,
@@ -608,6 +637,7 @@ def main() -> int:
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "records": records,
         "target_manifest_skipped": target_manifest_skipped,
+        "notices": notices,
         "errors": [],
     }
     print(json.dumps(output, indent=2))
