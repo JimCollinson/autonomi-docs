@@ -113,6 +113,8 @@ python3 scripts/sweep_poll.py > sweep_report.json
 
 Read `sweep_report.json`. If `status` is `"error"`, post the JSON diagnostics to `$STATUS_ISSUE` and exit. The scanner's fail-closed semantics are documented in `planning/routines/upstream-sweep.md` and in `scripts/sweep_poll.py`.
 
+When posting an HTTP-error diagnostic, read the GitHub API context fields the scanner captures (`body_message`, `ratelimit_remaining`, `ratelimit_reset`, `request_id`, `retry_after`) and quote the specific cause rather than inferring repo state. `ratelimit_remaining: "0"` plus a `body_message` mentioning "API rate limit exceeded" is the sandbox IP burning through anonymous quota — the next run will recover once the window resets. A 403 whose `body_message` references "fine-grained personal access tokens" or "personal access token" is an org-level token policy refusal, not a missing-repo or private-repo signal. Do not claim that a public repo is private from a bare 403; reference the diagnostic field that actually explains the failure. The scanner also attempts an unauthenticated `git ls-remote` fallback before fail-closing on HEAD-resolution failures, and reports the outcome in a `git_ls_remote` block when that fallback also fails.
+
 If `notices` is non-empty, surface those entries in the run summary at step 6 alongside drift counts. The `unauthenticated_mode` notice in particular tells a reviewer that the run used anonymous GitHub reads (60 req/hour) rather than authenticated.
 
 If `target_manifest_skipped` is non-empty, include those entries in the run summary at step 6 as "pinned by target-manifest, not bumped" so a human can confirm those pins remain intentional. Never modify `target-manifest` records.
