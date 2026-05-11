@@ -38,49 +38,31 @@ Apply verbatim:
 
 ## Steps
 
-### 0. Bootstrap the rolling status thread
+### 0. Verify required labels exist
 
-POSIX shell only. No `mapfile`, no Bash arrays, no bash-only parameter expansions, no `gh issue create --json/--jq` (`gh issue create` does not support those flags). Capture-then-decide is the key invariant: any `gh` failure (auth, network, API) must abort the bootstrap immediately rather than be silently coerced into "label missing" or "no open issue".
+The routine writes to two GitHub label classes:
+
+- `upstream-sweep-manual-review` — attached to issues that record ambiguous records needing a human decision (step 5.1).
+- `upstream-sweep-failure` — attached to fresh issues the routine opens when a step fails closed (steps 2, 4.1, and 5).
+
+Both labels are created manually by a human in the docs repo before the routine is enabled. The routine sandbox cannot create labels (no `create_label` MCP tool), so the only safe step here is to verify both labels are present and exit cleanly if either is missing.
 
 ```sh
-set -eu
-
-# (a) labels — capture gh output before deciding so auth/API failure is fatal,
-# not silently coerced into "label missing". Both labels are bootstrapped here
-# so step 5 can use --label upstream-sweep-manual-review without a 404.
 labels=$(gh label list --limit 1000 --json name --jq '.[].name')
-if ! printf '%s\n' "$labels" | grep -qx upstream-sweep-status; then
-  gh label create upstream-sweep-status \
-    --description "Rolling status thread for the daily upstream-sweep routine"
-fi
-if ! printf '%s\n' "$labels" | grep -qx upstream-sweep-manual-review; then
-  gh label create upstream-sweep-manual-review \
-    --description "Ambiguous upstream-sweep records that need a human decision"
-fi
-
-# (b) issue — same capture-then-decide pattern. gh issue create has no
-# --json/--jq, so parse the URL it writes to stdout.
-first_issue=$(gh issue list --state open --label upstream-sweep-status \
-  --limit 1000 --json number --jq 'sort_by(.number) | .[0].number // empty')
-if [ -z "$first_issue" ]; then
-  url=$(gh issue create --title "Upstream sweep status" \
-    --label upstream-sweep-status \
-    --body "Rolling status thread for the daily upstream-sweep routine.")
-  STATUS_ISSUE="${url##*/}"
-else
-  STATUS_ISSUE="$first_issue"
-  count=$(gh issue list --state open --label upstream-sweep-status \
-    --limit 1000 --json number --jq 'length')
-  if [ "$count" -gt 1 ]; then
-    others=$(gh issue list --state open --label upstream-sweep-status \
-      --limit 1000 --json number --jq '[.[].number | tostring] | join(", ")')
-    gh issue comment "$STATUS_ISSUE" --body \
-      "Multiple open issues carry the upstream-sweep-status label: $others. Continuing against #$STATUS_ISSUE (lowest number). Please close the duplicates."
+missing=""
+for needed in upstream-sweep-manual-review upstream-sweep-failure; do
+  if ! printf '%s\n' "$labels" | grep -qx "$needed"; then
+    missing="$missing $needed"
   fi
+done
+if [ -n "$missing" ]; then
+  printf 'Setup error: the following labels must exist in the docs repo before the routine can run:%s\n' "$missing"
+  printf 'Create them at github.com/<owner>/<repo>/labels, then re-run.\n'
+  exit 1
 fi
 ```
 
-`gh issue create --label X` fails when the label is missing, so the label step must precede issue creation. Both `upstream-sweep-status` and `upstream-sweep-manual-review` are bootstrapped here because step 5 opens manual-review issues with the second label and would otherwise 404. Capture `$STATUS_ISSUE` for every status post in later steps.
+This step produces no GitHub artifact — it is purely a precondition gate. The routine session log records the outcome for transient debugging.
 
 ### 1. Open-PR collision check
 
@@ -91,7 +73,7 @@ OPEN_CLAUDE_PRS=$(
 )
 ```
 
-If `OPEN_CLAUDE_PRS` is non-empty, post a collision comment to `$STATUS_ISSUE` listing the open PR numbers, and exit without opening anything. Drift is re-detected on the next run.
+If `OPEN_CLAUDE_PRS` is non-empty, exit silently without opening anything. The open PR is itself the signal that drift is pending review; the routine session log records the collision skip for debugging. Drift is re-detected on the next run after the prior PR(s) merge or close.
 
 `--limit 1000` defeats `gh`'s default 30-row cap so a busy repo cannot hide a still-open prior sweep/prose PR behind pagination. GitHub's `--search` syntax does not reliably match branch prefixes; the JSON list with a client-side prefix filter is the trustworthy form.
 
@@ -111,17 +93,26 @@ fi
 python3 scripts/sweep_poll.py > sweep_report.json
 ```
 
-Read `sweep_report.json`. If `status` is `"error"`, post the JSON diagnostics to `$STATUS_ISSUE` and exit. The scanner's fail-closed semantics are documented in `planning/routines/upstream-sweep.md` and in `scripts/sweep_poll.py`.
+Read `sweep_report.json`. If `status` is `"error"`, open a fresh `upstream-sweep-failure`-labelled issue with the JSON diagnostics in the body, and exit. The scanner's fail-closed semantics are documented in `planning/routines/upstream-sweep.md` and in `scripts/sweep_poll.py`.
 
-When posting an HTTP-error diagnostic, read the GitHub API context fields the scanner captures (`body_message`, `ratelimit_remaining`, `ratelimit_reset`, `request_id`, `retry_after`) and quote the specific cause rather than inferring repo state. `ratelimit_remaining: "0"` plus a `body_message` mentioning "API rate limit exceeded" is the sandbox IP burning through anonymous quota — the next run will recover once the window resets. A 403 whose `body_message` references "fine-grained personal access tokens" or "personal access token" is an org-level token policy refusal, not a missing-repo or private-repo signal. Do not claim that a public repo is private from a bare 403; reference the diagnostic field that actually explains the failure. The scanner also attempts an unauthenticated `git ls-remote` fallback before fail-closing on HEAD-resolution failures, and reports the outcome in a `git_ls_remote` block when that fallback also fails.
+```sh
+gh issue create \
+  --title "Upstream sweep failure — $(date -u +%Y-%m-%d)" \
+  --label upstream-sweep-failure \
+  --body "$(printf '## Fail-closed diagnostic\n\n```json\n%s\n```\n\n## Cause\n\n%s\n' "$(cat sweep_report.json)" "$CAUSE_PROSE")"
+```
 
-If `notices` is non-empty, surface those entries in the run summary at step 6 alongside drift counts. The `unauthenticated_mode` notice in particular tells a reviewer that the run used anonymous GitHub reads (60 req/hour) rather than authenticated.
+When composing the issue body's cause prose, read the GitHub API context fields the scanner captures (`body_message`, `ratelimit_remaining`, `ratelimit_reset`, `request_id`, `retry_after`) and quote the specific cause rather than inferring repo state. `ratelimit_remaining: "0"` plus a `body_message` mentioning "API rate limit exceeded" is the sandbox IP burning through anonymous quota — the next run may recover once the window resets, but the issue still stays open until a human confirms that. A 403 whose `body_message` references "fine-grained personal access tokens" or "personal access token" is an org-level token policy refusal, not a missing-repo or private-repo signal. Do not claim that a public repo is private from a bare 403; reference the diagnostic field that actually explains the failure. The scanner also attempts an unauthenticated `git ls-remote` fallback before fail-closing on HEAD-resolution failures, and reports the outcome in a `git_ls_remote` block when that fallback also fails.
 
-If `target_manifest_skipped` is non-empty, include those entries in the run summary at step 6 as "pinned by target-manifest, not bumped" so a human can confirm those pins remain intentional. Never modify `target-manifest` records.
+`upstream-sweep-failure` issues are never auto-closed by the routine. A human triages each one and closes it deliberately when the underlying cause is understood. Duplicate failure issues across consecutive runs are intentional — they record discrete observations.
+
+If `notices` is non-empty (for example, the `unauthenticated_mode` info diagnostic when no token was available), include the notices in the PR body's `Verification run` section when a PR is opened later in the run. They are not surfaced as standalone artifacts.
+
+If `target_manifest_skipped` is non-empty, include those entries in the sweep PR body and the `planning/sweeps/<YYYY-MM-DD>.md` summary file as "pinned by target-manifest, not bumped" so a human can confirm those pins remain intentional during PR review. Never modify `target-manifest` records.
 
 ### 3. Short-circuit on no drift
 
-If `records` is empty or every record has `drifted: false`, post a no-drift summary table to `$STATUS_ISSUE` (one row per record: location / recorded / HEAD / drifted?) and exit.
+If `records` is empty or every record has `drifted: false`, exit silently. No GitHub artifact is produced. The routine session log preserves the no-drift summary for debugging.
 
 ### 4. Opus audit/write/verify loop
 
@@ -287,17 +278,7 @@ gh issue comment "$ISSUE_NUMBER" \
 
 Use a comment, not a body edit, so the original issue body remains an authoritative record of what was deferred and why, and reused issues accumulate a chronological trail of every run that re-encountered them.
 
-If any of 5.1 / 5.2 / 5.3 errors, post the partial state to `$STATUS_ISSUE` and exit the routine without retrying.
-
-### 6. Run summary
-
-Post a single comment to `$STATUS_ISSUE` summarising the run:
-
-- counts of records scanned, drifted, swept, prose-flagged, manual-review-flagged, and target-manifest-skipped,
-- links to the sweep PR, prose PR, and any new issues,
-- one-line "no drift" or "skipping; prior PRs open" if those short-circuits fired.
-
-Link to the prose PR's body for audit detail rather than duplicating it in this comment.
+If any of 5.1 / 5.2 / 5.3 errors, open a fresh `upstream-sweep-failure`-labelled issue with the partial state in the body (which manual-review issues were created, which PRs were attempted, which call failed and with what error) and exit the routine without retrying. The next-day run sees the open prior PRs (if any) as a collision and exits silently; a human closes the failure issue once the partial state is reconciled.
 
 ## PR body format
 
@@ -318,7 +299,8 @@ The body is intentionally concise — no full audit transcript — but every cla
 - Use only `gh` for GitHub operations. Do not invoke the GitHub MCP server.
 - Bump the skill's `version`, `published_date`, frontmatter `version:`, and `CHANGELOG.md` only when the prose PR's `SKILL.md` body change requires the linked patch release per step 4.8. On `claude/sweep-*` PRs these fields never move.
 - Do not modify `target-manifest` verification blocks. They are pinned for launch hardening.
-- If a step fails, post the error to `$STATUS_ISSUE` and exit. Do not open partial PRs.
-- For per-record fail-closed (e.g., both SHA fetch and compare API failing for one record), open a `manual review needed` issue for that page and continue with the rest of the run.
+- If a step fails, open a fresh `upstream-sweep-failure`-labelled issue with the diagnostic in the body and exit. Do not open partial PRs. Do not auto-close failure issues on a later success — a human triages each one.
+- For per-record fail-closed (e.g., both SHA fetch and compare API failing for one record), open an `upstream-sweep-manual-review`-labelled issue for that page and continue with the rest of the run.
+- Successful no-drift runs and collision skips produce no GitHub artifact. The routine session log is the transient debug trail.
 - Apply the terminology lockfile in `CLAUDE.md` to any prose written in the prose PR or in issue bodies.
 - Cite the pinned `head_sha` in audit notes so a reviewer can reproduce the exact tree the audit consulted.
