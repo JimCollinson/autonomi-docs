@@ -141,10 +141,12 @@ If both the local fetch and the compare API fail for a record, **fail closed for
 #### 4.2 Compute the upstream diff
 
 ```sh
-git log --oneline "<recorded_sha>..<head_sha>"
-git diff --stat "<recorded_sha>..<head_sha>"
-git diff "<recorded_sha>..<head_sha>" -- <focused-paths>
+git -C "$TMP" log --oneline "<recorded_sha>..<head_sha>"
+git -C "$TMP" diff --stat "<recorded_sha>..<head_sha>"
+git -C "$TMP" diff "<recorded_sha>..<head_sha>" -- <focused-paths>
 ```
+
+Every command in this step targets the upstream checkout at `$TMP`. A bare `git log` or `git diff` here would inspect the docs repo (the cwd of the routine), not the upstream tree, and silently produce misleading audit input.
 
 Or read `compare.json` `commits[]` and `files[]` when running via the compare-API fallback.
 

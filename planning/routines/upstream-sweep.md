@@ -62,17 +62,18 @@ If any results come back regardless of date, the routine skips the run, posts a 
 
 For each drifted record, the routine must inspect the diff between `recorded_sha` and `head_sha` against the upstream tree at `head_sha`. **Both SHAs are required.**
 
-Default path: fetch both exact SHAs into a fresh tmp dir.
+Default path: fetch both exact SHAs into a fresh tmp dir without changing the routine's cwd.
 
 ```bash
-git init -q
-git remote add origin <url>
-git fetch --depth 1 origin <recorded_sha>
-git fetch --depth 1 origin <head_sha>
-git checkout --detach <head_sha>
+TMP=$(mktemp -d)
+git -C "$TMP" init -q
+git -C "$TMP" remote add origin <url>
+git -C "$TMP" fetch --depth 1 origin <recorded_sha>
+git -C "$TMP" fetch --depth 1 origin <head_sha>
+git -C "$TMP" checkout --detach <head_sha>
 ```
 
-Then `git log <recorded_sha>..<head_sha>` and `git diff <recorded_sha>..<head_sha>` work locally.
+Then `git -C "$TMP" log <recorded_sha>..<head_sha>` and `git -C "$TMP" diff <recorded_sha>..<head_sha>` work against the upstream tree while the routine's cwd remains the docs repo. Every git command in the audit step must carry `-C "$TMP"`; a bare `git log` or `git diff` would inspect the docs repo by accident. See `planning/routines/upstream-sweep-prompt.md` Step 4.1 and Step 4.2 for the executable form.
 
 Fallback path: if either `git fetch` fails (reachable-SHA fetches disabled by the repo, SHA garbage-collected, network failure), use the GitHub compare API:
 
@@ -194,7 +195,7 @@ Required model: **Opus 4.7 or higher**. The deterministic scanner is only the dr
 For each drifted record:
 
 1. **Fetch both SHAs** per `## Audit-diff fetch rule`. If both fetch and compare API fail, fail closed for the page → manual-review issue.
-2. **Compute the upstream diff**: `git log --oneline <recorded>..<head>`, `git diff --stat <recorded>..<head>`, targeted `git diff <recorded>..<head> -- <path>`. Or read the compare API response when running via fallback.
+2. **Compute the upstream diff**: `git -C "$TMP" log --oneline <recorded>..<head>`, `git -C "$TMP" diff --stat <recorded>..<head>`, targeted `git -C "$TMP" diff <recorded>..<head> -- <path>`. Every git invocation in this step carries `-C "$TMP"` so it inspects the upstream checkout rather than the docs repo. Or read the compare API response when running via fallback.
 3. **Inspect upstream source artifacts** at `head_sha` (OpenAPI specs, `.proto` files, CLI source and `--help` output, public Rust modules, README/docs). Use `repo-registry.yml`'s `topics:` and `component-registry.yml`'s component map to focus on artifacts the affected page actually depends on.
 4. **Compare against the affected docs pages** and `skills/start/SKILL.md`. Identify any rendered claim, code sample, command, endpoint, type, field, or live-reference URL that no longer matches the pinned source.
 5. **Classify the record** as `metadata-only`, `prose`, or `ambiguous` (see prompt step 4.5 for criteria).
