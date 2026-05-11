@@ -233,7 +233,7 @@ Read access uses a token tier that the prompt resolves at runtime, in order:
 2. `gh auth token`, when the routine sandbox carries a GitHub App installation token usable by the `gh` CLI. Provides the higher rate limit on repos covered by the installation; for orgs outside the installation, the scanner's authenticated-403-to-anonymous retry handles the lookup.
 3. Anonymous reads, as a last resort. Limited to 60 req/hour on the sandbox IP, sufficient for the daily sweep over the public upstream registry but vulnerable to shared-IP exhaustion.
 
-Write access uses the `gh` CLI's own auth context independently of `GITHUB_TOKEN`. The routine never writes against an upstream repo, only against `withautonomi/autonomi-developer-docs`.
+Write access uses the `gh` CLI. `gh` respects `GITHUB_TOKEN` when set, so a configured `GITHUB_TOKEN` must include the docs-repo write scopes (`contents: write`, `pull-requests: write`, `issues: write`) — otherwise issue, label, and PR creation will fail at runtime. When `GITHUB_TOKEN` is unset, `gh` uses its stored auth context (typically a GitHub App installation token, which has the necessary scopes by design). The routine never writes against an upstream repo, only against `withautonomi/autonomi-developer-docs`.
 
 Token preferences for production runs, in priority order:
 
@@ -300,11 +300,11 @@ Forward compatibility: when `notify-docs.yml` rolls out in upstream repos, the s
 
 1. Add `sweep-guard`, `prose-guard`, and `sweep-sha-reachability` (the exact workflow `name:` strings) as required checks on `main` in repo settings → Branch protection.
 2. Confirm the routine's bot identity has push access. If branch protection requires reviewers, ensure the bot is granted bypass or has CODEOWNERS coverage on `planning/sweeps/*` and the metadata-only paths, or accept that the user reviews each PR by hand.
-3. Provision the `GITHUB_TOKEN` secret in the Claude Desktop routine config per the credentials section above.
+3. If using a `GITHUB_TOKEN` secret, provision it in the Claude Desktop routine config per the credentials section above. The secret is optional; when unset the routine derives a token from `gh auth token` and falls back to anonymous reads.
 
 ## Out of scope
 
-- Claude Desktop Remote routine config (model = Opus 4.7 or higher, schedule, secret value of `GITHUB_TOKEN`) — lives in Claude Desktop, not in this repo. The behaviour (the prompt) is committed at `planning/routines/upstream-sweep-prompt.md`.
+- Claude Desktop Remote routine config (model = Opus 4.7 or higher, schedule, any optional `GITHUB_TOKEN` secret value) — lives in Claude Desktop, not in this repo. The behaviour (the prompt) is committed at `planning/routines/upstream-sweep-prompt.md`.
 - `notify-docs.yml` installation in any upstream repo — tracked under `planning/implementation-plan.md` Section 8.2.
 - Per-event sweep PRs — deferred to v2 of the trigger shape.
 - Auto-merge — deferred to v1.5. The label-driven `sweep-auto-merge` workflow ships once all three required checks have run cleanly for several weeks.

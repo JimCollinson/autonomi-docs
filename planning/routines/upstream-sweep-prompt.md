@@ -1,6 +1,6 @@
 # Upstream sweep — routine prompt
 
-This is the prompt the Claude Desktop Remote routine executes once per day. The behaviour lives in version control so it is reviewable, diffable, and rollback-able. The Claude Desktop routine config references this file by URL or paste-in. Schedule, model selection, and the `GITHUB_TOKEN` secret value live in Claude Desktop, not in this repo.
+This is the prompt the Claude Desktop Remote routine executes once per day. The behaviour lives in version control so it is reviewable, diffable, and rollback-able. The Claude Desktop routine config references this file by URL or paste-in. Schedule, model selection, and any `GITHUB_TOKEN` secret value live in Claude Desktop, not in this repo.
 
 ## Goal
 
@@ -21,7 +21,7 @@ Do not run this prompt under a smaller model.
 
 - The `Bash` tool, with the docs repo cloned at the working directory.
 - The `gh` CLI for all GitHub operations (PR list/create, issue list/create, comment).
-- `GITHUB_TOKEN` in the environment, optional. When set, the scanner uses it for the higher 5000 req/hour rate limit. When unset, the scanner derives a token from `gh auth token` if available, then falls back to anonymous reads (60 req/hour) for public upstream repos. Write access to `withautonomi/autonomi-developer-docs` is provided by the `gh` CLI's own auth context regardless of `GITHUB_TOKEN`.
+- `GITHUB_TOKEN` in the environment, optional. When set, the scanner uses it for the higher 5000 req/hour rate limit, and the `gh` CLI also picks it up for issue, label, and PR writes against `withautonomi/autonomi-developer-docs` — a configured `GITHUB_TOKEN` must therefore carry the docs-repo write scopes (`contents: write`, `pull-requests: write`, `issues: write`) or those steps will fail. When unset, the scanner derives a token from `gh auth token` if available, then falls back to anonymous reads (60 req/hour) for public upstream repos; `gh` uses its stored auth context (typically a GitHub App installation token) for writes.
 - `python3` plus the PyYAML pin from `scripts/requirements.txt`.
 
 Use `gh` consistently for GitHub work. Do not call the GitHub MCP server.
