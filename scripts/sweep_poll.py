@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
@@ -70,6 +71,44 @@ def _github_get(url: str, token: str | None) -> dict[str, Any]:
         return json.loads(resp.read().decode("utf-8"))
 
 
+def _http_error_context(exc: urllib.error.HTTPError) -> dict[str, Any]:
+    # Drain headers and body once so a bare 403 in a status comment carries
+    # enough signal (rate-limit state, GitHub's own error message, the
+    # request id) to distinguish org-policy refusal from anonymous quota
+    # exhaustion from a transient outage.
+    raw_headers = exc.headers if exc.headers is not None else {}
+    body_text = ""
+    try:
+        raw = exc.read()
+        if raw:
+            body_text = raw.decode("utf-8", errors="replace")
+    except Exception:
+        body_text = ""
+    body_message: str | None = body_text.strip()[:500] if body_text else None
+    try:
+        parsed = json.loads(body_text)
+        if isinstance(parsed, dict) and isinstance(parsed.get("message"), str):
+            body_message = parsed["message"][:500]
+    except (ValueError, TypeError):
+        pass
+
+    def _h(name: str) -> str | None:
+        value = raw_headers.get(name)
+        return str(value) if value is not None else None
+
+    return {
+        "status": exc.code,
+        "body_message": body_message,
+        "request_id": _h("x-github-request-id"),
+        "ratelimit_limit": _h("x-ratelimit-limit"),
+        "ratelimit_remaining": _h("x-ratelimit-remaining"),
+        "ratelimit_used": _h("x-ratelimit-used"),
+        "ratelimit_reset": _h("x-ratelimit-reset"),
+        "ratelimit_resource": _h("x-ratelimit-resource"),
+        "retry_after": _h("retry-after"),
+    }
+
+
 def github_request(path: str, token: str | None = None) -> dict[str, Any]:
     # An authenticated 403 means the org refuses the token, not that the repo
     # is unreachable. Retry once without auth so public repos in orgs that
@@ -77,20 +116,25 @@ def github_request(path: str, token: str | None = None) -> dict[str, Any]:
     url = f"https://api.github.com{path}"
     try:
         return _github_get(url, token)
-    except urllib.error.HTTPError as exc:
-        if exc.code == 403 and token:
+    except urllib.error.HTTPError as auth_exc:
+        if auth_exc.code == 403 and token:
+            auth_context = _http_error_context(auth_exc)
             try:
                 return _github_get(url, None)
             except urllib.error.HTTPError as anon_exc:
+                anon_context = _http_error_context(anon_exc)
                 raise FailClosed(
                     {
                         "kind": "github_api_http_error",
                         "url": url,
-                        "status": anon_exc.code,
-                        "auth_status": exc.code,
+                        "status": anon_context["status"],
+                        "auth_status": auth_context["status"],
+                        "auth": auth_context,
+                        "anon": anon_context,
                         "message": (
-                            f"GitHub API returned {exc.code} authenticated "
-                            f"and {anon_exc.code} anonymous for {path}"
+                            f"GitHub API returned {auth_context['status']} "
+                            f"authenticated and {anon_context['status']} "
+                            f"anonymous for {path}"
                         ),
                     }
                 ) from anon_exc
@@ -99,20 +143,24 @@ def github_request(path: str, token: str | None = None) -> dict[str, Any]:
                     {
                         "kind": "github_api_network_error",
                         "url": url,
+                        "auth_status": auth_context["status"],
+                        "auth": auth_context,
+                        "anon_network_error": str(anon_exc.reason),
                         "message": (
                             f"GitHub API network error on anonymous retry "
                             f"for {path}: {anon_exc.reason}"
                         ),
                     }
                 ) from anon_exc
+        context = _http_error_context(auth_exc)
         raise FailClosed(
             {
                 "kind": "github_api_http_error",
                 "url": url,
-                "status": exc.code,
-                "message": f"GitHub API returned {exc.code} for {path}",
+                **context,
+                "message": f"GitHub API returned {context['status']} for {path}",
             }
-        ) from exc
+        ) from auth_exc
     except urllib.error.URLError as exc:
         raise FailClosed(
             {
@@ -121,6 +169,69 @@ def github_request(path: str, token: str | None = None) -> dict[str, Any]:
                 "message": f"GitHub API network error for {path}: {exc.reason}",
             }
         ) from exc
+
+
+def git_ls_remote_sha(url: str, ref: str) -> tuple[str | None, str | None]:
+    """Resolve a named ref to a 40-hex SHA via unauthenticated git ls-remote.
+
+    git smart-HTTP uses a different infrastructure path from the REST API, so
+    this bypasses both org-level fine-grained PAT restrictions and the REST
+    anonymous rate limit. Returns (sha, None) on success or (None, error) on
+    failure. A bare commit SHA in `ref` cannot be resolved this way (ls-remote
+    lists refs, not arbitrary objects).
+    """
+    try:
+        result = subprocess.run(
+            ["git", "ls-remote", "--exit-code", url, ref],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return None, f"git ls-remote {url} {ref}: timeout after 30s"
+    except FileNotFoundError:
+        return None, "git ls-remote: 'git' executable not found on PATH"
+    if result.returncode != 0:
+        err = (result.stderr or result.stdout).strip()[:300]
+        return (
+            None,
+            f"git ls-remote {url} {ref}: exit {result.returncode}: {err}",
+        )
+    for line in result.stdout.splitlines():
+        sha, _, _ = line.partition("\t")
+        sha = sha.strip()
+        if len(sha) == 40 and all(c in "0123456789abcdef" for c in sha):
+            return sha, None
+    return None, f"git ls-remote {url} {ref}: no 40-hex SHA in output"
+
+
+def git_ls_remote_default_branch(url: str) -> tuple[str | None, str | None]:
+    """Resolve the remote's default branch via git ls-remote --symref HEAD."""
+    try:
+        result = subprocess.run(
+            ["git", "ls-remote", "--exit-code", "--symref", url, "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return None, f"git ls-remote --symref {url} HEAD: timeout after 30s"
+    except FileNotFoundError:
+        return None, "git ls-remote: 'git' executable not found on PATH"
+    if result.returncode != 0:
+        err = (result.stderr or result.stdout).strip()[:300]
+        return (
+            None,
+            f"git ls-remote --symref {url} HEAD: exit {result.returncode}: {err}",
+        )
+    for line in result.stdout.splitlines():
+        if line.startswith("ref: refs/heads/"):
+            branch = line.split("refs/heads/", 1)[1].split("\t", 1)[0].strip()
+            if branch:
+                return branch, None
+    return None, f"git ls-remote --symref {url} HEAD: no symbolic ref in output"
 
 
 def parse_owner_repo(url: str) -> tuple[str, str]:
@@ -279,7 +390,24 @@ def resolve_skill_default_branch(
             }
         )
     owner, repo = parse_owner_repo(registry[repo_key]["url"])
-    meta = github_request(f"/repos/{owner}/{repo}", token)
+    try:
+        meta = github_request(f"/repos/{owner}/{repo}", token)
+    except FailClosed as rest_exc:
+        clone_url = f"https://github.com/{owner}/{repo}.git"
+        fallback_branch, fallback_err = git_ls_remote_default_branch(clone_url)
+        if fallback_branch:
+            cache[repo_key] = fallback_branch
+            return fallback_branch
+        diag = dict(rest_exc.diagnostic)
+        diag["git_ls_remote"] = {
+            "url": clone_url,
+            "error": fallback_err,
+        }
+        diag["message"] = (
+            f"{diag.get('message', '')}; ls-remote fallback also failed: "
+            f"{fallback_err}"
+        )
+        raise FailClosed(diag) from rest_exc
     branch = meta.get("default_branch")
     if not isinstance(branch, str) or not branch:
         raise FailClosed(
@@ -542,9 +670,30 @@ def resolve_head_shas(
     for repo_key, ref in sorted(pair_set):
         owner, repo = parse_owner_repo(registry[repo_key]["url"])
         encoded_ref = urllib.parse.quote(ref, safe="")
-        commit = github_request(
-            f"/repos/{owner}/{repo}/commits/{encoded_ref}", token
-        )
+        try:
+            commit = github_request(
+                f"/repos/{owner}/{repo}/commits/{encoded_ref}", token
+            )
+        except FailClosed as rest_exc:
+            # Final fallback: unauthenticated git ls-remote. Bypasses both
+            # org-level fine-grained PAT restrictions and the REST anonymous
+            # rate-limit since git smart-HTTP uses a separate code path.
+            clone_url = f"https://github.com/{owner}/{repo}.git"
+            fallback_sha, fallback_err = git_ls_remote_sha(clone_url, ref)
+            if fallback_sha is not None:
+                head_shas[(repo_key, ref)] = fallback_sha
+                continue
+            diag = dict(rest_exc.diagnostic)
+            diag["git_ls_remote"] = {
+                "url": clone_url,
+                "ref": ref,
+                "error": fallback_err,
+            }
+            diag["message"] = (
+                f"{diag.get('message', '')}; ls-remote fallback also failed: "
+                f"{fallback_err}"
+            )
+            raise FailClosed(diag) from rest_exc
         sha = commit.get("sha")
         if not isinstance(sha, str) or not sha:
             raise FailClosed(

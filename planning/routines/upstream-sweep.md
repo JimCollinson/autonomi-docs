@@ -231,7 +231,8 @@ Read access uses a token tier that the prompt resolves at runtime, in order:
 
 1. `GITHUB_TOKEN` in the routine environment, when set. Recommended for the higher authenticated rate limit (5000 req/hour) and broadest cross-org access.
 2. `gh auth token`, when the routine sandbox carries a GitHub App installation token usable by the `gh` CLI. Provides the higher rate limit on repos covered by the installation; for orgs outside the installation, the scanner's authenticated-403-to-anonymous retry handles the lookup.
-3. Anonymous reads, as a last resort. Limited to 60 req/hour on the sandbox IP, sufficient for the daily sweep over the public upstream registry but vulnerable to shared-IP exhaustion.
+3. Anonymous REST reads, as a fallback when the authenticated request 403s. Limited to 60 req/hour on the sandbox IP.
+4. Unauthenticated `git ls-remote` against the public clone URL, as a final fallback for HEAD-SHA and default-branch resolution. The git smart-HTTP protocol uses a separate code path from the REST API, so this bypasses both org-level fine-grained PAT restrictions and the REST anonymous rate limit. Only works for public repos.
 
 Write access uses the `gh` CLI. `gh` respects `GITHUB_TOKEN` when set, so a configured `GITHUB_TOKEN` must include the docs-repo write scopes (`contents: write`, `pull-requests: write`, `issues: write`) — otherwise issue, label, and PR creation will fail at runtime. When `GITHUB_TOKEN` is unset, `gh` uses its stored auth context (typically a GitHub App installation token, which has the necessary scopes by design). The routine never writes against an upstream repo, only against `withautonomi/autonomi-developer-docs`.
 
@@ -250,7 +251,7 @@ SHAs are bumped only after the per-page audit step succeeds against the pinned u
 
 Scanner fail-closed (whole run aborts):
 
-- GitHub API 4xx/5xx on a HEAD or repo metadata lookup. An authenticated 403 is retried once without the `Authorization` header before fail-closing, so public repos in orgs that refuse fine-grained PATs resolve via the anonymous retry rather than aborting the run.
+- GitHub API 4xx/5xx on a HEAD or repo metadata lookup, after the resolver has exhausted its fallbacks. An authenticated 403 is retried once without the `Authorization` header, and a still-failing HEAD or default-branch lookup is then re-attempted via unauthenticated `git ls-remote` against the public clone URL. The run aborts only when every path fails. The diagnostic captures the response body, rate-limit state, `x-github-request-id`, and `retry-after` for each REST attempt, plus the `git ls-remote` outcome, so the status comment can distinguish org-policy refusal from anonymous-quota exhaustion from a transient outage.
 - network timeout,
 - malformed `<!-- verification:` block (missing `source_repo`, `source_ref`, `source_commit`, or `verification_mode`),
 - missing or unknown file-level `verification_mode` on `version.json` or `SKILL.md` frontmatter,
