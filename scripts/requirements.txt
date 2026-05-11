@@ -1,0 +1,7 @@
+# Used by scripts/sweep_poll.py for local + routine runs.
+# .github/workflows/sweep-guard.yml, prose-guard.yml, and
+# sweep-sha-reachability.yml duplicate this pin literally as
+#   pip install 'PyYAML>=6,<7'
+# to avoid installing from a PR-controlled file. If you change the pin here,
+# update those workflow YAMLs in the same PR.
+PyYAML>=6,<7

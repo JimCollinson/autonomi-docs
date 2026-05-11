@@ -1,0 +1,589 @@
+name: prose-guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  guard:
+    name: prose-guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scope gate
+        id: scope
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          if [[ "$HEAD_REF" == claude/prose-* ]]; then
+            echo "in_scope=true" >> "$GITHUB_OUTPUT"
+            echo "In scope: head ref is $HEAD_REF" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "in_scope=false" >> "$GITHUB_OUTPUT"
+            echo "Out of scope (head ref is not claude/prose-): $HEAD_REF" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Checkout PR head
+        if: steps.scope.outputs.in_scope == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        if: steps.scope.outputs.in_scope == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install scanner dependencies
+        if: steps.scope.outputs.in_scope == 'true'
+        # Pinned literally rather than installed from scripts/requirements.txt:
+        # the requirements file is PR-controlled and could be swapped for a
+        # hostile package on a malicious PR. Workflow YAMLs require repo-admin
+        # permissions to modify, so this pin lives at a trust boundary the
+        # guard does not need to validate.
+        run: pip install 'PyYAML>=6,<7'
+
+      - name: Validate prose envelope and skill linked-release rule
+        if: steps.scope.outputs.in_scope == 'true'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          import yaml
+
+          BASE = os.environ["BASE_SHA"]
+          HEAD = os.environ["HEAD_SHA"]
+          HEAD_REF = os.environ["HEAD_REF"]
+          SUMMARY_PATH = os.environ.get("GITHUB_STEP_SUMMARY")
+          BRANCH_DATE_RE = re.compile(
+              r"^claude/prose-(\d{4}-\d{2}-\d{2})(?:-[a-z0-9][a-z0-9-]*)?$"
+          )
+          DOCS_PREFIX = "docs/"
+          SWEEPS_PREFIX = "planning/sweeps/"
+          SWEEP_FILE_RE = re.compile(r"^planning/sweeps/(\d{4}-\d{2}-\d{2})\.md$")
+          VERSION_JSON_PATH = "skills/start/version.json"
+          SKILL_MD_PATH = "skills/start/SKILL.md"
+          CHANGELOG_PATH = "skills/start/CHANGELOG.md"
+          ALLOWED_PATH_PREFIXES = ("docs/", "skills/start/", "planning/sweeps/")
+          ALLOWED_EXACT_PATHS = {
+              "skills/start/SKILL.md",
+              "skills/start/version.json",
+              "skills/start/CHANGELOG.md",
+          }
+          FORBIDDEN_PATH_PREFIXES = ("scripts/", ".github/")
+          FORBIDDEN_EXACT_PATHS = {"repo-registry.yml", "component-registry.yml"}
+          # version.json fields that ride with a linked release
+          RELEASE_VERSION_JSON_KEYS = {"version", "published_date"}
+          # frontmatter keys that ride with a linked release
+          RELEASE_SKILL_FRONTMATTER_KEYS = {"version"}
+          # version.json fields the routine refreshes regardless
+          REFRESH_VERSION_JSON_KEYS = {"verified_commits"}
+          # frontmatter fields the routine refreshes regardless
+          REFRESH_SKILL_FRONTMATTER_KEYS = {"verified_commits", "verified_date"}
+          SEMVER_RE = re.compile(
+              r"^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)(?P<suffix>[-+].+)?$"
+          )
+          VERIFICATION_BLOCK_RE = re.compile(
+              r"<!--\s*verification:(.*?)-->", re.DOTALL
+          )
+          BLOCK_KEY_VALUE_RE = re.compile(r"^\s*([a-z_]+)\s*:\s*(\S.*?)\s*$")
+          DRAFT_SUFFIX = "-draft"
+
+          violations: list[str] = []
+
+          def fail(loc: str, msg: str) -> None:
+              violations.append(f"{loc}: {msg}")
+
+          def run(cmd: list[str]) -> str:
+              return subprocess.check_output(cmd, text=True)
+
+          def show(ref: str, path: str) -> str | None:
+              try:
+                  return subprocess.check_output(
+                      ["git", "show", f"{ref}:{path}"],
+                      text=True,
+                      stderr=subprocess.DEVNULL,
+                  )
+              except subprocess.CalledProcessError:
+                  return None
+
+          name_status = run(
+              ["git", "diff", "--name-status", "-z", f"{BASE}..{HEAD}"]
+          )
+          # -z output is NUL-separated. For renames the entry is
+          # "R<score>\0<old>\0<new>". For everything else "<status>\0<path>".
+          # Both the old and new paths are recorded so the envelope check
+          # sees forbidden old paths even when a rename lands them under an
+          # allowed new prefix.
+          tokens = [t for t in name_status.split("\0") if t]
+          changes: list[tuple[str, str]] = []
+          i = 0
+          while i < len(tokens):
+              status = tokens[i]
+              if status.startswith(("R", "C")):
+                  if i + 2 >= len(tokens):
+                      fail("git diff", "unexpected -z output truncation")
+                      break
+                  changes.append((status[0], tokens[i + 1]))
+                  changes.append((status[0], tokens[i + 2]))
+                  i += 3
+              else:
+                  if i + 1 >= len(tokens):
+                      fail("git diff", "unexpected -z output truncation")
+                      break
+                  changes.append((status, tokens[i + 1]))
+                  i += 2
+
+          branch_match = BRANCH_DATE_RE.match(HEAD_REF)
+          if not branch_match:
+              fail(
+                  HEAD_REF,
+                  "branch name does not match claude/prose-YYYY-MM-DD[-slug]; "
+                  "the guard cannot bind sweep summary files to a date",
+              )
+          branch_date = branch_match.group(1) if branch_match else None
+          expected_sweep_path = (
+              f"planning/sweeps/{branch_date}.md" if branch_date else None
+          )
+
+          changed_paths = sorted({path for _status, path in changes})
+
+          # Positive path allowlist: every changed path must match one of
+          # docs/**/*.md, skills/start/SKILL.md, skills/start/version.json,
+          # skills/start/CHANGELOG.md, or planning/sweeps/<branch-date>.md.
+          # Anything else fails closed. The forbidden-path list below is
+          # redundant defence-in-depth so the failure message names the
+          # specific infrastructure category when applicable.
+          for path in changed_paths:
+              if any(path.startswith(p) for p in FORBIDDEN_PATH_PREFIXES) or (
+                  path in FORBIDDEN_EXACT_PATHS
+              ):
+                  fail(
+                      path,
+                      "infrastructure file outside the prose envelope; "
+                      "the routine never modifies scripts/, .github/, "
+                      "repo-registry.yml, or component-registry.yml",
+                  )
+                  continue
+              allowed = False
+              if path.startswith(DOCS_PREFIX) and path.endswith(".md"):
+                  allowed = True
+              elif path in ALLOWED_EXACT_PATHS:
+                  allowed = True
+              elif path.startswith(SWEEPS_PREFIX):
+                  # Sweep summary path validated below; just permit here.
+                  allowed = True
+              if not allowed:
+                  fail(path, "path outside the prose envelope")
+
+          def parse_frontmatter(text: str) -> tuple[dict, str]:
+              if not text.startswith("---"):
+                  return {}, text
+              end = text.find("\n---", 3)
+              if end < 0:
+                  return {}, text
+              raw = text[3:end]
+              try:
+                  loaded = yaml.safe_load(raw) or {}
+              except yaml.YAMLError as exc:
+                  fail(SKILL_MD_PATH, f"frontmatter YAML parse error: {exc}")
+                  loaded = {}
+              body = text[end + 4 :]
+              return loaded, body
+
+          def parse_semver(version: str) -> tuple[int, int, int, str] | None:
+              match = SEMVER_RE.match(version.strip())
+              if not match:
+                  return None
+              return (
+                  int(match.group("major")),
+                  int(match.group("minor")),
+                  int(match.group("patch")),
+                  match.group("suffix") or "",
+              )
+
+          # Prepare base/head views of the skill files.
+          base_version_text = show(BASE, VERSION_JSON_PATH)
+          head_version_text = show(HEAD, VERSION_JSON_PATH)
+          base_skill_text = show(BASE, SKILL_MD_PATH)
+          head_skill_text = show(HEAD, SKILL_MD_PATH)
+          base_changelog_text = show(BASE, CHANGELOG_PATH) or ""
+          head_changelog_text = show(HEAD, CHANGELOG_PATH) or ""
+
+          base_version_obj: dict = {}
+          head_version_obj: dict = {}
+          if base_version_text is not None:
+              try:
+                  base_version_obj = json.loads(base_version_text)
+              except json.JSONDecodeError as exc:
+                  fail(VERSION_JSON_PATH, f"base JSON parse error: {exc}")
+          if head_version_text is not None:
+              try:
+                  head_version_obj = json.loads(head_version_text)
+              except json.JSONDecodeError as exc:
+                  fail(VERSION_JSON_PATH, f"head JSON parse error: {exc}")
+
+          base_fm: dict = {}
+          base_skill_body = ""
+          head_fm: dict = {}
+          head_skill_body = ""
+          if base_skill_text is not None:
+              base_fm, base_skill_body = parse_frontmatter(base_skill_text)
+          if head_skill_text is not None:
+              head_fm, head_skill_body = parse_frontmatter(head_skill_text)
+
+          skill_body_changed = base_skill_body != head_skill_body
+          version_value_changed = base_version_obj.get("version") != head_version_obj.get("version")
+          published_date_changed = (
+              base_version_obj.get("published_date")
+              != head_version_obj.get("published_date")
+          )
+          frontmatter_version_changed = base_fm.get("version") != head_fm.get("version")
+          changelog_changed = base_changelog_text != head_changelog_text
+
+          def block_body_is_target_manifest(body: str) -> bool:
+              for raw in body.splitlines():
+                  match = BLOCK_KEY_VALUE_RE.match(raw.strip())
+                  if match and match.group(1) == "verification_mode":
+                      return match.group(2) == "target-manifest"
+              return False
+
+          def target_manifest_block_bodies(text: str) -> list[str]:
+              # Each entry is the literal byte content between the opening
+              # "<!-- verification:" and the closing "-->" (group 1 of the
+              # regex). Multiset comparison on this raw form catches any
+              # byte-level edit, including comments and future fields.
+              out: list[str] = []
+              for match in VERIFICATION_BLOCK_RE.finditer(text):
+                  body = match.group(1)
+                  if block_body_is_target_manifest(body):
+                      out.append(body)
+              return out
+
+          # 0a) Target-manifest docs blocks must be unchanged. Multiset of
+          # block bodies on each side must match. Any byte-level diff inside
+          # a target-manifest block, any flip of verification_mode, or any
+          # add/remove of a target-manifest block fails closed.
+          for path in changed_paths:
+              if not (path.startswith(DOCS_PREFIX) and path.endswith(".md")):
+                  continue
+              base_text = show(BASE, path) or ""
+              head_text = show(HEAD, path) or ""
+              base_tm = sorted(target_manifest_block_bodies(base_text))
+              head_tm = sorted(target_manifest_block_bodies(head_text))
+              if base_tm != head_tm:
+                  fail(
+                      path,
+                      "target-manifest verification block changed; "
+                      "manual override required",
+                  )
+
+          # 0b) Target-manifest version.json: if either side has top-level
+          # verification_mode: target-manifest, both verification_mode and
+          # verified_commits must be structurally equal between base and
+          # head. Structural (parsed-object) equality avoids false positives
+          # from cosmetic re-serialisation but still catches every
+          # meaningful change.
+          base_vjson_mode = base_version_obj.get("verification_mode")
+          head_vjson_mode = head_version_obj.get("verification_mode")
+          if "target-manifest" in (base_vjson_mode, head_vjson_mode):
+              if (
+                  base_vjson_mode != head_vjson_mode
+                  or base_version_obj.get("verified_commits")
+                  != head_version_obj.get("verified_commits")
+                  or base_version_obj.get("verified_date")
+                  != head_version_obj.get("verified_date")
+              ):
+                  fail(
+                      VERSION_JSON_PATH,
+                      "target-manifest verification block changed; "
+                      "manual override required",
+                  )
+
+          # 0c) Target-manifest SKILL.md frontmatter: same rule.
+          base_fm_mode = base_fm.get("verification_mode")
+          head_fm_mode = head_fm.get("verification_mode")
+          if "target-manifest" in (base_fm_mode, head_fm_mode):
+              if (
+                  base_fm_mode != head_fm_mode
+                  or base_fm.get("verified_commits")
+                  != head_fm.get("verified_commits")
+                  or base_fm.get("verified_date")
+                  != head_fm.get("verified_date")
+              ):
+                  fail(
+                      SKILL_MD_PATH,
+                      "target-manifest verification block changed; "
+                      "manual override required",
+                  )
+
+          # 1) verified_commits key set must be locked in both files.
+          # Read raw values (no `... or {}` coercion) so that null, list,
+          # string, or any other non-map fails closed before the key-set
+          # check runs. The routine emits a map only.
+          for path, base_obj, head_obj in (
+              (VERSION_JSON_PATH, base_version_obj, head_version_obj),
+              (SKILL_MD_PATH, base_fm, head_fm),
+          ):
+              if "verified_commits" not in base_obj:
+                  fail(path, "verified_commits missing on base")
+                  continue
+              if "verified_commits" not in head_obj:
+                  fail(path, "verified_commits missing on head")
+                  continue
+              base_commits = base_obj["verified_commits"]
+              head_commits = head_obj["verified_commits"]
+              if not isinstance(base_commits, dict):
+                  fail(
+                      path,
+                      "verified_commits is not a map/object on base; "
+                      "the routine emits a map only",
+                  )
+                  continue
+              if not isinstance(head_commits, dict):
+                  fail(
+                      path,
+                      "verified_commits is not a map/object on head; "
+                      "the routine emits a map only",
+                  )
+                  continue
+              if set(base_commits.keys()) != set(head_commits.keys()):
+                  added = sorted(set(head_commits) - set(base_commits))
+                  removed = sorted(set(base_commits) - set(head_commits))
+                  detail = []
+                  if added:
+                      detail.append(f"added: {', '.join(added)}")
+                  if removed:
+                      detail.append(f"removed: {', '.join(removed)}")
+                  fail(
+                      path,
+                      "verified_commits key set changed; the routine may only "
+                      "refresh values, not add or remove repos "
+                      f"({'; '.join(detail)})",
+                  )
+
+          # 2) version.json forbidden-key check: anything outside the refresh
+          # set or the release set is forbidden everywhere. status is called
+          # out specifically because flipping it (e.g., draft -> stable) is a
+          # promotion event that must happen on a manually-prepared branch
+          # outside the upstream-sweep namespace.
+          if base_version_obj or head_version_obj:
+              all_keys = set(base_version_obj) | set(head_version_obj)
+              for key in sorted(all_keys):
+                  if base_version_obj.get(key) == head_version_obj.get(key):
+                      continue
+                  if key == "status":
+                      fail(
+                          VERSION_JSON_PATH,
+                          "status changed (immutable in upstream-sweep PRs): "
+                          f"{base_version_obj.get('status')!r} -> "
+                          f"{head_version_obj.get('status')!r}",
+                      )
+                      continue
+                  if (
+                      key in REFRESH_VERSION_JSON_KEYS
+                      or key in RELEASE_VERSION_JSON_KEYS
+                  ):
+                      continue
+                  fail(
+                      VERSION_JSON_PATH,
+                      f"forbidden field changed: {key} "
+                      "(only verified_commits, version, and published_date may "
+                      "differ in a prose PR)",
+                  )
+
+          # 3) frontmatter forbidden-key check: anything outside refresh + release
+          # set is forbidden.
+          if base_fm or head_fm:
+              all_keys = set(base_fm) | set(head_fm)
+              for key in sorted(all_keys):
+                  if base_fm.get(key) == head_fm.get(key):
+                      continue
+                  if (
+                      key in REFRESH_SKILL_FRONTMATTER_KEYS
+                      or key in RELEASE_SKILL_FRONTMATTER_KEYS
+                  ):
+                      continue
+                  fail(
+                      SKILL_MD_PATH,
+                      f"forbidden frontmatter key changed: {key} "
+                      "(only verified_commits, verified_date, and version "
+                      "may differ in a prose PR)",
+                  )
+
+          # 4) Linked-release rule (both directions).
+          if skill_body_changed:
+              # All five linked-release fields must move.
+              missing: list[str] = []
+              if not version_value_changed:
+                  missing.append("skills/start/version.json: version (must bump to a new patch)")
+              if not published_date_changed:
+                  missing.append("skills/start/version.json: published_date (must update)")
+              if not frontmatter_version_changed:
+                  missing.append("skills/start/SKILL.md frontmatter version: (must match new version.json)")
+              # verified_date must change too.
+              if base_fm.get("verified_date") == head_fm.get("verified_date"):
+                  missing.append("skills/start/SKILL.md frontmatter verified_date: (must update)")
+              if not changelog_changed:
+                  missing.append("skills/start/CHANGELOG.md (must add a new entry matching the new version)")
+              if missing:
+                  fail(
+                      SKILL_MD_PATH,
+                      "SKILL.md body changed but the linked patch release is "
+                      "incomplete; missing: " + "; ".join(missing),
+                  )
+              else:
+                  # Validate patch arithmetic: head version's MAJOR.MINOR match
+                  # base, PATCH = base + 1.
+                  base_v = base_version_obj.get("version", "")
+                  head_v = head_version_obj.get("version", "")
+                  base_parsed = parse_semver(base_v) if isinstance(base_v, str) else None
+                  head_parsed = parse_semver(head_v) if isinstance(head_v, str) else None
+                  if not base_parsed or not head_parsed:
+                      fail(
+                          VERSION_JSON_PATH,
+                          f"version values are not valid semver: "
+                          f"base={base_v!r} head={head_v!r}",
+                      )
+                  else:
+                      bmaj, bmin, bpat, _ = base_parsed
+                      hmaj, hmin, hpat, _ = head_parsed
+                      if (hmaj, hmin) != (bmaj, bmin) or hpat != bpat + 1:
+                          fail(
+                              VERSION_JSON_PATH,
+                              f"linked release must be a patch bump: "
+                              f"base {base_v} -> head {head_v} (expected "
+                              f"{bmaj}.{bmin}.{bpat + 1})",
+                          )
+                      # -draft suffix preservation. Promotion off draft is an
+                      # explicit human decision; an upstream-sweep prose PR
+                      # is a routine maintenance event and must not silently
+                      # strip the suffix. Symmetric: a non-draft base may
+                      # not gain -draft on head.
+                      if isinstance(base_v, str) and isinstance(head_v, str):
+                          base_draft = base_v.endswith(DRAFT_SUFFIX)
+                          head_draft = head_v.endswith(DRAFT_SUFFIX)
+                          if base_draft != head_draft:
+                              fail(
+                                  VERSION_JSON_PATH,
+                                  "version suffix changed (-draft "
+                                  f"preservation): {base_v} -> {head_v}",
+                              )
+                  # published_date and verified_date must match on a linked
+                  # release. The release set is one event; splitting them
+                  # suggests one of the two files was missed.
+                  pub_date = head_version_obj.get("published_date")
+                  ver_date = head_fm.get("verified_date")
+                  if pub_date != ver_date:
+                      fail(
+                          SKILL_MD_PATH,
+                          "published_date and verified_date disagree: "
+                          f"{pub_date!r} vs {ver_date!r}",
+                      )
+                  # Frontmatter version must match version.json: version.
+                  if head_fm.get("version") != head_version_obj.get("version"):
+                      fail(
+                          SKILL_MD_PATH,
+                          "frontmatter version: must match version.json: version "
+                          f"(frontmatter={head_fm.get('version')!r} vs "
+                          f"version.json={head_version_obj.get('version')!r})",
+                      )
+                  # CHANGELOG must contain a new header for the new version.
+                  new_version = head_version_obj.get("version", "")
+                  expected_header = f"## [{new_version}]"
+                  if expected_header not in head_changelog_text:
+                      fail(
+                          CHANGELOG_PATH,
+                          f"missing CHANGELOG entry for version {new_version!r} "
+                          f"(expected header line starting with '{expected_header}')",
+                      )
+                  if expected_header in base_changelog_text:
+                      fail(
+                          CHANGELOG_PATH,
+                          f"CHANGELOG already had an entry for {new_version!r} on "
+                          "base; the linked release must add a new entry, not "
+                          "reuse an existing one",
+                      )
+          else:
+              # Body unchanged: none of the linked-release fields may change.
+              if version_value_changed:
+                  fail(
+                      VERSION_JSON_PATH,
+                      "version changed but SKILL.md body is unchanged; release "
+                      "metadata may only move when the skill body moves",
+                  )
+              if published_date_changed:
+                  fail(
+                      VERSION_JSON_PATH,
+                      "published_date changed but SKILL.md body is unchanged; "
+                      "release metadata may only move when the skill body moves",
+                  )
+              if frontmatter_version_changed:
+                  fail(
+                      SKILL_MD_PATH,
+                      "frontmatter version: changed but SKILL.md body is "
+                      "unchanged; release metadata may only move when the body "
+                      "moves",
+                  )
+              if changelog_changed:
+                  fail(
+                      CHANGELOG_PATH,
+                      "CHANGELOG.md changed but SKILL.md body is unchanged; "
+                      "the CHANGELOG may only move as part of a linked patch "
+                      "release with a body change",
+                  )
+
+          # 5) Sweep summary file: optional, but if present must be ADDED
+          # (not modified), and must match the branch date.
+          status_by_path: dict[str, str] = {}
+          for status, path in changes:
+              status_by_path[path] = status
+          for path in changed_paths:
+              if path.startswith(SWEEPS_PREFIX):
+                  match = SWEEP_FILE_RE.match(path)
+                  if not match:
+                      fail(path, "non-sweep file inside planning/sweeps/")
+                      continue
+                  if status_by_path.get(path) != "A":
+                      fail(
+                          path,
+                          "sweep summary must be added (A); "
+                          f"got status {status_by_path.get(path, '?')}",
+                      )
+                      continue
+                  if expected_sweep_path and path != expected_sweep_path:
+                      fail(
+                          path,
+                          f"sweep summary file date does not match branch; "
+                          f"expected {expected_sweep_path}",
+                      )
+
+          if violations:
+              if SUMMARY_PATH:
+                  with open(SUMMARY_PATH, "a", encoding="utf-8") as out:
+                      out.write("## prose-guard failures\n\n")
+                      for v in violations:
+                          out.write(f"- `{v}`\n")
+              for v in violations:
+                  print(v, file=sys.stderr)
+              sys.exit(1)
+
+          if SUMMARY_PATH:
+              with open(SUMMARY_PATH, "a", encoding="utf-8") as out:
+                  out.write("prose-guard: clean envelope.\n")
+          PY
