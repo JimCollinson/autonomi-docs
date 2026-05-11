@@ -8,7 +8,7 @@ description: |
   in Rust with `ant-core`, or expose Autonomi through an MCP-compatible client.
   Do not use for Autonomi 1.0, the MaidSafe-era network, `ant-quic`, or
   general EVM work that is not part of building on Autonomi.
-version: 0.1.3-draft
+version: 0.1.4-draft
 license: MIT
 repository: https://github.com/WithAutonomi/autonomi-developer-docs
 homepage: https://docs.autonomi.com/developers
@@ -29,13 +29,13 @@ keywords:
   - read-only
 
 # Verification block. Re-verify before changing stable claims or examples.
-verified_date: 2026-05-02
+verified_date: 2026-05-11
 verification_mode: current-merged-truth
 verified_commits:
-  ant-sdk: d7652ec3da82dfbe2107778e5223dc413d95815b
-  ant-client: 71ad53b047f7fc6b55e73ce6008d0a834feebbd6
-  ant-node: 23aee15cae33a17257ba833b2b98ed8a7a12e684
-  ant-protocol: 65651f3a3243af8299a3e8d63385cba846ef88a4
+  ant-sdk: 529280c32c024c92b68436abb6ace956c8da66ba
+  ant-client: 6cada1d6b318a93e52ea6c34aa4b68fc2782c946
+  ant-node: 0c2f2c97aa0b7a2f1000aaa4a3a2a2d629da4e5d
+  ant-protocol: 8955144bd2473d1bb5f3b6753061eb104b552070
   self_encryption: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
   evmlib: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
 
@@ -118,11 +118,17 @@ Expected shape:
 ```json
 {
   "status": "ok",
-  "network": "default"
+  "network": "default",
+  "version": "0.6.1",
+  "evm_network": "arbitrum-one",
+  "uptime_seconds": 12345,
+  "build_commit": "529280c3",
+  "payment_token_address": "0x...",
+  "payment_vault_address": "0x..."
 }
 ```
 
-Treat `network` as environment-dependent. On a local devnet, it is typically `local` instead of `default`.
+Treat `network` as environment-dependent. On a local devnet, it is typically `local` instead of `default`, and the payment address fields may be empty strings.
 
 If the user is on a non-default host or port, ask for the base URL instead of assuming `localhost:8082`.
 
@@ -264,7 +270,7 @@ Run the editable install from an `ant-sdk` checkout root.
   - `daemon.port`
   - `http://127.0.0.1:8082`
 
-`ANTD_BASE_URL` is the reliable MCP setup path because `antd` writes `ant/sdk/daemon.port` while `antd-mcp` reads `ant/daemon.port`.
+Both `antd` and `antd-mcp` now use the same `ant/sdk/daemon.port` path, so port-file discovery works without `ANTD_BASE_URL` when both are installed from the same `ant-sdk` checkout. Set `ANTD_BASE_URL` when you need a fixed URL or when running against a daemon on a different host.
 
 Do not memorize MCP tool names or schemas in this skill. Fetch the MCP server reference when the task is MCP-specific.
 

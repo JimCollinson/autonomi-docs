@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 71ad53b047f7fc6b55e73ce6008d0a834feebbd6
-  verified_date: 2026-05-02
+  source_commit: 6cada1d6b318a93e52ea6c34aa4b68fc2782c946
+  verified_date: 2026-05-11
   verification_mode: current-merged-truth
 -->
 
@@ -121,7 +121,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 The native Rust library exposes both wave-batch and Merkle-batch external payment helpers.
 
-For wave-batch uploads, `data_prepare_upload`, `file_prepare_upload`, and `finalize_upload` prepare the upload, collect quotes, and later store the chunks after an external signer returns transaction hashes.
+For wave-batch uploads, `data_prepare_upload`, `data_prepare_upload_with_visibility`, `file_prepare_upload`, and `finalize_upload` prepare the upload, collect quotes, and later store the chunks after an external signer returns transaction hashes. Use `data_prepare_upload_with_visibility(content, Visibility::Public)` to bundle the DataMap chunk into the same payment batch and receive its network address in the `FileUploadResult` after finalize.
 
 For Merkle batches, `prepare_merkle_batch_external` and `finalize_merkle_batch` expose the low-level batch helpers, while `finalize_upload_merkle` completes a prepared upload from the winning pool hash. Progress-aware variants such as `file_prepare_upload_with_progress`, `finalize_upload_with_progress`, and `finalize_upload_merkle_with_progress` are also available when you need UI feedback during long-running uploads.
 
@@ -138,6 +138,7 @@ For Merkle batches, `prepare_merkle_batch_external` and `finalize_merkle_batch` 
 | `ant_core::data::PreparedUpload` | Two-phase upload state used by external-signer flows |
 | `ant_core::data::ExternalPaymentInfo` | External payment details for prepared uploads |
 | `ant_core::data::PreparedMerkleBatch` | Prepared Merkle batch data for external signing |
+| `ant_core::data::Visibility` | Upload visibility: `Private` (DataMap returned to caller) or `Public` (DataMap bundled into payment batch and stored on-network) |
 
 ## External signer example
 
