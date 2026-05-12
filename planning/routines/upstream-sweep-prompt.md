@@ -168,7 +168,9 @@ The two PRs never touch the same page. A prose PR may touch a page with deferred
 
 #### 4.7 Write prose changes directly into the prose PR
 
-When the page is in the prose batch, write the actual prose edits into the draft `claude/prose-*` PR. Apply `CLAUDE.md`'s voice, terminology lockfile, page templates, and refusal rules. Do not stop at "suggestions in the PR body" — the PR diff must contain the prose edit.
+When the page is in the prose batch, write the actual prose edits into the draft `claude/prose-*` PR. Do not stop at "suggestions in the PR body" — the PR diff must contain the prose edit.
+
+Before writing each sentence, re-read the **Voice and tone**, **Style guide**, and **Prohibited words and phrases** sections of `CLAUDE.md` and apply them as written. The audit gives you a diff between two SHAs; the page describes the **state of the surface at `head_sha`**, not a changelog of what moved between SHAs. Translate every observation about what changed into a statement of how the surface works now. Do not write "this endpoint now returns X" — write "this endpoint returns X." Do not reference prior version behaviour, prior parameter shapes, or prior implementation details unless the page is an explicit version-comparison page. The terminology lockfile, page templates, and refusal rules in `CLAUDE.md` apply equally to every line of prose written here.
 
 #### 4.8 Skill-aware prose
 
