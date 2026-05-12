@@ -206,12 +206,13 @@ Clean up tmp dirs after the loop completes.
 
 The opening order is fixed to break the body↔issue mutual-reference cycle.
 
-**5.1 Manual-review issues first**, before any PR is opened. For each deferred record (case 5) and each whole-page deferral (cases 3 and 4), compute the fingerprint defined in `planning/routines/upstream-sweep.md` `## Manual-review issue format`. Then list open manual-review issues:
+**5.1 Manual-review issues first**, before any PR is opened. For each deferred record (case 5) and each whole-page deferral (cases 3 and 4), compute the fingerprint defined in `planning/routines/upstream-sweep.md` `## Manual-review issue format`. Then list open issues:
 
 ```sh
-gh issue list --state open --label upstream-sweep-manual-review \
-  --limit 1000 --json number,title,body
+gh issue list --state open --limit 1000 --json number,title,body
 ```
+
+Do **not** filter by `--label upstream-sweep-manual-review`. Label attach is best-effort: a previous run may have created an issue via the unlabeled fallback (when the label was missing or the token lacked label-write permission). Filtering on the label would miss those issues, the dedup would fail, and a duplicate manual-review issue would be created on every subsequent run.
 
 Walk each candidate issue's `body` field client-side and look for a line that, after stripping leading and trailing whitespace, equals the fingerprint string verbatim. Do **not** use `gh issue list --search` — GitHub issue search tokenization does not reliably match a pipe-heavy fingerprint embedded in the body. `--limit 1000` defeats `gh`'s default 30-row cap.
 

@@ -111,7 +111,7 @@ The two PRs never touch the same page. A prose PR may touch a page with deferred
 
 ## Manual-review issue format
 
-Every manual-review issue carries the `upstream-sweep-manual-review` label, distinct from `upstream-sweep-failure`.
+Every manual-review issue attempts to carry the `upstream-sweep-manual-review` label (distinct from `upstream-sweep-failure`); label attach is best-effort per `## GitHub artifacts the routine produces`, so an issue created via the unlabeled fallback is still a valid manual-review issue and is identified by the fingerprint in its body.
 
 - Title for cases 3 and 4: `manual review needed for <page>`.
 - Title for case 5 (deferred record from a prose PR with proven independent ambiguity): `manual review needed for deferred record in <page>`.
@@ -129,12 +129,13 @@ The fingerprint includes the SHA range so a record whose `head_sha` advanced sin
 
 ## Manual-review issue de-duplication
 
-Deferred records are not stamped, so the next run will rediscover them and would otherwise re-open a duplicate issue every day. Before creating a new manual-review issue, the routine lists open manual-review issues and matches the fingerprint client-side as an exact-line match:
+Deferred records are not stamped, so the next run will rediscover them and would otherwise re-open a duplicate issue every day. Before creating a new manual-review issue, the routine lists every open issue (no label filter) and matches the fingerprint client-side as an exact-line match:
 
 ```bash
-gh issue list --state open --label upstream-sweep-manual-review \
-  --limit 1000 --json number,title,body
+gh issue list --state open --limit 1000 --json number,title,body
 ```
+
+The label filter is deliberately omitted. Label attach is best-effort: a previous run may have created the manual-review issue without the label (when the label was missing or the token lacked label-write permission). Filtering on the label would miss those issues, the dedup would fail, and a duplicate would be created on every subsequent run. The fingerprint in the body is the durable identifier.
 
 `gh issue search` is not used: GitHub issue search tokenization does not reliably match a pipe-heavy fingerprint embedded in the body. The match is performed by walking each candidate issue's `body` field and looking for a line that, after stripping leading and trailing whitespace, equals the fingerprint string verbatim — not a substring match.
 
