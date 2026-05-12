@@ -270,7 +270,7 @@ Run the editable install from an `ant-sdk` checkout root.
   - `daemon.port`
   - `http://127.0.0.1:8082`
 
-Both `antd` and `antd-mcp` now use the same `ant/sdk/daemon.port` path, so port-file discovery works without `ANTD_BASE_URL` when both are installed from the same `ant-sdk` checkout. Set `ANTD_BASE_URL` when you need a fixed URL or when running against a daemon on a different host.
+`antd` writes the port file to `ant/sdk/daemon.port` and `antd-mcp` reads from the same path, so port-file discovery works without `ANTD_BASE_URL` when both are installed from the same `ant-sdk` checkout. Set `ANTD_BASE_URL` when you need a fixed URL or when running against a daemon on a different host.
 
 Do not memorize MCP tool names or schemas in this skill. Fetch the MCP server reference when the task is MCP-specific.
 

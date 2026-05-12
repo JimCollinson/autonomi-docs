@@ -59,7 +59,7 @@ At startup, the server resolves the daemon base URL in this order:
 
 The discovery helper still checks a `daemon.port` file before falling back to the default URL.
 
-Both `antd` and `antd-mcp` now use the same `ant/sdk/daemon.port` path, so port-file discovery should work without `ANTD_BASE_URL` when both are installed from the same `ant-sdk` checkout. Set `ANTD_BASE_URL` explicitly when you want a fixed URL regardless of port-file state, or when you are running `antd-mcp` against a daemon on a different host.
+`antd` writes the port file to `ant/sdk/daemon.port` and `antd-mcp` reads from the same path, so port-file discovery works without `ANTD_BASE_URL` when both are installed from the same `ant-sdk` checkout. Set `ANTD_BASE_URL` explicitly when you want a fixed URL regardless of port-file state, or when you are running `antd-mcp` against a daemon on a different host.
 
 ## Claude Desktop configuration
 

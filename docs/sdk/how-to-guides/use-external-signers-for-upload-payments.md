@@ -67,7 +67,7 @@ curl -X POST http://localhost:8082/v1/data/prepare \
   -d "{\"data\":\"$DATA_B64\"}"
 ```
 
-The in-memory data prepare endpoint currently only supports private uploads (`visibility` is accepted but `"public"` returns `501`). To prepare a public upload with an external signer, use `POST /v1/upload/prepare` with a file path and `"visibility":"public"` instead.
+The in-memory data prepare endpoint supports only private uploads: `visibility` is accepted but `"public"` returns `501`. To prepare a public upload with an external signer, use `POST /v1/upload/prepare` with a file path and `"visibility":"public"` instead.
 
 The prepare endpoints return a `payment_type` discriminator. Use that value to decide which on-chain call to make and which finalize payload to send back.
 
@@ -165,7 +165,7 @@ Expected response shape:
 }
 ```
 
-`address` is only present when `store_data_map` is `true` (legacy daemon-wallet path). `data_map_address` is only present when the upload was prepared with `visibility:"public"` — it is the network address of the DataMap chunk whose payment was included in the same external-signer batch.
+`address` is only present when `store_data_map` is `true`; that path uses the daemon's own wallet to store the DataMap. `data_map_address` is only present when the upload was prepared with `visibility:"public"` — it is the network address of the DataMap chunk whose payment was included in the same external-signer batch.
 
 ### 5. Use SDK helpers when available
 
