@@ -29,7 +29,7 @@ keywords:
   - read-only
 
 # Verification block. Re-verify before changing stable claims or examples.
-verified_date: 2026-05-11
+verified_date: "2026-05-11"
 verification_mode: current-merged-truth
 verified_commits:
   ant-sdk: 529280c32c024c92b68436abb6ace956c8da66ba
