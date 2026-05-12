@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
-  verified_date: 2026-05-02
+  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
+  verified_date: 2026-05-11
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 71ad53b047f7fc6b55e73ce6008d0a834feebbd6
-  verified_date: 2026-05-02
+  source_commit: 6cada1d6b318a93e52ea6c34aa4b68fc2782c946
+  verified_date: 2026-05-11
   verification_mode: current-merged-truth
 -->
 <!-- verification:
@@ -67,6 +67,8 @@ curl -X POST http://localhost:8082/v1/data/prepare \
   -d "{\"data\":\"$DATA_B64\"}"
 ```
 
+The in-memory data prepare endpoint supports only private uploads: `visibility` is accepted but `"public"` returns `501`. To prepare a public upload with an external signer, use `POST /v1/upload/prepare` with a file path and `"visibility":"public"` instead.
+
 The prepare endpoints return a `payment_type` discriminator. Use that value to decide which on-chain call to make and which finalize payload to send back.
 
 The daemon returns `wave_batch` for uploads under 64 chunks and `merkle` for uploads with 64 or more chunks.
@@ -119,7 +121,7 @@ Merkle prepare response:
 
 Each `pool_commitments` entry contains exactly 16 candidate payments. The sample above shows one candidate for brevity.
 
-For file uploads, the equivalent is `POST /v1/upload/prepare` with a local `path` field instead of `data`.
+For file uploads, the equivalent is `POST /v1/upload/prepare` with a local `path` field instead of `data`. To make the upload publicly retrievable by address, add `"visibility":"public"` to the prepare request — the daemon bundles the serialized DataMap chunk into the same payment batch, and the finalize response includes a `data_map_address` field with its network address.
 
 ### 3. Submit the payment externally
 
@@ -158,11 +160,12 @@ Expected response shape:
 {
   "data_map": "<hex_encoded_datamap>",
   "address": "<64_hex_address>",
+  "data_map_address": "<64_hex_address>",
   "chunks_stored": <chunk_count>
 }
 ```
 
-The `address` field is only present when `store_data_map` is `true`.
+`address` is only present when `store_data_map` is `true`; that path uses the daemon's own wallet to store the DataMap. `data_map_address` is only present when the upload was prepared with `visibility:"public"` — it is the network address of the DataMap chunk whose payment was included in the same external-signer batch.
 
 ### 5. Use SDK helpers when available
 
@@ -170,7 +173,7 @@ The daemon SDKs follow the same prepare/finalize split. Merkle-capable bindings 
 
 Use the REST API when you need the full finalize response surface, such as the raw `data_map` value or explicit `store_data_map` control on wave-batch finalize requests.
 
-If you are building in Rust with ant-core instead of the daemon, the library exposes native external-payment helpers such as `data_prepare_upload`, `file_prepare_upload`, `prepare_merkle_batch_external`, and `finalize_merkle_batch`. Progress-aware variants such as `file_prepare_upload_with_progress`, `finalize_upload_with_progress`, and `finalize_upload_merkle_with_progress` are also available when you need UI feedback during long-running uploads.
+If you are building in Rust with ant-core instead of the daemon, the library exposes native external-payment helpers such as `data_prepare_upload`, `data_prepare_upload_with_visibility`, `file_prepare_upload`, `prepare_merkle_batch_external`, and `finalize_merkle_batch`. Use `data_prepare_upload_with_visibility(content, Visibility::Public)` to bundle the DataMap chunk into the payment batch for a public in-memory upload. Progress-aware variants such as `file_prepare_upload_with_progress`, `finalize_upload_with_progress`, and `finalize_upload_merkle_with_progress` are also available when you need UI feedback during long-running uploads.
 
 ## Verify it worked
 

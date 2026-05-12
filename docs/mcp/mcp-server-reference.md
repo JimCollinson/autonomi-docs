@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
-  verified_date: 2026-05-02
+  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
+  verified_date: 2026-05-11
   verification_mode: current-merged-truth
 -->
 
@@ -59,7 +59,7 @@ At startup, the server resolves the daemon base URL in this order:
 
 The discovery helper still checks a `daemon.port` file before falling back to the default URL.
 
-`antd` writes `ant/sdk/daemon.port`, while `antd-mcp` reads `ant/daemon.port`. Treat `ANTD_BASE_URL` as the reliable configuration path unless you have already confirmed port-file discovery works in your environment.
+`antd` writes the port file to `ant/sdk/daemon.port` and `antd-mcp` reads from the same path, so port-file discovery works without `ANTD_BASE_URL` when both are installed from the same `ant-sdk` checkout. Set `ANTD_BASE_URL` explicitly when you want a fixed URL regardless of port-file state, or when you are running `antd-mcp` against a daemon on a different host.
 
 ## Claude Desktop configuration
 
@@ -202,7 +202,13 @@ Examples:
 ```json
 {
   "healthy": true,
-  "network": "local"
+  "network": "local",
+  "version": "0.6.1",
+  "evm_network": "local",
+  "uptime_seconds": 42,
+  "build_commit": "529280c3",
+  "payment_token_address": "",
+  "payment_vault_address": ""
 }
 ```
 

@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
-  verified_date: 2026-05-02
+  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
+  verified_date: 2026-05-11
   verification_mode: current-merged-truth
 -->
 
@@ -25,9 +25,17 @@ Returns daemon health and the selected network.
 ```json
 {
   "status": "ok",
-  "network": "default"
+  "network": "default",
+  "version": "0.6.1",
+  "evm_network": "arbitrum-one",
+  "uptime_seconds": 12345,
+  "build_commit": "529280c3",
+  "payment_token_address": "0xde817De9d8AC8C3aA10C3Ed0EE5FCB6C53cE7B0a",
+  "payment_vault_address": "0x607483B50C5F06c25cDC316b6d1E071084EeC9f5"
 }
 ```
+
+All six fields (`version`, `evm_network`, `uptime_seconds`, `build_commit`, `payment_token_address`, `payment_vault_address`) are always present. On a local devnet, `payment_token_address` and `payment_vault_address` may be empty strings, and `build_commit` is empty when the binary was built outside a git checkout.
 
 **Example:**
 
@@ -495,6 +503,7 @@ Prepares an in-memory data upload for external signing.
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `data` | string | Yes | Base64-encoded payload |
+| `visibility` | string | No | `"private"` (default) or `"public"`. `"public"` returns `501` on this endpoint. Use `/v1/upload/prepare` with a file path for public external-signer uploads. |
 
 **Response:**
 
@@ -569,6 +578,7 @@ Prepares a file upload for external signing.
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `path` | string | Yes | Local file path |
+| `visibility` | string | No | `"private"` (default) or `"public"`. `"public"` bundles the serialized DataMap chunk into the same payment batch and stores it on-network; its address is returned on finalize via `data_map_address`. |
 
 **Response:** Same `payment_type`-based shape as `POST /v1/data/prepare`
 
@@ -603,11 +613,12 @@ Provide `tx_hashes` when the prepare response returned `payment_type: "wave_batc
 {
   "data_map": "<hex_encoded_datamap>",
   "address": "<64_hex_address>",
+  "data_map_address": "<64_hex_address>",
   "chunks_stored": <chunk_count>
 }
 ```
 
-The `address` field is only present when `store_data_map` is `true`.
+`address` is only present when `store_data_map` is `true`; that path uses the daemon's own wallet to store the DataMap. `data_map_address` is only present when the upload was prepared with `visibility:"public"`; it is the network address of the bundled DataMap chunk whose payment was included in the same external-signer batch as the data chunks.
 
 **Examples:**
 
@@ -632,6 +643,7 @@ curl -X POST http://localhost:8082/v1/upload/finalize \
 | `404` | Not found | Check the address or `upload_id` |
 | `413` | Payload too large | Split the upload or switch to file/directory endpoints |
 | `500` | Internal server error | Check daemon logs and retry |
+| `501` | Not implemented | `visibility:"public"` is not supported on `/v1/data/prepare`; use `/v1/upload/prepare` with a file path instead |
 | `502` | Network unreachable | Confirm the daemon can reach the Autonomi network |
 | `503` | Service unavailable | Configure a wallet before calling wallet or write endpoints |
 

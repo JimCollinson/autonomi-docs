@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: d7652ec3da82dfbe2107778e5223dc413d95815b
-  verified_date: 2026-05-02
+  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
+  verified_date: 2026-05-11
   verification_mode: current-merged-truth
 -->
 
@@ -25,7 +25,13 @@ Checks daemon health and network selection.
 | Name | Type | Description |
 |------|------|-------------|
 | `status` | string | Expected `ok` on success |
-| `network` | string | Current network name |
+| `network` | string | Network name: `default`, `local`, or `alpha` |
+| `version` | string | antd crate version (e.g. `0.4.0`) |
+| `evm_network` | string | EVM preset: `arbitrum-one`, `arbitrum-sepolia`, `local`, or `custom` |
+| `uptime_seconds` | uint64 | Seconds since the daemon process started |
+| `build_commit` | string | Short git SHA captured at build time, or empty if built outside a git checkout |
+| `payment_token_address` | string | Payment token contract address, or empty if unconfigured |
+| `payment_vault_address` | string | Payment vault contract address, or empty if unconfigured |
 
 ## Data Service
 
@@ -139,7 +145,7 @@ The proto files define these shared shapes:
 | Message | Fields |
 |------|--------|
 | `Cost` | `atto_tokens` |
-| `HealthCheckResponse` | `status`, `network` |
+| `HealthCheckResponse` | `status`, `network`, `version`, `evm_network`, `uptime_seconds`, `build_commit`, `payment_token_address`, `payment_vault_address` |
 | `PutPublicDataResponse` | `cost`, `address` |
 | `PutPrivateDataResponse` | `cost`, `data_map` |
 | `UploadPublicResponse` | `address`, `storage_cost_atto`, `gas_cost_wei`, `chunks_stored`, `payment_mode_used` |

@@ -4,6 +4,20 @@ All notable changes to this skill are recorded here.
 
 ## [Unreleased]
 
+## [0.1.4-draft] - 2026-05-11
+
+### Changed
+- Updated health check expected shape to include the six new required fields added in antd v0.6.1: `version`, `evm_network`, `uptime_seconds`, `build_commit`, `payment_token_address`, `payment_vault_address`.
+- Corrected the MCP daemon-discovery note: both `antd` and `antd-mcp` now use `ant/sdk/daemon.port`, so port-file discovery works without `ANTD_BASE_URL`.
+
+### Verified Against
+- ant-sdk: 529280c32c024c92b68436abb6ace956c8da66ba
+- ant-client: 6cada1d6b318a93e52ea6c34aa4b68fc2782c946
+- ant-node: 0c2f2c97aa0b7a2f1000aaa4a3a2a2d629da4e5d
+- ant-protocol: 8955144bd2473d1bb5f3b6753061eb104b552070
+- self_encryption: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
+- evmlib: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+
 ## [0.1.3-draft] - 2026-05-02
 
 ### Changed
