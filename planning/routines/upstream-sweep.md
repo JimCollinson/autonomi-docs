@@ -17,12 +17,11 @@ The routine is the hosted-scheduled equivalent of Tier 1 + Tier 2 from `planning
 
 ## Routine flow
 
-1. Bootstrap the rolling status thread (label + issue, see `## Rolling status issue`).
-2. Run the open-PR collision check. If a prior `claude/sweep-*` or `claude/prose-*` PR is still open, post a collision notice to the rolling issue and exit without opening anything.
-3. Run `scripts/sweep_poll.py`. If the JSON status is `error`, post the diagnostics to the rolling issue and exit.
-4. If `records` is empty or every record has `drifted: false`, post a no-drift summary to the rolling issue and exit.
-5. For each drifted record, run the `## Opus audit/write/verify loop` (fetch both SHAs, compute the upstream diff, inspect source artifacts, compare against docs and skill, classify the record, apply the page batching rule, write prose where required, run the deferred-record self-check, run practical verification).
-6. Open at most two PRs (one sweep, one prose draft) plus zero or more `upstream-sweep-manual-review`-labelled issues per the topology in `## Page batching rule`, `## Manual-review issue format`, `## Manual-review issue de-duplication`, and `## PR body format`. Manual-review issues are opened **before** PRs so PR bodies can reference issue numbers; a `Tracked in <PR URL>.` comment is posted on each issue once the corresponding PR exists. Post a run summary with PR/issue links to the rolling issue.
+1. Run the open-PR collision check. If a prior `claude/sweep-*` or `claude/prose-*` PR is still open, exit silently. The open PR is itself the signal that drift is pending review; drift is re-detected on the next run.
+2. Run `scripts/sweep_poll.py`. If the JSON status is `error`, open a fresh issue (best-effort labelled `upstream-sweep-failure` — see `## GitHub artifacts the routine produces` for the label-fallback rule) with the JSON diagnostics and a brief cause prose in the body, and exit. A human triages the issue and closes it manually when the underlying cause is understood; the routine never auto-closes failure issues.
+3. If `records` is empty or every record has `drifted: false`, exit silently. No GitHub artifact is produced for the happy no-drift path; the routine session log preserves the trace for debugging.
+4. For each drifted record, run the `## Opus audit/write/verify loop` (fetch both SHAs, compute the upstream diff, inspect source artifacts, compare against docs and skill, classify the record, apply the page batching rule, write prose where required, run the deferred-record self-check, run practical verification).
+5. Open at most two PRs (one sweep, one prose draft) plus zero or more issues (best-effort labelled `upstream-sweep-manual-review`) per the topology in `## Page batching rule`, `## Manual-review issue format`, `## Manual-review issue de-duplication`, and `## PR body format`. Manual-review issues are opened **before** PRs so PR bodies can reference issue numbers; a `Tracked in <PR URL>.` comment is posted on each issue once the corresponding PR exists. The PR bodies carry the run summary; no separate aggregated comment is posted anywhere.
 
 ## Branch convention
 
@@ -31,19 +30,28 @@ All routine-opened branches use the `claude/` namespace.
 - Metadata-only stamp refreshes: `claude/sweep-<YYYY-MM-DD>` or `claude/sweep-<YYYY-MM-DD>-<slug>` (the slug is optional for production runs and required for synthetic test PRs that exercise individual envelope rules).
 - Prose-impact PRs: `claude/prose-<YYYY-MM-DD>-<slug>`. Opened as **draft** PRs so the human reviewer promotes them to ready-for-review only after the prose has been read.
 
-## Rolling status issue
+## GitHub artifacts the routine produces
 
-The routine maintains a single open GitHub issue labelled `upstream-sweep-status` as the chronological log of its behavior.
+Issues are reserved for things a human needs to address. Successful runs and routine no-ops produce no GitHub artifact at all; the routine session log is the transient debug trail for those.
 
-Bootstrap, run by every execution before any other GitHub work, in POSIX shell only (no `mapfile`, no Bash arrays, no `gh issue create --json/--jq`). Capture-then-decide is the key invariant: any `gh` failure (auth, network, API) must abort the bootstrap immediately rather than be silently coerced into "label missing" or "no open issue". See `planning/routines/upstream-sweep-prompt.md` Step 0 for the exact script.
+| Outcome | GitHub artifact |
+|---|---|
+| No drift | None. Routine exits silently. |
+| Drift found, all clean | Sweep PR (and prose draft PR if prose changed). The PR bodies are the run summary. |
+| Drift + ambiguity | PRs plus one issue per deferred record, best-effort labelled `upstream-sweep-manual-review`. |
+| Scanner error or mid-step error in step 5 (whole-run fail-closed) | One fresh issue per occurrence, best-effort labelled `upstream-sweep-failure`. The body carries the JSON diagnostic plus a brief cause prose. |
+| Open-PR collision (prior `claude/sweep-*` or `claude/prose-*` still open) | None. The open PR is itself the signal. |
 
-1. Ensure the `upstream-sweep-status` and `upstream-sweep-manual-review` labels both exist. Idempotent: list labels with `--limit 1000`, create either label if missing. Both labels are bootstrapped here because step 5 opens manual-review issues with `--label upstream-sweep-manual-review`, and `gh issue create --label X` fails when the label is missing, so this step must precede any issue creation.
-2. Ensure an open issue with that label exists. Idempotent: list open issues with the label sorted by issue number ascending.
-   - Zero results: create the issue. `gh issue create` has no `--json/--jq` flags, so parse the URL it writes to stdout and take the trailing path component as the issue number.
-   - Exactly one result: use it.
-   - More than one result: pick the lowest-numbered issue deterministically and post a one-time warning to that thread asking a human to close the duplicates. The run continues against the chosen issue rather than failing the cadence.
+The two issue classes are kept distinct because the response differs:
 
-Every status post (collision skip, error diagnostics, no-drift summaries, run summaries with PR/issue links, target-manifest skip notices) targets the chosen issue.
+- **`upstream-sweep-failure`** is reserved for routine-level failures that abort the whole run. The whole sweep stops; nothing is opened that day.
+- **`upstream-sweep-manual-review`** is for per-record audit deferrals (page-batching cases 3, 4, 5, and SHA-fetch-and-compare double-failures for a single record). The routine continues with the rest of the run; these are routine output, not error signals.
+
+Both labels are best-effort. The routine attempts to attach the intended label when it creates an issue, but if the label is missing or the token lacks label-write permission, it falls back to creating the issue without the label and adds an in-body note explaining the omission and quoting the underlying `gh` error. The routine never blocks on label hygiene — label management is a low-stakes cleanup task a human can handle after the fact. Only a real issue-creation failure (auth, network, or `issues: write` permission error) aborts.
+
+`upstream-sweep-failure` issues are not auto-closed. A successful next run does not mean the underlying cause is fixed — it can mean the run did not hit the same condition. A human reads the diagnostic on each failure issue and closes it deliberately. Duplicate failure issues are tolerated rather than deduplicated: each one is a discrete observation that something went wrong.
+
+`upstream-sweep-manual-review` issues are fingerprint-deduplicated per `## Manual-review issue de-duplication` — a record whose `head_sha` has not moved since the previous run reuses the existing issue rather than opening a duplicate.
 
 ## Open-PR collision handling
 
@@ -56,7 +64,7 @@ gh pr list --state open --limit 1000 --json number,headRefName \
 
 `--limit 1000` defeats `gh`'s default 30-row cap so a busy repo cannot hide a still-open prior sweep/prose PR behind pagination — without it the routine would see "no results" and open a colliding PR. GitHub's `--search` syntax does not reliably match branch prefixes, so the JSON list with a client-side prefix filter is the trustworthy form.
 
-If any results come back regardless of date, the routine skips the run, posts a "skipping; prior PR(s) #X #Y still open" comment to the rolling status issue, and exits. Drift is re-detected on the next run after the prior PR(s) merge or close. This forces a clean serial cadence and prevents PR accumulation.
+If any results come back regardless of date, the routine exits silently. The open PR is itself the signal that drift is pending review; no separate comment or issue is needed. Drift is re-detected on the next run after the prior PR(s) merge or close. This forces a clean serial cadence and prevents PR accumulation.
 
 ## Audit-diff fetch rule
 
@@ -103,7 +111,7 @@ The two PRs never touch the same page. A prose PR may touch a page with deferred
 
 ## Manual-review issue format
 
-Every manual-review issue carries the `upstream-sweep-manual-review` label, distinct from `upstream-sweep-status`.
+Every manual-review issue attempts to carry the `upstream-sweep-manual-review` label (distinct from `upstream-sweep-failure`); label attach is best-effort per `## GitHub artifacts the routine produces`, so an issue created via the unlabeled fallback is still a valid manual-review issue and is identified by the fingerprint in its body.
 
 - Title for cases 3 and 4: `manual review needed for <page>`.
 - Title for case 5 (deferred record from a prose PR with proven independent ambiguity): `manual review needed for deferred record in <page>`.
@@ -121,12 +129,13 @@ The fingerprint includes the SHA range so a record whose `head_sha` advanced sin
 
 ## Manual-review issue de-duplication
 
-Deferred records are not stamped, so the next run will rediscover them and would otherwise re-open a duplicate issue every day. Before creating a new manual-review issue, the routine lists open manual-review issues and matches the fingerprint client-side as an exact-line match:
+Deferred records are not stamped, so the next run will rediscover them and would otherwise re-open a duplicate issue every day. Before creating a new manual-review issue, the routine lists every open issue (no label filter) and matches the fingerprint client-side as an exact-line match:
 
 ```bash
-gh issue list --state open --label upstream-sweep-manual-review \
-  --limit 1000 --json number,title,body
+gh issue list --state open --limit 1000 --json number,title,body
 ```
+
+The label filter is deliberately omitted. Label attach is best-effort: a previous run may have created the manual-review issue without the label (when the label was missing or the token lacked label-write permission). Filtering on the label would miss those issues, the dedup would fail, and a duplicate would be created on every subsequent run. The fingerprint in the body is the durable identifier.
 
 `gh issue search` is not used: GitHub issue search tokenization does not reliably match a pipe-heavy fingerprint embedded in the body. The match is performed by walking each candidate issue's `body` field and looking for a line that, after stripping leading and trailing whitespace, equals the fingerprint string verbatim — not a substring match.
 
@@ -260,7 +269,7 @@ Scanner fail-closed (whole run aborts):
 - unknown `source_repo` not in the registry,
 - `verification_mode` set to a value other than `current-merged-truth` or `target-manifest`.
 
-The routine treats any non-zero scanner exit as an error condition, posts the JSON diagnostics to the rolling status issue, and exits without opening any PR.
+The routine treats any non-zero scanner exit as an error condition, opens a fresh `upstream-sweep-failure`-labelled issue with the JSON diagnostics in the body, and exits without opening any PR. The diagnostic includes the response body, rate-limit state, `x-github-request-id`, `retry-after`, and the `git ls-remote` fallback outcome so the issue body alone is enough to triage the cause.
 
 Per-record fail-closed (one page deferred, rest of run continues):
 
@@ -268,22 +277,18 @@ Per-record fail-closed (one page deferred, rest of run continues):
 
 That page is held back as a `manual review needed` issue.
 
-`target-manifest` blocks are deliberately skipped by the scanner and listed in a separate `target_manifest_skipped` array in the JSON output. The routine surfaces those entries in the run summary as "pinned by target-manifest, not bumped" so a human can confirm those pins remain intentional. The routine must never bump a `target-manifest` block against a moving HEAD; doing so would silently overwrite a launch-hardening pin.
-
-## No-drift status report
-
-Comment to the rolling status issue. Format: a short markdown table with one row per record (location / recorded SHA / HEAD SHA / drifted?), grouped by repo for readability.
+`target-manifest` blocks are deliberately skipped by the scanner and listed in a separate `target_manifest_skipped` array in the JSON output. When the run opens a sweep PR, the PR body and the per-run `planning/sweeps/<YYYY-MM-DD>.md` summary file note any target-manifest entries as "pinned by target-manifest, not bumped" so a human can confirm those pins remain intentional during review. The routine must never bump a `target-manifest` block against a moving HEAD; doing so would silently overwrite a launch-hardening pin.
 
 ## Failure modes
 
-- GitHub API rate-limit during the daily poll. Handled by the scanner's fail-closed semantics; the routine posts the error and waits for the next run.
+- GitHub API rate-limit during the daily poll. Handled by the scanner's fail-closed semantics: the routine opens a fresh `upstream-sweep-failure` issue with the diagnostic and waits for the next run.
 - Deleted or renamed source repo. Same handling.
 - Force-push that invalidates a recorded SHA. Caught by the `sweep-sha-reachability` required check on the resulting PR.
-- Routine missing the 09:00 UTC slot. Recovery: next-day run picks up the drift; latency at most 24h.
-- Claude Desktop routine credential or token expiry. Routine fails closed; user refreshes the secret.
+- Routine missing the 09:00 UTC slot. Recovery: next-day run picks up the drift; latency at most 24h. No GitHub artifact.
+- Claude Desktop routine credential or token expiry. Routine fails closed; the failure issue captures the diagnostic; user refreshes the secret.
 - Daily routine-start cap exhausted on Max plan. Same recovery as missed slot.
-- Collision skip when a prior PR is left open for many days. Recovery: user merges or closes the prior PR; the next-day run resumes.
-- SHA-fetch failure for a single record (both fetch paths). Recovery: page deferred to a manual-review issue; the rest of the run proceeds.
+- Collision skip when a prior PR is left open for many days. The open PR is itself the signal; the next-day run resumes once the prior PR merges or closes.
+- SHA-fetch failure for a single record (both fetch paths). Recovery: page deferred to an `upstream-sweep-manual-review` issue; the rest of the run proceeds.
 
 ## Alignment with implementation-plan.md Section 8
 
@@ -297,11 +302,16 @@ Differences from the per-event arm:
 
 Forward compatibility: when `notify-docs.yml` rolls out in upstream repos, the same routine can grow a webhook-receiver arm without invalidating the daily-poll v1.
 
-## Required-check setup (one-time, after the synthetic verification cases pass)
+## One-time setup
 
-1. Add `sweep-guard`, `prose-guard`, and `sweep-sha-reachability` (the exact workflow `name:` strings) as required checks on `main` in repo settings → Branch protection.
-2. Confirm the routine's bot identity has push access. If branch protection requires reviewers, ensure the bot is granted bypass or has CODEOWNERS coverage on `planning/sweeps/*` and the metadata-only paths, or accept that the user reviews each PR by hand.
-3. If using a `GITHUB_TOKEN` secret, provision it in the Claude Desktop routine config per the credentials section above. The secret is optional; when unset the routine derives a token from `gh auth token` and falls back to anonymous reads.
+1. Recommended (not required): create both routine labels manually in the docs repo (Settings → Labels → New label) so the issues the routine opens are filterable from the start:
+   - `upstream-sweep-manual-review` — "Ambiguous upstream-sweep records that need a human decision".
+   - `upstream-sweep-failure` — "Fail-closed upstream-sweep run; needs human triage".
+
+   If either label is missing, the routine still creates the issue when needed, falls back to creating it unlabeled, and adds an in-body note explaining the missed label and the underlying `gh` error. The labels can be created and reapplied to existing issues at any time.
+2. Add `sweep-guard`, `prose-guard`, and `sweep-sha-reachability` (the exact workflow `name:` strings) as required checks on `main` in repo settings → Branch protection.
+3. Confirm the routine's bot identity has push access. If branch protection requires reviewers, ensure the bot is granted bypass or has CODEOWNERS coverage on `planning/sweeps/*` and the metadata-only paths, or accept that the user reviews each PR by hand.
+4. If using a `GITHUB_TOKEN` secret, provision it in the Claude Desktop routine config per the credentials section above. The secret is optional; when unset the routine derives a token from `gh auth token` and falls back to anonymous reads.
 
 ## Out of scope
 
