@@ -3,3 +3,6 @@
 # docs assembly.
 __pycache__/
 *.pyc
+
+# Transient sweep scanner output; never part of the docs assembly.
+sweep_report*.json
