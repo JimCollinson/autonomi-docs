@@ -54,8 +54,8 @@ The root command accepts the global flags used across data and node operations. 
 | `--allow-loopback` | boolean | No | Allow loopback connections for local devnet or local testing |
 | `--ipv4-only` | boolean | No | Disable dual-stack and force IPv4-only mode |
 | `--quote-timeout-secs <N>` | integer | No | Hidden. Controls lightweight network-operation timeouts such as DHT lookups. |
-| `--store-timeout-secs <N>` | integer | No | Hidden. Controls chunk store timeouts. |
-| `--chunk-get-timeout-secs <N>` | integer | No | Hidden. Controls chunk retrieve timeouts. |
+| `--store-timeout-secs <N>` | integer | No | Hidden. Sets `ClientConfig.store_timeout_secs`. Non-Merkle chunk PUT response timeout is set by an internal `STORE_RESPONSE_TIMEOUT` constant; Merkle batch PUT timeout is set by `merkle_store_timeout_secs` (270 s default, library-only); chunk GET timeout is set by `--chunk-get-timeout-secs`. |
+| `--chunk-get-timeout-secs <N>` | integer | No | Hidden. Per-peer response timeout for chunk retrieve operations. Default 10 s. |
 | `--quote-concurrency <N>` | integer | No | Hidden. Caps the quote channel only. It does not affect store or download concurrency. |
 | `--store-concurrency <N>` | integer | No | Hidden. Controls upload chunk concurrency. `--chunk-concurrency` is accepted as an alias. |
 | `-v, --verbose...` | count | No | Increase log verbosity: `-v`, `-vv`, or `-vvv` |
