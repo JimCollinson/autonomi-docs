@@ -3,3 +3,8 @@
 # docs assembly.
 __pycache__/
 *.pyc
+
+# Transient sweep scanner output. Written by the daily routine and by
+# local invocations of scripts/sweep_poll.py; never part of the docs
+# assembly.
+sweep_report*.json

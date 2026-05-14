@@ -243,6 +243,7 @@ Do **not** include a PR backlink in any issue body at this stage — the PR URL 
 - For case 5, every deferred record's `<!-- verification: ... -->` block is byte-identical to base (deferred-record self-check from step 4.9).
 - If the audit found skill impact, include the `SKILL.md` body edit and the linked patch release set per step 4.8.
 - The two PRs never touch the same page.
+- **Stay strictly within the prose envelope**: no `.gitignore`, no `scripts/`, no `.github/`, no `repo-registry.yml`, no `component-registry.yml`, no other root-level housekeeping files. If the audit observes a useful infrastructure cleanup (a missing gitignore entry, a stale workflow, a registry tidy-up), do **not** include it in the prose PR. Mention it in a "Suggested follow-ups" section of the PR body so a human can open a separate PR for it. `prose-guard` rejects any change outside the envelope.
 - PR body: see `## PR body format` below; include a "Why prose changed" section, and (for case 5) a "Deferred ambiguous records" section with the issue numbers captured in 5.1.
 
 **5.3 Post backlinks last**. For each manual-review issue captured in 5.1 (newly-created **and** reused), comment with the matching prose-PR URL:
