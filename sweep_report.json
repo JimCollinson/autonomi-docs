@@ -1,0 +1,1098 @@
+{
+  "status": "ok",
+  "generated_at": "2026-05-15T09:18:45.081078+00:00",
+  "records": [
+    {
+      "location": "docs/architecture/system-overview.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/architecture/system-overview.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/architecture/system-overview.md:17",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/architecture/system-overview.md:24",
+      "scope": "docs",
+      "repo": "ant-protocol",
+      "ref": "main",
+      "recorded_sha": "93e63b8a41a97c37c24d1164a3ee5525e002ddcd",
+      "head_sha": "cbaf710dc51c7e436120ced5d60f07b0aa14a8ee",
+      "drifted": true
+    },
+    {
+      "location": "docs/architecture/system-overview.md:31",
+      "scope": "docs",
+      "repo": "saorsa-core",
+      "ref": "main",
+      "recorded_sha": "5f482af334b4703a78f9a051b38fd79d5478c607",
+      "head_sha": "550183b717a4c9c0d9bb498eb0b10809c51764bb",
+      "drifted": true
+    },
+    {
+      "location": "docs/architecture/system-overview.md:38",
+      "scope": "docs",
+      "repo": "saorsa-transport",
+      "ref": "main",
+      "recorded_sha": "7d02af138f4b9ea77239a908837ad3cc56366d73",
+      "head_sha": "260b522926d6d64baf5891f168a72388764d250b",
+      "drifted": true
+    },
+    {
+      "location": "docs/architecture/system-overview.md:45",
+      "scope": "docs",
+      "repo": "saorsa-pqc",
+      "ref": "main",
+      "recorded_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "head_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "drifted": false
+    },
+    {
+      "location": "docs/architecture/system-overview.md:52",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/cli/command-reference.md:3",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/cli/use-the-cli.md:3",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/data-types.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/data-types.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/data-types.md:17",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/keys-addresses-and-datamaps.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/keys-addresses-and-datamaps.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/keys-addresses-and-datamaps.md:17",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/overview.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/overview.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/overview.md:17",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/overview.md:24",
+      "scope": "docs",
+      "repo": "saorsa-pqc",
+      "ref": "main",
+      "recorded_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "head_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "drifted": false
+    },
+    {
+      "location": "docs/core-concepts/payment-model.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/payment-model.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/payment-model.md:17",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/payment-model.md:24",
+      "scope": "docs",
+      "repo": "evmlib",
+      "ref": "main",
+      "recorded_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "head_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "drifted": false
+    },
+    {
+      "location": "docs/core-concepts/payment-model.md:31",
+      "scope": "docs",
+      "repo": "ant-protocol",
+      "ref": "main",
+      "recorded_sha": "93e63b8a41a97c37c24d1164a3ee5525e002ddcd",
+      "head_sha": "cbaf710dc51c7e436120ced5d60f07b0aa14a8ee",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/post-quantum-cryptography.md:3",
+      "scope": "docs",
+      "repo": "saorsa-pqc",
+      "ref": "main",
+      "recorded_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "head_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "drifted": false
+    },
+    {
+      "location": "docs/core-concepts/post-quantum-cryptography.md:10",
+      "scope": "docs",
+      "repo": "saorsa-transport",
+      "ref": "main",
+      "recorded_sha": "7d02af138f4b9ea77239a908837ad3cc56366d73",
+      "head_sha": "260b522926d6d64baf5891f168a72388764d250b",
+      "drifted": true
+    },
+    {
+      "location": "docs/core-concepts/post-quantum-cryptography.md:17",
+      "scope": "docs",
+      "repo": "ant-keygen",
+      "ref": "main",
+      "recorded_sha": "3a2953f384a3b16391968de451b703843b98ed86",
+      "head_sha": "3a2953f384a3b16391968de451b703843b98ed86",
+      "drifted": false
+    },
+    {
+      "location": "docs/core-concepts/self-encryption.md:3",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/developer-skill.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/build-read-only-features.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/build-read-only-features.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/deploy-to-mainnet.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/deploy-to-mainnet.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/estimate-costs-and-handle-upload-payments.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/estimate-costs-and-handle-upload-payments.md:10",
+      "scope": "docs",
+      "repo": "evmlib",
+      "ref": "main",
+      "recorded_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "head_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "drifted": false
+    },
+    {
+      "location": "docs/guides/overview.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/overview.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/overview.md:17",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/prepare-a-wallet-for-uploads.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/prepare-a-wallet-for-uploads.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/set-up-a-local-network.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/set-up-a-local-network.md:10",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/test-your-application.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/test-your-application.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/guides/test-your-application.md:17",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/index.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/index.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/index.md:17",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/index.md:24",
+      "scope": "docs",
+      "repo": "saorsa-transport",
+      "ref": "main",
+      "recorded_sha": "7d02af138f4b9ea77239a908837ad3cc56366d73",
+      "head_sha": "260b522926d6d64baf5891f168a72388764d250b",
+      "drifted": true
+    },
+    {
+      "location": "docs/mcp/mcp-server-reference.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/mcp/use-mcp-with-ai-tools.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/mcp/use-the-autonomi-mcp-server.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:17",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:24",
+      "scope": "docs",
+      "repo": "ant-protocol",
+      "ref": "main",
+      "recorded_sha": "93e63b8a41a97c37c24d1164a3ee5525e002ddcd",
+      "head_sha": "cbaf710dc51c7e436120ced5d60f07b0aa14a8ee",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:31",
+      "scope": "docs",
+      "repo": "saorsa-core",
+      "ref": "main",
+      "recorded_sha": "5f482af334b4703a78f9a051b38fd79d5478c607",
+      "head_sha": "550183b717a4c9c0d9bb498eb0b10809c51764bb",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:38",
+      "scope": "docs",
+      "repo": "saorsa-transport",
+      "ref": "main",
+      "recorded_sha": "7d02af138f4b9ea77239a908837ad3cc56366d73",
+      "head_sha": "260b522926d6d64baf5891f168a72388764d250b",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:45",
+      "scope": "docs",
+      "repo": "saorsa-pqc",
+      "ref": "main",
+      "recorded_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "head_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "drifted": false
+    },
+    {
+      "location": "docs/reference/glossary.md:52",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/glossary.md:59",
+      "scope": "docs",
+      "repo": "ant-keygen",
+      "ref": "main",
+      "recorded_sha": "3a2953f384a3b16391968de451b703843b98ed86",
+      "head_sha": "3a2953f384a3b16391968de451b703843b98ed86",
+      "drifted": false
+    },
+    {
+      "location": "docs/reference/source-repositories.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/source-repositories.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/source-repositories.md:17",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/source-repositories.md:24",
+      "scope": "docs",
+      "repo": "ant-protocol",
+      "ref": "main",
+      "recorded_sha": "93e63b8a41a97c37c24d1164a3ee5525e002ddcd",
+      "head_sha": "cbaf710dc51c7e436120ced5d60f07b0aa14a8ee",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/source-repositories.md:31",
+      "scope": "docs",
+      "repo": "saorsa-core",
+      "ref": "main",
+      "recorded_sha": "5f482af334b4703a78f9a051b38fd79d5478c607",
+      "head_sha": "550183b717a4c9c0d9bb498eb0b10809c51764bb",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/source-repositories.md:38",
+      "scope": "docs",
+      "repo": "saorsa-transport",
+      "ref": "main",
+      "recorded_sha": "7d02af138f4b9ea77239a908837ad3cc56366d73",
+      "head_sha": "260b522926d6d64baf5891f168a72388764d250b",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/source-repositories.md:45",
+      "scope": "docs",
+      "repo": "saorsa-pqc",
+      "ref": "main",
+      "recorded_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "head_sha": "2ab931e2533f1df6aa446636fbcf6e95b5bf5a21",
+      "drifted": false
+    },
+    {
+      "location": "docs/reference/source-repositories.md:52",
+      "scope": "docs",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "docs/reference/source-repositories.md:59",
+      "scope": "docs",
+      "repo": "evmlib",
+      "ref": "main",
+      "recorded_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "head_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "drifted": false
+    },
+    {
+      "location": "docs/reference/source-repositories.md:66",
+      "scope": "docs",
+      "repo": "ant-merkle",
+      "ref": "master",
+      "recorded_sha": "80af80a5df1e26e3b6fb386d041178889c4ed993",
+      "head_sha": "80af80a5df1e26e3b6fb386d041178889c4ed993",
+      "drifted": false
+    },
+    {
+      "location": "docs/reference/source-repositories.md:73",
+      "scope": "docs",
+      "repo": "ant-keygen",
+      "ref": "main",
+      "recorded_sha": "3a2953f384a3b16391968de451b703843b98ed86",
+      "head_sha": "3a2953f384a3b16391968de451b703843b98ed86",
+      "drifted": false
+    },
+    {
+      "location": "docs/rust/README.md:3",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/rust/README.md:10",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/rust/build-directly-in-rust.md:3",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/rust/embed-a-node-in-your-application.md:3",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/rust/library-reference.md:3",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/how-to-guides/README.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/how-to-guides/store-and-retrieve-data.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/how-to-guides/use-external-signers-for-upload-payments.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/how-to-guides/use-external-signers-for-upload-payments.md:10",
+      "scope": "docs",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/how-to-guides/use-external-signers-for-upload-payments.md:17",
+      "scope": "docs",
+      "repo": "evmlib",
+      "ref": "main",
+      "recorded_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "head_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "drifted": false
+    },
+    {
+      "location": "docs/sdk/how-to-guides/use-the-daemon-as-a-local-service.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/install.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/README.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/daemon-command-reference.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/grpc-services.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/cpp.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/csharp.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/dart.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/go.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/java.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/javascript.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/kotlin.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/overview.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/php.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/python.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/ruby.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/rust.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/swift.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/typescript.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/language-bindings/zig.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/overview.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/reference/rest-api.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/retrieve-data-from-the-network.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/start-the-local-daemon.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/start-the-local-daemon.md:10",
+      "scope": "docs",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "docs/sdk/store-data-on-the-network.md:3",
+      "scope": "docs",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/version.json:verified_commits.ant-client",
+      "scope": "skill_version_json",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/version.json:verified_commits.ant-node",
+      "scope": "skill_version_json",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/version.json:verified_commits.ant-protocol",
+      "scope": "skill_version_json",
+      "repo": "ant-protocol",
+      "ref": "main",
+      "recorded_sha": "93e63b8a41a97c37c24d1164a3ee5525e002ddcd",
+      "head_sha": "cbaf710dc51c7e436120ced5d60f07b0aa14a8ee",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/version.json:verified_commits.ant-sdk",
+      "scope": "skill_version_json",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/version.json:verified_commits.evmlib",
+      "scope": "skill_version_json",
+      "repo": "evmlib",
+      "ref": "main",
+      "recorded_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "head_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "drifted": false
+    },
+    {
+      "location": "skills/start/version.json:verified_commits.self_encryption",
+      "scope": "skill_version_json",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/SKILL.md:verified_commits.ant-client",
+      "scope": "skill_md",
+      "repo": "ant-client",
+      "ref": "main",
+      "recorded_sha": "91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8",
+      "head_sha": "3df6764298b10dcc51287f43b1b5742a25785bff",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/SKILL.md:verified_commits.ant-node",
+      "scope": "skill_md",
+      "repo": "ant-node",
+      "ref": "main",
+      "recorded_sha": "8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b",
+      "head_sha": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/SKILL.md:verified_commits.ant-protocol",
+      "scope": "skill_md",
+      "repo": "ant-protocol",
+      "ref": "main",
+      "recorded_sha": "93e63b8a41a97c37c24d1164a3ee5525e002ddcd",
+      "head_sha": "cbaf710dc51c7e436120ced5d60f07b0aa14a8ee",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/SKILL.md:verified_commits.ant-sdk",
+      "scope": "skill_md",
+      "repo": "ant-sdk",
+      "ref": "main",
+      "recorded_sha": "529280c32c024c92b68436abb6ace956c8da66ba",
+      "head_sha": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+      "drifted": true
+    },
+    {
+      "location": "skills/start/SKILL.md:verified_commits.evmlib",
+      "scope": "skill_md",
+      "repo": "evmlib",
+      "ref": "main",
+      "recorded_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "head_sha": "225acbb1af613193bcc8264b6ede4d7e4a7ac607",
+      "drifted": false
+    },
+    {
+      "location": "skills/start/SKILL.md:verified_commits.self_encryption",
+      "scope": "skill_md",
+      "repo": "self_encryption",
+      "ref": "master",
+      "recorded_sha": "5f9d1646231da7ca2ce60e84d010acfb6d9c29d0",
+      "head_sha": "0deb040084f94bea2ebb53bda20fa23464bbcfe0",
+      "drifted": true
+    }
+  ],
+  "target_manifest_skipped": [],
+  "notices": [],
+  "errors": []
+}
