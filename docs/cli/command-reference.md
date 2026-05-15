@@ -89,7 +89,7 @@ Uploads a file with self-encryption and EVM payment.
 | `--public` | boolean | No | Store the DataMap on-network so anyone with the address can download the file |
 | `--merkle` | boolean | No | Force Merkle batch payment |
 | `--no-merkle` | boolean | No | Force single per-chunk payments |
-| `--store-timeout <N>` | integer | No | Hidden. Overrides the chunk store timeout for this upload. |
+| `--store-timeout <N>` | integer | No | Hidden. Overrides `ClientConfig.store_timeout_secs` for this upload only. See the `--store-timeout-secs` row in the [Root command and global flags](#root-command-and-global-flags) section for what that field does and does not govern. |
 | `--store-concurrency <N>` | integer | No | Hidden. Overrides upload chunk concurrency for this upload. |
 | `--overwrite` | boolean | No | Replace any existing `<filename>.datamap` instead of writing a suffixed `<filename>-2.datamap`. |
 
