@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 6cada1d6b318a93e52ea6c34aa4b68fc2782c946
-  verified_date: 2026-05-11
+  source_commit: 91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8
+  verified_date: 2026-05-13
   verification_mode: current-merged-truth
 -->
 
@@ -130,7 +130,7 @@ For Merkle batches, `prepare_merkle_batch_external` and `finalize_merkle_batch` 
 | Type | Description |
 |------|-------------|
 | `ant_core::data::Client` | Main network client |
-| `ant_core::data::ClientConfig` | Separate quote and store timeouts, concurrency limits, and loopback policy |
+| `ant_core::data::ClientConfig` | Quote, Merkle batch store (`merkle_store_timeout_secs`, 270 s default), and chunk retrieve (`chunk_get_timeout_secs`) timeouts; concurrency limits; loopback policy. Non-Merkle chunk PUT response timeout is set by an internal `STORE_RESPONSE_TIMEOUT` constant, not via this struct. |
 | `ant_core::data::PaymentMode` | `Auto`, `Merkle`, or `Single` |
 | `ant_core::data::DataMap` | Private retrieval map for uploaded data |
 | `ant_core::data::LocalDevnet` | Local development helper |

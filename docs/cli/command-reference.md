@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 6cada1d6b318a93e52ea6c34aa4b68fc2782c946
-  verified_date: 2026-05-11
+  source_commit: 91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8
+  verified_date: 2026-05-13
   verification_mode: current-merged-truth
 -->
 
@@ -54,7 +54,8 @@ The root command accepts the global flags used across data and node operations. 
 | `--allow-loopback` | boolean | No | Allow loopback connections for local devnet or local testing |
 | `--ipv4-only` | boolean | No | Disable dual-stack and force IPv4-only mode |
 | `--quote-timeout-secs <N>` | integer | No | Hidden. Controls lightweight network-operation timeouts such as DHT lookups. |
-| `--store-timeout-secs <N>` | integer | No | Hidden. Controls chunk store and retrieve timeouts. |
+| `--store-timeout-secs <N>` | integer | No | Hidden. Sets `ClientConfig.store_timeout_secs`. Non-Merkle chunk PUT response timeout is set by an internal `STORE_RESPONSE_TIMEOUT` constant; Merkle batch PUT timeout is set by `merkle_store_timeout_secs` (270 s default, library-only); chunk GET timeout is set by `--chunk-get-timeout-secs`. |
+| `--chunk-get-timeout-secs <N>` | integer | No | Hidden. Per-peer response timeout for chunk retrieve operations. Default 10 s. |
 | `--quote-concurrency <N>` | integer | No | Hidden. Caps the quote channel only. It does not affect store or download concurrency. |
 | `--store-concurrency <N>` | integer | No | Hidden. Controls upload chunk concurrency. `--chunk-concurrency` is accepted as an alias. |
 | `-v, --verbose...` | count | No | Increase log verbosity: `-v`, `-vv`, or `-vvv` |
@@ -88,7 +89,7 @@ Uploads a file with self-encryption and EVM payment.
 | `--public` | boolean | No | Store the DataMap on-network so anyone with the address can download the file |
 | `--merkle` | boolean | No | Force Merkle batch payment |
 | `--no-merkle` | boolean | No | Force single per-chunk payments |
-| `--store-timeout <N>` | integer | No | Hidden. Overrides the chunk store timeout for this upload. |
+| `--store-timeout <N>` | integer | No | Hidden. Overrides `ClientConfig.store_timeout_secs` for this upload only. See the `--store-timeout-secs` row in the [Root command and global flags](#root-command-and-global-flags) section for what that field does and does not govern. |
 | `--store-concurrency <N>` | integer | No | Hidden. Overrides upload chunk concurrency for this upload. |
 | `--overwrite` | boolean | No | Replace any existing `<filename>.datamap` instead of writing a suffixed `<filename>-2.datamap`. |
 
