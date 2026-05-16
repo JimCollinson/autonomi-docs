@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8
-  verified_date: 2026-05-13
+  source_commit: 3df6764298b10dcc51287f43b1b5742a25785bff
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 
@@ -212,16 +212,22 @@ SECRET_KEY=0x<hex_private_key> ant wallet balance
 
 ### `ant node daemon start`
 
-Launches the node daemon as a detached background process.
+Launches the node daemon as a detached background process. By default it binds to a random free port on `127.0.0.1` and writes the chosen port to `daemon.port` for SDK discovery.
 
 **Parameters:**
 
-This command has no command-specific parameters.
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `--port <PORT>` | integer | No | Pin the HTTP port. `0` is equivalent to the default (OS-assigned). |
+| `--listen-addr <IP>` | IP address | No | Bind address. Defaults to `127.0.0.1`. Binding to a non-loopback address (e.g. `0.0.0.0`) exposes node management without authentication — only do this when the network path is controlled. |
 
 **Example:**
 
 ```bash
 ant node daemon start
+
+# Pin port and bind on all interfaces (e.g. inside a container):
+ant node daemon start --listen-addr 0.0.0.0 --port 8765
 ```
 
 ### `ant node daemon stop`

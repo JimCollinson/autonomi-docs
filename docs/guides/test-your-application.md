@@ -3,22 +3,22 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
-  verified_date: 2026-05-11
+  source_commit: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8
-  verified_date: 2026-05-13
+  source_commit: 3df6764298b10dcc51287f43b1b5742a25785bff
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b
-  verified_date: 2026-05-13
+  source_commit: f38fdcacbeb3318e4524f4534e2d5bd87dcca467
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 
@@ -159,6 +159,10 @@ jobs:
         with:
           repository: WithAutonomi/ant-node
           path: ant-node
+
+      - name: Install Foundry
+        run: curl -sL https://foundry.paradigm.xyz | bash && ~/.foundry/bin/foundryup
+        # ant-devnet requires anvil for the local EVM testnet
 
       - name: Install ant-dev
         run: pip install -e ant-sdk/ant-dev/

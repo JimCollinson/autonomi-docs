@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
-  verified_date: 2026-05-11
+  source_commit: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b
-  verified_date: 2026-05-13
+  source_commit: f38fdcacbeb3318e4524f4534e2d5bd87dcca467
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 
@@ -24,6 +24,10 @@ This is the best place to test uploads before you move to Arbitrum Sepolia or Ar
 - Rust toolchain
 - Python 3.10+
 - `protoc` (Protocol Buffers compiler) available on your machine
+- Foundry (provides `anvil`) — required by `ant-devnet` for the local EVM testnet. Install with:
+  ```bash
+  curl -sL https://foundry.paradigm.xyz | bash && foundryup
+  ```
 - A local checkout of `ant-sdk`
 - A local checkout of `ant-node`
 
