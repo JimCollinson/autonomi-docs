@@ -3,78 +3,78 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
-  verified_date: 2026-05-11
+  source_commit: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8
-  verified_date: 2026-05-13
+  source_commit: 3df6764298b10dcc51287f43b1b5742a25785bff
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b
-  verified_date: 2026-05-13
+  source_commit: f38fdcacbeb3318e4524f4534e2d5bd87dcca467
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-protocol
   source_ref: main
-  source_commit: 93e63b8a41a97c37c24d1164a3ee5525e002ddcd
-  verified_date: 2026-05-13
+  source_commit: cbaf710dc51c7e436120ced5d60f07b0aa14a8ee
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-core
   source_ref: main
-  source_commit: 5f482af334b4703a78f9a051b38fd79d5478c607
-  verified_date: 2026-05-13
+  source_commit: 550183b717a4c9c0d9bb498eb0b10809c51764bb
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-transport
   source_ref: main
-  source_commit: 7d02af138f4b9ea77239a908837ad3cc56366d73
-  verified_date: 2026-05-13
+  source_commit: 260b522926d6d64baf5891f168a72388764d250b
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: saorsa-pqc
   source_ref: main
   source_commit: 2ab931e2533f1df6aa446636fbcf6e95b5bf5a21
-  verified_date: 2026-05-02
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: self_encryption
   source_ref: master
-  source_commit: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
-  verified_date: 2026-05-02
+  source_commit: 0deb040084f94bea2ebb53bda20fa23464bbcfe0
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: evmlib
   source_ref: main
   source_commit: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
-  verified_date: 2026-05-02
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-merkle
   source_ref: master
   source_commit: 80af80a5df1e26e3b6fb386d041178889c4ed993
-  verified_date: 2026-05-02
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-keygen
   source_ref: main
   source_commit: 3a2953f384a3b16391968de451b703843b98ed86
-  verified_date: 2026-05-02
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 
