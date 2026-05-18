@@ -26,8 +26,10 @@ This is the best place to test uploads before you move to Arbitrum Sepolia or Ar
 - `protoc` (Protocol Buffers compiler) available on your machine
 - Foundry (provides `anvil`) — required by `ant-devnet` for the local EVM testnet. Install with:
   ```bash
-  curl -sL https://foundry.paradigm.xyz | bash && foundryup
+  curl -sL https://foundry.paradigm.xyz | bash
+  ~/.foundry/bin/foundryup
   ```
+  The installer adds `~/.foundry/bin` to your shell profile (`~/.bashrc`, `~/.zshrc`, or equivalent). Open a new terminal, or run `source ~/.bashrc` (or `source ~/.zshrc`), before running `ant dev start` so `anvil` is on `PATH`.
 - A local checkout of `ant-sdk`
 - A local checkout of `ant-node`
 

@@ -27,7 +27,7 @@ Use `antd` when you want:
 
 - Rust toolchain and `protoc` (Protocol Buffers compiler) to build `antd` from source
 - For paid uploads on the default network: access to wallet and payment configuration. See [Prepare a Wallet for Uploads](../guides/prepare-a-wallet-for-uploads.md) and [Use External Signers for Upload Payments](how-to-guides/use-external-signers-for-upload-payments.md).
-- For a fully local devnet: Python 3.10+, Foundry (`curl -sL https://foundry.paradigm.xyz | bash && foundryup`), and a sibling `ant-node` checkout if you plan to use `ant dev start`. See [Set Up a Local Network](../guides/set-up-a-local-network.md).
+- For a fully local devnet: Python 3.10+, Foundry (provides `anvil`), and a sibling `ant-node` checkout if you plan to use `ant dev start`. See [Set Up a Local Network](../guides/set-up-a-local-network.md) for Foundry install steps and the rest of the local-devnet setup.
 
 ## Steps
 

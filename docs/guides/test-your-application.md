@@ -161,8 +161,12 @@ jobs:
           path: ant-node
 
       - name: Install Foundry
-        run: curl -sL https://foundry.paradigm.xyz | bash && ~/.foundry/bin/foundryup
-        # ant-devnet requires anvil for the local EVM testnet
+        run: |
+          curl -sL https://foundry.paradigm.xyz | bash
+          ~/.foundry/bin/foundryup
+          echo "$HOME/.foundry/bin" >> $GITHUB_PATH
+        # ant-devnet requires anvil for the local EVM testnet; appending
+        # to $GITHUB_PATH puts it on PATH for every subsequent step.
 
       - name: Install ant-dev
         run: pip install -e ant-sdk/ant-dev/

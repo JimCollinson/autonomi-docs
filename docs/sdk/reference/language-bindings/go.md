@@ -92,7 +92,7 @@ func main() {
 | `PrepareChunkResult` | `antd.PrepareChunkResult` |
 | Raw data | `[]byte` |
 
-`PrepareChunkResult` is returned by `PrepareChunkUpload`. When `AlreadyStored` is `true`, only `Address` is populated and no payment or finalize call is needed. Otherwise, `UploadID`, `Payments`, and `TotalAmount` describe the external-signer payment required before calling `FinalizeChunkUpload`. Requires antd 0.7.0 or later.
+`PrepareChunkResult` is returned by `PrepareChunkUpload`. When `AlreadyStored` is `true`, only `Address` and `AlreadyStored` are populated and there is no payment to make or finalize call to issue. Otherwise, `UploadID`, `Payments`, and `TotalAmount` describe the external-signer payment required before calling `FinalizeChunkUpload`. Requires antd 0.7.0 or later.
 
 ## Error handling
 

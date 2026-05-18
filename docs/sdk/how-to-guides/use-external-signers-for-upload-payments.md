@@ -67,7 +67,7 @@ curl -X POST http://localhost:8082/v1/chunks/prepare \
   -d "{\"data\":\"$CHUNK_B64\"}"
 ```
 
-When the chunk is already stored on the network, the response returns `already_stored: true` with the existing address and no `upload_id` — skip payment and finalize. Otherwise the response returns the wave-batch payment shape:
+When the chunk is already stored on the network, the response returns `already_stored: true` with the existing address and no `upload_id`. There is nothing more to do: no payment to make and no finalize call to issue. Otherwise the response returns the wave-batch payment shape:
 
 ```json
 {
