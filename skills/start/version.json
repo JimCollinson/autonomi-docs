@@ -8,7 +8,7 @@
   "repository": "https://github.com/WithAutonomi/autonomi-developer-docs",
   "verification_mode": "current-merged-truth",
   "verified_commits": {
-    "ant-sdk": "e0dfa2c384ea17f49490d3d5110c3d226ac5233b",
+    "ant-sdk": "a3cf4e40052e3af8d1e8029ca0b3c97281d14108",
     "ant-client": "3df6764298b10dcc51287f43b1b5742a25785bff",
     "ant-node": "f38fdcacbeb3318e4524f4534e2d5bd87dcca467",
     "ant-protocol": "cbaf710dc51c7e436120ced5d60f07b0aa14a8ee",
