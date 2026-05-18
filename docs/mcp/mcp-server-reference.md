@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
-  verified_date: 2026-05-16
+  source_commit: a3cf4e40052e3af8d1e8029ca0b3c97281d14108
+  verified_date: 2026-05-18
   verification_mode: current-merged-truth
 -->
 
@@ -156,9 +156,15 @@ Fetches a raw chunk and returns base64-encoded data.
 
 ### Prepare a File Upload
 
-**Tool:** `prepare_upload(path)`
+**Tool:** `prepare_upload(path, visibility?)`
 
-Prepares a file upload for external signing and returns payment details plus a `payment_type` discriminator.
+Prepares a file upload for external signing and returns payment details plus a `payment_type` discriminator. Pass `visibility="public"` to bundle the serialized DataMap chunk into the same payment batch; the `data_map_address` field in the finalize response is then the shareable retrieval handle for the upload.
+
+### Prepare a Public File Upload
+
+**Tool:** `prepare_upload_public(path)`
+
+Convenience wrapper equivalent to `prepare_upload(path, visibility="public")`. The DataMap chunk is bundled into the same external-signer payment batch so the `data_map_address` on finalize is the shareable retrieval handle.
 
 ### Prepare a Data Upload
 
@@ -166,7 +172,7 @@ Prepares a file upload for external signing and returns payment details plus a `
 
 Prepares a data upload for external signing. The input is base64-encoded.
 
-Both prepare tools return either:
+The file and data prepare tools return either:
 
 - `payment_type: "wave_batch"` with quote-level `payments`
 - `payment_type: "merkle"` with `depth`, `pool_commitments`, `merkle_payment_timestamp`, and `payment_vault_address`
@@ -175,13 +181,25 @@ Both prepare tools return either:
 
 **Tool:** `finalize_upload(upload_id, tx_hashes)`
 
-Finalizes an externally-signed upload when the prepare step returned `payment_type: "wave_batch"`.
+Finalizes an externally-signed upload when the prepare step returned `payment_type: "wave_batch"`. Returns `address`, `chunks_stored`, `data_map` (hex-encoded serialized DataMap, always present), and `data_map_address` (set when prepare used `visibility="public"`, empty otherwise).
 
 ### Finalize a Merkle Upload
 
 **Tool:** `finalize_merkle_upload(upload_id, winner_pool_hash)`
 
-Finalizes an externally-signed upload when the prepare step returned `payment_type: "merkle"`.
+Finalizes an externally-signed upload when the prepare step returned `payment_type: "merkle"`. Returns the same fields as `finalize_upload`.
+
+### Prepare a Single-Chunk Upload
+
+**Tool:** `prepare_chunk_upload(data_base64)`
+
+Prepares a single raw chunk for external-signer publish. Returns either `already_stored=true` with the existing `address` (no payment or finalize step needed), or a wave-batch payment intent with `upload_id`, `payments`, contract addresses, and `rpc_url`.
+
+### Finalize a Single-Chunk Upload
+
+**Tool:** `finalize_chunk_upload(upload_id, tx_hashes)`
+
+Submits a prepared chunk to the network after the external signer has paid. Returns `address` — the network address of the stored chunk.
 
 ## Payment modes
 
