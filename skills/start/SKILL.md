@@ -8,7 +8,7 @@ description: |
   in Rust with `ant-core`, or expose Autonomi through an MCP-compatible client.
   Do not use for Autonomi 1.0, the MaidSafe-era network, `ant-quic`, or
   general EVM work that is not part of building on Autonomi.
-version: 0.1.4-draft
+version: 0.1.5-draft
 license: MIT
 repository: https://github.com/WithAutonomi/autonomi-developer-docs
 homepage: https://docs.autonomi.com/developers
@@ -29,14 +29,14 @@ keywords:
   - read-only
 
 # Verification block. Re-verify before changing stable claims or examples.
-verified_date: "2026-05-13"
+verified_date: "2026-05-16"
 verification_mode: current-merged-truth
 verified_commits:
-  ant-sdk: 529280c32c024c92b68436abb6ace956c8da66ba
-  ant-client: 91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8
-  ant-node: 8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b
-  ant-protocol: 93e63b8a41a97c37c24d1164a3ee5525e002ddcd
-  self_encryption: 5f9d1646231da7ca2ce60e84d010acfb6d9c29d0
+  ant-sdk: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+  ant-client: 3df6764298b10dcc51287f43b1b5742a25785bff
+  ant-node: f38fdcacbeb3318e4524f4534e2d5bd87dcca467
+  ant-protocol: cbaf710dc51c7e436120ced5d60f07b0aa14a8ee
+  self_encryption: 0deb040084f94bea2ebb53bda20fa23464bbcfe0
   evmlib: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
 
 version_manifest_url: https://raw.githubusercontent.com/WithAutonomi/autonomi-developer-docs/main/skills/start/version.json
@@ -119,7 +119,7 @@ Expected shape:
 {
   "status": "ok",
   "network": "default",
-  "version": "0.6.1",
+  "version": "0.7.1",
   "evm_network": "arbitrum-one",
   "uptime_seconds": 12345,
   "build_commit": "529280c3",
@@ -159,6 +159,8 @@ Current shared daemon surfaces you can rely on at this commit:
 - `POST /v1/data/prepare`
 - `POST /v1/upload/prepare`
 - `POST /v1/upload/finalize`
+- `POST /v1/chunks/prepare`
+- `POST /v1/chunks/finalize`
 
 Golden public-data round trip:
 

@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
-  verified_date: 2026-05-11
+  source_commit: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-client
   source_ref: main
-  source_commit: 91d5f18e3fbf5125fc6b5bbc46bb0a1fe6356ae8
-  verified_date: 2026-05-13
+  source_commit: 3df6764298b10dcc51287f43b1b5742a25785bff
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
@@ -56,6 +56,46 @@ If `antd` is already on your `PATH`, replace `./target/release/antd` with `antd`
 Use `EVM_PAYMENT_VAULT_ADDRESS` for both wave-batch and Merkle uploads in the external-signer flow.
 
 ### 2. Prepare the upload
+
+For a single chunk (up to 4 MiB of raw bytes), call `POST /v1/chunks/prepare`. This is the simplest external-signer flow — one chunk, one payment:
+
+```bash
+CHUNK_B64=$(printf 'Hello, Autonomi!' | base64)
+
+curl -X POST http://localhost:8082/v1/chunks/prepare \
+  -H "Content-Type: application/json" \
+  -d "{\"data\":\"$CHUNK_B64\"}"
+```
+
+When the chunk is already stored on the network, the response returns `already_stored: true` with the existing address and no `upload_id`. There is nothing more to do: no payment to make and no finalize call to issue. Otherwise the response returns the wave-batch payment shape:
+
+```json
+{
+  "address": "<64_hex_chunk_address>",
+  "already_stored": false,
+  "upload_id": "<hex_id>",
+  "payment_type": "wave_batch",
+  "payments": [
+    { "quote_hash": "0x...", "rewards_address": "0x...", "amount": "<atto_tokens>" }
+  ],
+  "total_amount": "<atto_tokens>",
+  "payment_vault_address": "0x...",
+  "payment_token_address": "0x...",
+  "rpc_url": "https://your-rpc-endpoint"
+}
+```
+
+After the external signer calls `payForQuotes()` with the returned `payments`, finalize with `POST /v1/chunks/finalize`:
+
+```bash
+curl -X POST http://localhost:8082/v1/chunks/finalize \
+  -H "Content-Type: application/json" \
+  -d '{"upload_id":"<hex_id>","tx_hashes":{"0xquote_hash":"0xtx_hash"}}'
+```
+
+The finalize response returns the network address of the stored chunk. Requires antd 0.7.0 or later.
+
+For multi-chunk uploads (arbitrary files or in-memory data larger than one chunk), use the data or file prepare/finalize endpoints described below.
 
 For in-memory data, call `POST /v1/data/prepare`.
 

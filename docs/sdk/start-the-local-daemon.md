@@ -3,15 +3,15 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
-  verified_date: 2026-05-11
+  source_commit: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 <!-- verification:
   source_repo: ant-node
   source_ref: main
-  source_commit: 8b68b2d7f4662faf67ed7812dc6cb37de0c74a8b
-  verified_date: 2026-05-13
+  source_commit: f38fdcacbeb3318e4524f4534e2d5bd87dcca467
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 
@@ -27,7 +27,7 @@ Use `antd` when you want:
 
 - Rust toolchain and `protoc` (Protocol Buffers compiler) to build `antd` from source
 - For paid uploads on the default network: access to wallet and payment configuration. See [Prepare a Wallet for Uploads](../guides/prepare-a-wallet-for-uploads.md) and [Use External Signers for Upload Payments](how-to-guides/use-external-signers-for-upload-payments.md).
-- For a fully local devnet: Python 3.10+ and a sibling `ant-node` checkout if you plan to use `ant dev start`. See [Set Up a Local Network](../guides/set-up-a-local-network.md).
+- For a fully local devnet: Python 3.10+, Foundry (provides `anvil`), and a sibling `ant-node` checkout if you plan to use `ant dev start`. See [Set Up a Local Network](../guides/set-up-a-local-network.md) for Foundry install steps and the rest of the local-devnet setup.
 
 ## Steps
 

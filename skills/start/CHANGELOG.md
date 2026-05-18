@@ -4,6 +4,20 @@ All notable changes to this skill are recorded here.
 
 ## [Unreleased]
 
+## [0.1.5-draft] - 2026-05-16
+
+### Changed
+- Updated health check expected `version` field to `"0.7.1"` (antd release e0dfa2c).
+- Added `POST /v1/chunks/prepare` and `POST /v1/chunks/finalize` to the current shared daemon surfaces list (single-chunk external-signer flow, antd 0.7.0+).
+
+### Verified Against
+- ant-sdk: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+- ant-client: 3df6764298b10dcc51287f43b1b5742a25785bff
+- ant-node: f38fdcacbeb3318e4524f4534e2d5bd87dcca467
+- ant-protocol: cbaf710dc51c7e436120ced5d60f07b0aa14a8ee
+- self_encryption: 0deb040084f94bea2ebb53bda20fa23464bbcfe0
+- evmlib: 225acbb1af613193bcc8264b6ede4d7e4a7ac607
+
 ## [0.1.4-draft] - 2026-05-11
 
 ### Changed

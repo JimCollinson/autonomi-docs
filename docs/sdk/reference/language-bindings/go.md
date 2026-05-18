@@ -3,8 +3,8 @@
 <!-- verification:
   source_repo: ant-sdk
   source_ref: main
-  source_commit: 529280c32c024c92b68436abb6ace956c8da66ba
-  verified_date: 2026-05-11
+  source_commit: e0dfa2c384ea17f49490d3d5110c3d226ac5233b
+  verified_date: 2026-05-16
   verification_mode: current-merged-truth
 -->
 
@@ -89,7 +89,10 @@ func main() {
 | `WalletBalance` | `antd.WalletBalance` |
 | `PrepareUploadResult` | `antd.PrepareUploadResult` |
 | `FinalizeUploadResult` | `antd.FinalizeUploadResult` |
+| `PrepareChunkResult` | `antd.PrepareChunkResult` |
 | Raw data | `[]byte` |
+
+`PrepareChunkResult` is returned by `PrepareChunkUpload`. When `AlreadyStored` is `true`, only `Address` and `AlreadyStored` are populated and there is no payment to make or finalize call to issue. Otherwise, `UploadID`, `Payments`, and `TotalAmount` describe the external-signer payment required before calling `FinalizeChunkUpload`. Requires antd 0.7.0 or later.
 
 ## Error handling
 
